@@ -1,3 +1,3 @@
 # calculatrip
 
-INITIAL COMMIT!!!!
+Initial Commit!!!!
