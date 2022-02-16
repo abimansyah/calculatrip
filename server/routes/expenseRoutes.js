@@ -1,7 +1,7 @@
 const express = require('express')
 const expenseRouter = express.Router()
 
-router.get('/', (req, res) => {
+expenseRouter.get('/', (req, res) => {
   res.send('Expense!')
 })
 
