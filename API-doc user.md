@@ -5,7 +5,7 @@ List of available endpoints for Users:
 - `POST users/register`
 - `POST users/login`
 - `GET users`
-- `GET users/:input`
+- `GET users/profile/:input`
 - `GET users/profile`
 - `PUT users/:id`
 
@@ -165,7 +165,7 @@ _Response (200 - OK)_
 
 &nbsp;
 
-## 4. GET /users/:input
+## 4. GET /users/profile/:input
 
 Description:
 - Get one user by email/username from database

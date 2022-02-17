@@ -1,7 +1,7 @@
 const express = require('express')
 const savingRouter = express.Router()
 
-router.get('/', (req, res) => {
+savingRouter.get('/', (req, res) => {
   res.send('Saving!')
 })
 

@@ -1,7 +1,7 @@
 const express = require('express')
 const tripRouter = express.Router()
 
-router.get('/', (req, res) => {
+tripRouter.get('/', (req, res) => {
   res.send('Trip!')
 })
 
