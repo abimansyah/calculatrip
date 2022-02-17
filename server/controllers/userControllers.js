@@ -38,7 +38,7 @@ class UserController {
             }
             if (!input.loginInput) {
                 throw {
-                    name: "Email is required"
+                    name: "Email or Username is required"
                 }
             }
             if (!input.password) {
