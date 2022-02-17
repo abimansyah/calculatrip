@@ -12,7 +12,7 @@
         "userId": 2,
         "tripId": 1,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 5,
@@ -35,7 +35,7 @@
         "userId": 3,
         "tripId": 2,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       }
     ]
   },
@@ -52,12 +52,12 @@
         "userId": 1,
         "tripId": 3,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 5,
         "tripId": 3,
-        "status": "master",
+        "status": "owner",
         "role": "companion"
       }
     ]
@@ -75,7 +75,7 @@
         "userId": 2,
         "tripId": 4,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 1,
@@ -98,7 +98,7 @@
         "userId": 3,
         "tripId": 5,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       }
     ]
   },
@@ -115,7 +115,7 @@
         "userId": 2,
         "tripId": 6,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 3,
@@ -144,7 +144,7 @@
         "userId": 1,
         "tripId": 7,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 4,
@@ -173,7 +173,7 @@
         "userId": 5,
         "tripId": 8,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 1,
@@ -196,7 +196,7 @@
         "userId": 5,
         "tripId": 9,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 4,
@@ -225,7 +225,7 @@
         "userId": 1,
         "tripId": 10,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 2,
@@ -260,7 +260,7 @@
         "userId": 2,
         "tripId": 11,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 3,
@@ -295,7 +295,7 @@
         "userId": 1,
         "tripId": 12,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       }
     ]
   },
@@ -312,7 +312,7 @@
         "userId": 3,
         "tripId": 13,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 5,
@@ -341,7 +341,7 @@
         "userId": 2,
         "tripId": 14,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       },
       {
         "userId": 3,
@@ -376,7 +376,7 @@
         "userId": 3,
         "tripId": 15,
         "status": "accept",
-        "role": "master"
+        "role": "owner"
       }
     ]
   }
