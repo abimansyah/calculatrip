@@ -1,0 +1,383 @@
+[
+  {
+    "id": 1,
+    "name": "tempor convallis nulla",
+    "startDate": "2021-02-22 07:51:23",
+    "endDate": "2022-02-02 08:53:33",
+    "homeCurrency": "idr",
+    "tripImageUrl": "http://dummyimage.com/208x100.png/cc0000/ffffff",
+    "targetBudget": 9810055,
+    "UserTrips": [
+      {
+        "userId": 2,
+        "tripId": 1,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 5,
+        "tripId": 1,
+        "status": "reject",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "enim sit",
+    "startDate": "2021-05-12 01:18:31",
+    "endDate": "2022-01-22 21:25:16",
+    "homeCurrency": "idr",
+    "tripImageUrl": "http://dummyimage.com/106x100.png/5fa2dd/ffffff",
+    "targetBudget": 2614270,
+    "UserTrips": [
+      {
+        "userId": 3,
+        "tripId": 2,
+        "status": "accept",
+        "role": "master"
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "non mi",
+    "startDate": "2021-11-14 15:49:20",
+    "endDate": "2021-09-06 02:23:08",
+    "homeCurrency": "usd",
+    "tripImageUrl": "http://dummyimage.com/149x100.png/dddddd/000000",
+    "targetBudget": 8212147,
+    "UserTrips": [
+      {
+        "userId": 1,
+        "tripId": 3,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 5,
+        "tripId": 3,
+        "status": "master",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "vel lectus in",
+    "startDate": "2021-10-01 00:57:05",
+    "endDate": "2021-04-08 16:03:10",
+    "homeCurrency": "usd",
+    "tripImageUrl": "http://dummyimage.com/165x100.png/dddddd/000000",
+    "targetBudget": 4865134,
+    "UserTrips": [
+      {
+        "userId": 2,
+        "tripId": 4,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 1,
+        "tripId": 4,
+        "status": "accept",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "at feugiat non",
+    "startDate": "2021-07-09 11:31:36",
+    "endDate": "2021-07-18 03:59:48",
+    "homeCurrency": "idr",
+    "tripImageUrl": "http://dummyimage.com/184x100.png/ff4444/ffffff",
+    "targetBudget": 8476497,
+    "UserTrips": [
+      {
+        "userId": 3,
+        "tripId": 5,
+        "status": "accept",
+        "role": "master"
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "in congue",
+    "startDate": "2021-03-17 16:51:53",
+    "endDate": "2021-09-04 08:47:59",
+    "homeCurrency": "idr",
+    "tripImageUrl": "http://dummyimage.com/113x100.png/ff4444/ffffff",
+    "targetBudget": 9484310,
+    "UserTrips": [
+      {
+        "userId": 2,
+        "tripId": 6,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 3,
+        "tripId": 6,
+        "status": "reject",
+        "role": "companion"
+      },
+      {
+        "userId": 1,
+        "tripId": 6,
+        "status": "accept",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "tempus semper est",
+    "startDate": "2021-03-09 01:41:32",
+    "endDate": "2021-06-06 02:16:39",
+    "homeCurrency": "idr",
+    "tripImageUrl": "http://dummyimage.com/236x100.png/5fa2dd/ffffff",
+    "targetBudget": 3582468,
+    "UserTrips": [
+      {
+        "userId": 1,
+        "tripId": 7,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 4,
+        "tripId": 7,
+        "status": "accept",
+        "role": "companion"
+      },
+      {
+        "userId": 3,
+        "tripId": 7,
+        "status": "pending",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "vestibulum velit id",
+    "startDate": "2021-09-26 11:33:07",
+    "endDate": "2021-03-01 03:45:33",
+    "homeCurrency": "idr",
+    "tripImageUrl": "http://dummyimage.com/144x100.png/cc0000/ffffff",
+    "targetBudget": 1162895,
+    "UserTrips": [
+      {
+        "userId": 5,
+        "tripId": 8,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 1,
+        "tripId": 8,
+        "status": "reject",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "name": "praesent id massa",
+    "startDate": "2021-09-04 04:52:19",
+    "endDate": "2022-01-17 06:01:43",
+    "homeCurrency": "usd",
+    "tripImageUrl": "http://dummyimage.com/243x100.png/5fa2dd/ffffff",
+    "targetBudget": 3084402,
+    "UserTrips": [
+      {
+        "userId": 5,
+        "tripId": 9,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 4,
+        "tripId": 9,
+        "status": "pending",
+        "role": "companion"
+      },
+      {
+        "userId": 1,
+        "tripId": 9,
+        "status": "accept",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 10,
+    "name": "iaculis congue vivamus",
+    "startDate": "2021-12-20 19:00:12",
+    "endDate": "2021-04-15 07:39:29",
+    "homeCurrency": "usd",
+    "tripImageUrl": "http://dummyimage.com/193x100.png/cc0000/ffffff",
+    "targetBudget": 2650659,
+    "UserTrips": [
+      {
+        "userId": 1,
+        "tripId": 10,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 2,
+        "tripId": 10,
+        "status": "reject",
+        "role": "companion"
+      },
+      {
+        "userId": 3,
+        "tripId": 10,
+        "status": "accept",
+        "role": "companion"
+      },
+      {
+        "userId": 5,
+        "tripId": 10,
+        "status": "pending",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 11,
+    "name": "lobortis vel dapibus",
+    "startDate": "2022-02-06 10:14:24",
+    "endDate": "2021-09-29 23:45:19",
+    "homeCurrency": "usd",
+    "tripImageUrl": "http://dummyimage.com/151x100.png/cc0000/ffffff",
+    "targetBudget": 3517704,
+    "UserTrips": [
+      {
+        "userId": 2,
+        "tripId": 11,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 3,
+        "tripId": 11,
+        "status": "pending",
+        "role": "companion"
+      },
+      {
+        "userId": 1,
+        "tripId": 11,
+        "status": "pending",
+        "role": "companion"
+      },
+      {
+        "userId": 5,
+        "tripId": 11,
+        "status": "accept",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 12,
+    "name": "sed tincidunt",
+    "startDate": "2021-02-13 07:18:29",
+    "endDate": "2022-02-02 17:07:04",
+    "homeCurrency": "usd",
+    "tripImageUrl": "http://dummyimage.com/221x100.png/dddddd/000000",
+    "targetBudget": 3666211,
+    "UserTrips": [
+      {
+        "userId": 1,
+        "tripId": 12,
+        "status": "accept",
+        "role": "master"
+      }
+    ]
+  },
+  {
+    "id": 13,
+    "name": "nec dui luctus",
+    "startDate": "2021-10-30 02:50:52",
+    "endDate": "2022-01-06 03:34:36",
+    "homeCurrency": "idr",
+    "tripImageUrl": "http://dummyimage.com/135x100.png/dddddd/000000",
+    "targetBudget": 7842383,
+    "UserTrips": [
+      {
+        "userId": 3,
+        "tripId": 13,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 5,
+        "tripId": 13,
+        "status": "accept",
+        "role": "companion"
+      },
+      {
+        "userId": 1,
+        "tripId": 13,
+        "status": "pending",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 14,
+    "name": "vulputate justo in",
+    "startDate": "2021-10-20 14:50:23",
+    "endDate": "2021-04-28 11:26:50",
+    "homeCurrency": "idr",
+    "tripImageUrl": "http://dummyimage.com/151x100.png/dddddd/000000",
+    "targetBudget": 4259697,
+    "UserTrips": [
+      {
+        "userId": 2,
+        "tripId": 14,
+        "status": "accept",
+        "role": "master"
+      },
+      {
+        "userId": 3,
+        "tripId": 14,
+        "status": "pending",
+        "role": "companion"
+      },
+      {
+        "userId": 5,
+        "tripId": 14,
+        "status": "reject",
+        "role": "companion"
+      },
+      {
+        "userId": 4,
+        "tripId": 14,
+        "status": "accept",
+        "role": "companion"
+      }
+    ]
+  },
+  {
+    "id": 15,
+    "name": "suspendisse potenti",
+    "startDate": "2021-03-17 00:27:13",
+    "endDate": "2021-05-25 09:00:57",
+    "homeCurrency": "usd",
+    "tripImageUrl": "http://dummyimage.com/203x100.png/cc0000/ffffff",
+    "targetBudget": 6267390,
+    "UserTrips": [
+      {
+        "userId": 3,
+        "tripId": 15,
+        "status": "accept",
+        "role": "master"
+      }
+    ]
+  }
+]
