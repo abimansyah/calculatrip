@@ -11,6 +11,12 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "JsonWebTokenError") {
         status = 401
         message = "Invalid Token"
+    } else if (err.name === "Email or Username is required") {
+        status = 400
+        message = "Email or Username is required"
+    } else if (err.name === "Password is required") {
+        status = 400
+        message = "Password is required"
     } else if (err.name === "Forbiden to Access") {
         status = 401
         message = "Forbiden to Access"
