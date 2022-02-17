@@ -58,7 +58,7 @@ OR
 }
 OR
 {
-  "message": "endDate cannot be before startDate"
+  "message": "endDate cannot end before startDate"
 }
 OR
 {

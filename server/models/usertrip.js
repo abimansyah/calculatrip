@@ -10,12 +10,14 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      
     }
   }
   UserTrip.init({
-    userId: DataTypes.INTEGER,
-    tripId: DataTypes.INTEGER
+    UserId: DataTypes.INTEGER,
+    TripId: DataTypes.INTEGER,
+    status: DataTypes.STRING,
+    role: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'UserTrip',
