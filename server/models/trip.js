@@ -14,11 +14,59 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Trip.init({
-    name: DataTypes.STRING,
-    startDate: DataTypes.DATE,
-    endDate: DataTypes.DATE,
-    homeCurrency: DataTypes.STRING,
-    tripImageUrl: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Trip name is required"
+        }
+      }
+    },
+    startDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "startDate is required"
+        },
+        isDate:true
+      }
+    },
+    endDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "endDate is required"
+        },
+        isDate:true,
+        examineDate() {
+          const sDate = this.startDate.getTime()
+          const eDate = this.endDate.getTime()
+          if(sDate > eDate){
+            throw new Error("endDate cannot end before startDate");
+          }
+        }
+      }
+    },
+    homeCurrency: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "homeCurrency is required"
+        }
+      }
+    },
+    tripImageUrl: {
+      type: DataTypes.STRING,
+      validate: {
+        isUrl: {
+          msg: 'Must be URL!'
+        }
+      }
+    },
     targetBudget: DataTypes.INTEGER
   }, {
     sequelize,
