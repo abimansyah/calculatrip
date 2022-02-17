@@ -17,6 +17,15 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "User not found") {
         status = 404
         message = "User not found"
+    } else if (err.name === "From currency is required") {
+        status = 400
+        message = "From currency is required"
+    } else if (err.name === "To currency is required") {
+        status = 400
+        message = "To currency is required"
+    } else if (err.name === "Amount currency is required") {
+        status = 400
+        message = "Amount currency is required"
     }
 
 

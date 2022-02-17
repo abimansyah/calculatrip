@@ -4,10 +4,12 @@ const userRouter = require('./userRoutes')
 const tripRouter = require('./tripRoutes')
 const expenseRouter = require('./expenseRoutes')
 const savingRouter = require('./savingRoutes')
+const exchangeRateRouter = require('./exchangerateRoute')
 
 router.use('/users', userRouter)
 router.use('/trips', tripRouter)
 router.use('/expenses', expenseRouter)
 router.use('/savings', savingRouter)
+router.use('/exchangerate', exchangeRateRouter)
 
 module.exports = router
