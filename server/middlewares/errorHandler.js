@@ -26,6 +26,9 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "Amount currency is required") {
         status = 400
         message = "Amount currency is required"
+    } else if (err.name === "TripNotFound") {
+        status = 404
+        message = "Trip not found"
     }
 
 
