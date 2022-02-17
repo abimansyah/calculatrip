@@ -13,11 +13,12 @@ List of available endpoints for Trips:
 ## 1. POST /trips
 
 Description:
+
 - Create a trip and usertrip
 
 Request:
 
-- headers: 
+- headers:
 
 ```json
 {
@@ -68,6 +69,10 @@ OR
 {
   "message": "homeCurrency is required"
 }
+OR
+{
+  "message": "Target Budget Must be in Number!"
+}
 ```
 
 &nbsp;
@@ -75,11 +80,12 @@ OR
 ## 2. GET /trips
 
 Description:
+
 - Get all current user trips
 
 Request:
 
-- headers: 
+- headers:
 
 ```json
 {
@@ -118,11 +124,12 @@ _Response (200 - OK)_
 ## 3. GET /trips/:id
 
 Description:
+
 - Get one trip by trip id from database
 
 Request:
 
-- headers: 
+- headers:
 
 ```json
 {
@@ -142,29 +149,32 @@ _Response (200 - OK)_
 
 ```json
   {
-    "id": 2,
+    "id": 1,
     "name": "string",
     "startDate": "date",
     "endDate": "date",
     "homeCurrency": "string",
     "tripImageUrl": "string",
     "targetBudget": "integer",
-    "UserTrips": [
-      {
-        "userId": 1,
-        "tripId": "integer",
-        "status": "string",
-        "role": "string"
-      },
-      {
-        "userId": 2,
-        "tripId": "integer",
-        "status": "string",
-        "role": "string"
-      },
+    "Users": [
+        {
+            "id": 1,
+            "email": "string",
+            "username": "string",
+            "avatar": "string",
+            "phoneNumber": "string",
+            "birthDate": "date",
+            "UserTrip": {
+                "UserId": "integer",
+                "TripId": "integer",
+                "status": "string",
+                "role": "string",
+            }
+        }
     ]
-  },
+},
 ```
+
 _Response (404 - Not found)_
 
 ```json
@@ -178,11 +188,12 @@ _Response (404 - Not found)_
 ## 4. DELETE /trips/:id
 
 Description:
+
 - Delete one trip and all related data (savings & expenses) from database
 
 Request:
 
-- headers: 
+- headers:
 
 ```json
 {
@@ -201,10 +212,11 @@ Request:
 _Response (200 - OK)_
 
 ```json
-  {
-    "message": "Trip ${name} hase been deleted!"
-  }
+{
+  "message": "Trip ${name} has been deleted!"
+}
 ```
+
 _Response (404 - Not found)_
 
 ```json
@@ -212,6 +224,7 @@ _Response (404 - Not found)_
   "message": "Trip not found"
 }
 ```
+
 _Response (403 - Forbidden)_
 
 ```json
@@ -221,18 +234,28 @@ _Response (403 - Forbidden)_
 ```
 
 &nbsp;
+
 ## 5. PUT /trips/:id
 
 Description:
+
 - Update a trip
 
 Request:
 
-- headers: 
+- headers:
 
 ```json
 {
   "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+  "id": "integer"
 }
 ```
 
@@ -296,7 +319,6 @@ _Response (404 - Not found)_
   "message": "Trip not found"
 }
 ```
-
 
 &nbsp;
 

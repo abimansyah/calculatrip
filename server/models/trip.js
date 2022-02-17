@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Trip.belongsToMany(models.User, {through: models.UserTrip})
+      Trip.hasMany(models.UserTrip)
     }
   }
   Trip.init({
@@ -61,13 +63,15 @@ module.exports = (sequelize, DataTypes) => {
     },
     tripImageUrl: {
       type: DataTypes.STRING,
+    },
+    targetBudget: {
+      type: DataTypes.INTEGER,
       validate: {
-        isUrl: {
-          msg: 'Must be URL!'
+        isNumeric: {
+          msg: 'Target Budget Must be in Number!'
         }
       }
-    },
-    targetBudget: DataTypes.INTEGER
+    }
   }, {
     sequelize,
     modelName: 'Trip',
