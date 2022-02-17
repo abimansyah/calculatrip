@@ -19,7 +19,9 @@
     "supertest": "^6.2.2"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx nodemon ./bin/www",
+    "test": "jest --watchAll --detectOpenHandles --forceExit --runInBand --verbose --coverage",
+    "db:test": "npx sequelize-cli --env=test db:drop && npx sequelize-cli --env=test db:create && npx sequelize-cli --env=test db:migrate && npx sequelize-cli --env=test db:seed"
   },
   "keywords": [],
   "author": "",
