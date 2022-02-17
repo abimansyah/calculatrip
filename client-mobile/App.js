@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View, StatusBar, Dimensions } from 'react-native';
+import { Text, View, StatusBar } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import Login from './screens/Login';
+import { styles } from './styles/index'
 
 export default function App() {
   return (
-    <SafeAreaProvider style={styles.container}>
+    <SafeAreaProvider style={styles.mainContainer}>
       <View style={styles.screenSize}>
         <Login />
         <StatusBar style="auto" />
@@ -12,16 +13,3 @@ export default function App() {
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0487d9',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  screenSize: {
-    height: Dimensions.get('window').height,
-    width: Dimensions.get('window').width
-  }
-});
