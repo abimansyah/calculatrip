@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Saving.belongsTo(models.User, {foreignKey:"userId"})
     }
   }
   Saving.init({
@@ -38,7 +39,7 @@ module.exports = (sequelize, DataTypes) => {
         },
         belowZero() {
           if(this.amount <= 0) {
-            throw new error("Amount can't be 0 or below")
+            throw "Amount can't be 0 or below"
           }
         }
       }
