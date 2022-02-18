@@ -3,6 +3,7 @@ const {
   Saving,
   Trip,
   UserTrip,
+  User
 } = require("../models/index");
 
 const tripAuthorization = async (req, res, next) => {
@@ -13,7 +14,9 @@ const tripAuthorization = async (req, res, next) => {
   Ini untuk delete dan update/edit
   */
   try {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
 
     const trip = await Trip.findOne({
       where: {
@@ -22,7 +25,9 @@ const tripAuthorization = async (req, res, next) => {
     });
 
     if (!trip) {
-      throw { name: "TripNotFound" };
+      throw {
+        name: "TripNotFound"
+      };
     }
 
     const userTrip = await UserTrip.findOne({
@@ -33,13 +38,17 @@ const tripAuthorization = async (req, res, next) => {
     });
 
     if (!userTrip) {
-      throw { name: "Forbidden to Access" };
+      throw {
+        name: 'Unauthorize'
+      };
     }
 
     if (userTrip.role === "owner") {
       next();
     } else {
-      throw { name: "Forbidden to Access" };
+      throw {
+        name: 'Unauthorize'
+      };
     }
   } catch (err) {
     next(err);
@@ -63,7 +72,9 @@ const expenseAuthorization = async (req, res, next) => {
 
 */
   try {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
 
     const expense = await Expense.findOne({
       where: {
@@ -72,7 +83,9 @@ const expenseAuthorization = async (req, res, next) => {
     });
 
     if (!expense) {
-      throw { name: "ExpenseNotFound" };
+      throw {
+        name: "ExpenseNotFound"
+      };
     }
 
     const trip = await Trip.findOne({
@@ -81,7 +94,9 @@ const expenseAuthorization = async (req, res, next) => {
       },
     });
     if (!trip) {
-      throw { name: "TripNotFound" };
+      throw {
+        name: "TripNotFound"
+      };
     }
 
     const userTrip = await UserTrip.findOne({
@@ -92,7 +107,9 @@ const expenseAuthorization = async (req, res, next) => {
     });
 
     if (!userTrip) {
-      throw { name: "UserTripNotFound" };
+      throw {
+        name: "UserTripNotFound"
+      };
     }
 
     if (userTrip.role === "owner") {
@@ -102,7 +119,9 @@ const expenseAuthorization = async (req, res, next) => {
         next();
       }
     } else {
-      throw { name: "Forbiden to Access" };
+      throw {
+        name: 'Unauthorize'
+      };
     }
   } catch (err) {
     next();
@@ -126,7 +145,9 @@ const savingAuthorization = async (req, res, next) => {
 
 */
   try {
-    const { id } = req.params;
+    const {
+      id
+    } = req.params;
 
     const saving = await Saving.findOne({
       where: {
@@ -134,7 +155,9 @@ const savingAuthorization = async (req, res, next) => {
       },
     });
     if (!saving) {
-      throw { name: "SavingNotFound" };
+      throw {
+        name: "SavingNotFound"
+      };
     }
 
     const trip = await Trip.findOne({
@@ -143,7 +166,9 @@ const savingAuthorization = async (req, res, next) => {
       },
     });
     if (!trip) {
-      throw { name: "TripNotFound" };
+      throw {
+        name: "TripNotFound"
+      };
     }
 
     const userTrip = await UserTrip.findOne({
@@ -154,7 +179,9 @@ const savingAuthorization = async (req, res, next) => {
     });
 
     if (!userTrip) {
-      throw { name: "UserTripNotFound" };
+      throw {
+        name: "UserTripNotFound"
+      };
     }
 
     if (userTrip.role === "owner") {
@@ -164,15 +191,40 @@ const savingAuthorization = async (req, res, next) => {
         next();
       }
     } else {
-      throw { name: "Forbiden to Access" };
+      throw {
+        name: 'Unauthorize'
+      };
     }
   } catch (err) {
     next(err);
   }
 };
 
+const userAuthorization = async (req, res, next) => {
+  try {
+    const {
+      id
+    } = req.params
+    const user = await User.findByPk(id);
+    if (!user) {
+      throw {
+        name: "User not found"
+      }
+    }
+    if (user.id !== req.user.id) {
+      throw {
+        name: 'Unauthorize'
+      }
+    }
+    next()
+  } catch (err) {
+    next(err)
+  }
+}
+
 module.exports = {
   tripAuthorization,
   expenseAuthorization,
   savingAuthorization,
+  userAuthorization
 };

@@ -25,7 +25,7 @@ beforeAll(async () => {
             username: "usernametest",
             email: "test@mail.com",
             password: "1234567",
-            phoneNumber: "111111111",
+            phoneNumber: "1234567890",
             avatar: "abcder",
             birthDate: "01-01-2022"
         })
@@ -33,7 +33,7 @@ beforeAll(async () => {
             username: "usernametestdua",
             email: "test2@mail.com",
             password: "1234567",
-            phoneNumber: "2222222222",
+            phoneNumber: "2134567890",
             avatar: "abcder",
             birthDate: "01-01-2022"
         })
@@ -41,7 +41,7 @@ beforeAll(async () => {
             username: "usernametesttiga",
             email: "test3@mail.com",
             password: "1234567",
-            phoneNumber: "33333333",
+            phoneNumber: "3214567890",
             avatar: "abcder",
             birthDate: "01-01-2022"
         })
@@ -71,7 +71,7 @@ describe('POST /users/register - create new user', () => {
                 username: "rodhey",
                 email: "lb_inter@yahoo.com",
                 password: "1234567",
-                phoneNumber: "123456",
+                phoneNumber: "123456789",
                 avatar: "abcder",
                 birthDate: "01-01-2022"
             })
@@ -95,7 +95,7 @@ describe('POST /users/register - create new user', () => {
             .send({
                 username: "rodhey",
                 password: "1234567",
-                phoneNumber: "123456",
+                phoneNumber: "123456789",
                 avatar: "abcder",
                 birthDate: "01-01-2022"
             })
@@ -117,7 +117,7 @@ describe('POST /users/register - create new user', () => {
             .post('/users/register')
             .send({
                 username: "rodhey",
-                password: "1234567",
+                password: "12345676789",
                 email: "dsdsdsdsdsds",
                 phoneNumber: "123456",
                 avatar: "abcder",
@@ -143,7 +143,7 @@ describe('POST /users/register - create new user', () => {
                 username: "rodhey",
                 password: "1234567",
                 email: "lb_inter@yahoo.com",
-                phoneNumber: "123456",
+                phoneNumber: "1234567890",
                 avatar: "abcder",
                 birthDate: "01-01-2022"
             })
@@ -167,7 +167,7 @@ describe('POST /users/register - create new user', () => {
                 username: "rodhey",
                 password: "1234567",
                 email: "lb_inter2@yahoo.com",
-                phoneNumber: "123456",
+                phoneNumber: "1234567890",
                 avatar: "abcder",
                 birthDate: "01-01-2022"
             })
@@ -191,7 +191,7 @@ describe('POST /users/register - create new user', () => {
                 username: "rodhey@-",
                 password: "1234567",
                 email: "lb_inter2@yahoo.com",
-                phoneNumber: "123456",
+                phoneNumber: "1234567890",
                 avatar: "abcder",
                 birthDate: "01-01-2022"
             })
@@ -215,7 +215,7 @@ describe('POST /users/register - create new user', () => {
                 username: "rodh",
                 password: "1234567",
                 email: "lb_inter2@yahoo.com",
-                phoneNumber: "123456",
+                phoneNumber: "1234567890",
                 avatar: "abcder",
                 birthDate: "01-01-2022"
             })
@@ -238,7 +238,7 @@ describe('POST /users/register - create new user', () => {
             .send({
                 password: "1234567",
                 email: "lb_inter2@yahoo.com",
-                phoneNumber: "123456",
+                phoneNumber: "1234567890",
                 avatar: "abcder",
                 birthDate: "01-01-2022"
             })
@@ -261,7 +261,7 @@ describe('POST /users/register - create new user', () => {
             .send({
                 username: "rodhey",
                 email: "lb_inter2@yahoo.com",
-                phoneNumber: "123456",
+                phoneNumber: "1234567890",
                 avatar: "abcder",
                 birthDate: "01-01-2022"
             })
@@ -285,7 +285,7 @@ describe('POST /users/register - create new user', () => {
                 username: "rodhey",
                 password: "121",
                 email: "lb_inter2@yahoo.com",
-                phoneNumber: "123456",
+                phoneNumber: "1234568908",
                 avatar: "abcder",
                 birthDate: "01-01-2022"
             })
@@ -301,6 +301,124 @@ describe('POST /users/register - create new user', () => {
                 console.log(err)
             })
     })
+
+    test('POST /pub/register 400 Failed register - should return error if invalid date format', (done) => {
+        request(app)
+            .post('/users/register')
+            .send({
+                username: "rodhey",
+                password: "121989898",
+                email: "lb_inter2@yahoo.com",
+                phoneNumber: "1234567890",
+                avatar: "abcder",
+                birthDate: "25-01-2022"
+            })
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(400)
+                expect(result).toEqual(expect.any(Object))
+                expect(result).toHaveProperty("message", "Invalid date format");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('POST /pub/register 400 Failed register - should return error if birth date is null', (done) => {
+        request(app)
+            .post('/users/register')
+            .send({
+                username: "rodhey",
+                password: "121989898",
+                email: "lb_inter2@yahoo.com",
+                phoneNumber: "1234567890",
+                avatar: "abcder",
+            })
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(400)
+                expect(result).toEqual(expect.any(Object))
+                expect(result).toHaveProperty("message", "Birth Date is required");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('POST /pub/register 400 Failed register - should return error if Phone Number has already been taken', (done) => {
+        request(app)
+            .post('/users/register')
+            .send({
+                username: "rodhey12",
+                password: "121989898",
+                email: "lb_inter2@yahoo.com",
+                phoneNumber: "1234567890",
+                avatar: "abcder",
+                birthDate: "01-01-2022"
+            })
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(400)
+                expect(result).toEqual(expect.any(Object))
+                expect(result).toHaveProperty("message", "Phone Number has already been taken");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('POST /pub/register 400 Failed register - should return error if Phone Number is null', (done) => {
+        request(app)
+            .post('/users/register')
+            .send({
+                username: "rodhey12",
+                password: "121989898",
+                email: "lb_inter2@yahoo.com",
+                avatar: "abcder",
+                birthDate: "01-01-2022"
+            })
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(400)
+                expect(result).toEqual(expect.any(Object))
+                expect(result).toHaveProperty("message", "Phone Number is required");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('POST /pub/register 400 Failed register - should return error if Phone Number not contain 8-13 digits', (done) => {
+        request(app)
+            .post('/users/register')
+            .send({
+                username: "rodhey12",
+                password: "121989898",
+                email: "lb_inter2@yahoo.com",
+                phoneNumber: "12345",
+                avatar: "abcder",
+                birthDate: "01-01-2022"
+            })
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(400)
+                expect(result).toEqual(expect.any(Object))
+                expect(result).toHaveProperty("message", "Phone Number should contain 8-13 digits");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
 })
 
 describe('POST /users/Login - User login', () => {
@@ -308,7 +426,7 @@ describe('POST /users/Login - User login', () => {
         request(app)
             .post('/users/login')
             .send({
-                loginInput: "lb_inter@yahoo.com",
+                loginInput: "test@mail.com",
                 password: "1234567",
             })
             .then(resp => {
@@ -327,7 +445,7 @@ describe('POST /users/Login - User login', () => {
         request(app)
             .post('/users/login')
             .send({
-                loginInput: "rodhey",
+                loginInput: "usernametest",
                 password: "1234567",
             })
             .then(resp => {
@@ -364,7 +482,7 @@ describe('POST /users/Login - User login', () => {
         request(app)
             .post('/users/login')
             .send({
-                loginInput: "lb_inter@yahoo.com",
+                loginInput: "test@mail.com",
             })
             .then(resp => {
                 const result = resp.body
@@ -382,7 +500,7 @@ describe('POST /users/Login - User login', () => {
         request(app)
             .post('/users/login')
             .send({
-                loginInput: "lb_inter@yahoo.com",
+                loginInput: "test@mail.com",
                 password: "123"
             })
             .then(resp => {
@@ -557,7 +675,7 @@ describe('GET /users/profile - Get profile user from database', () => {
 describe('GET /users/profile/:input - Get profile user from database', () => {
     test('GET /users/profile/:input  success(200) - get user profile from database by email with correct access token', (done) => {
         request(app)
-            .get("/users/profile/lb_inter@yahoo.com")
+            .get("/users/profile/test@mail.com")
             .set('access_token', token)
             .then(resp => {
                 const result = resp.body
@@ -575,7 +693,7 @@ describe('GET /users/profile/:input - Get profile user from database', () => {
 
     test('GET /users/profile/:input  success(200) - get user profile from database by username with correct access token', (done) => {
         request(app)
-            .get("/users/profile/rodhey")
+            .get("/users/profile/usernametest")
             .set('access_token', token)
             .then(resp => {
                 const result = resp.body
@@ -787,7 +905,7 @@ describe('PUT /users/:id - Edit profile user', () => {
             .put('/users/1')
             .set("access_token", token)
             .send({
-                username: "rodhey",
+                username: "usernametestdua",
                 email: "lb_inte1212@yahoo.com",
                 password: "123456712",
                 phoneNumber: "1234564412",
@@ -863,7 +981,7 @@ describe('PUT /users/:id - Edit profile user', () => {
             .set("access_token", token)
             .send({
                 username: "rodheykenatestlagi",
-                email: "lb_inter@yahoo.com",
+                email: "test2@mail.com",
                 password: "123456712",
                 phoneNumber: "1234564412",
                 avatar: "abcder",
@@ -925,6 +1043,31 @@ describe('PUT /users/:id - Edit profile user', () => {
                 expect(resp.status).toBe(400)
                 expect(result).toEqual(expect.any(Object))
                 expect(result).toHaveProperty("message", "Password length min 7");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('PUT /users/:id success status (400) - should return error unauthorize edit profile user not owner user', (done) => {
+        request(app)
+            .put('/users/2')
+            .set("access_token", token)
+            .send({
+                username: "rodheykenatestlagi",
+                email: "lbinter@yahoo.com",
+                password: "12",
+                phoneNumber: "1234564412",
+                avatar: "abcder",
+                birthDate: "01-01-2022"
+            })
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(403)
+                expect(result).toEqual(expect.any(Object))
+                expect(result).toHaveProperty("message", 'Unauthorize - Forbiden to Access');
                 done()
             })
             .catch(err => {
