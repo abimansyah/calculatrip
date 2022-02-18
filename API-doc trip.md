@@ -55,19 +55,23 @@ _Response (400 - Bad Request)_
 }
 OR
 {
-  "message": "startDate is required"
+  "message": "Start Date is required"
 }
 OR
 {
-  "message": "endDate cannot end before startDate"
+  "message": "End Date is required"
 }
 OR
 {
-  "message": "endDate is required"
+  "message": "Invalid date format"
 }
 OR
 {
-  "message": "homeCurrency is required"
+  "message": "End Date cannot end before Start Date"
+}
+OR
+{
+  "message": "Home Currency is required"
 }
 OR
 {
@@ -99,34 +103,74 @@ _Response (200 - OK)_
 [
   {
     "id": 1,
-    "name": "string",
-    "startDate": "date",
-    "endDate": "date",
-    "homeCurrency": "string",
-    "tripImageUrl": "string",
-    "targetBudget": "integer",
-    "UserTrip": {
-        "UserId": 1,
-        "TripId": 1,
-        "status": "string",
-        "role": "string",
-    }
-  },
-  {
+    "email": "string",
+    "password": "string",
+    "username": "string",
+    "avatar": "string",
+    "phoneNumber": "string",
+    "birthDate": "date",
+    "createdAt": "date",
+    "updatedAt": "date",
+    "Trips": [
+        {
+            "id": 1,
+            "name": "string",
+            "startDate": "date",
+            "endDate": "date",
+            "homeCurrency": "string",
+            "tripImageUrl": "string",
+            "targetBudget": "integer",
+            "UserTrip": {
+                "UserId": 1,
+                "TripId": 1,
+                "status": "string",
+                "role": "string"
+            },
+            "UserTrips": [
+                {
+                    "UserId": 1,
+                    "TripId": 1,
+                    "status": "string",
+                    "role": "string"
+                }
+                ...
+            ]
+        },
+        {
     "id": 2,
-    "name": "string",
-    "startDate": "date",
-    "endDate": "date",
-    "homeCurrency": "string",
-    "tripImageUrl": "string",
-    "targetBudget": "integer",
-    "UserTrip": {
-        "UserId": 1,
-        "TripId": 2,
-        "status": "string",
-        "role": "string",
-    }
-  },
+    "email": "string",
+    "password": "string",
+    "username": "string",
+    "avatar": "string",
+    "phoneNumber": "string",
+    "birthDate": "date",
+    "createdAt": "date",
+    "updatedAt": "date",
+    "Trips": [
+        {
+            "id": 3,
+            "name": "string",
+            "startDate": "date",
+            "endDate": "date",
+            "homeCurrency": "string",
+            "tripImageUrl": "string",
+            "targetBudget": "integer",
+            "UserTrip": {
+                "UserId": 2,
+                "TripId": 3,
+                "status": "string",
+                "role": "string"
+            },
+            "UserTrips": [
+                {
+                    "UserId": 2,
+                    "TripId": 3,
+                    "status": "string",
+                    "role": "string"
+                }
+                ...
+        ]
+    },
   ...,
 ]
 ```
@@ -229,23 +273,11 @@ _Response (200 - OK)_
 }
 ```
 
-_Response (403 - Forbidden)_
-
-```json
-{
-  "message": "Forbiden to Access"
-}
-```
-
 _Response (404 - Not found)_
 
 ```json
 {
   "message": "Trip not found"
-}
-OR
-{
-  "message": "User Trip not found"
 }
 OR
 {
@@ -328,14 +360,6 @@ OR
 }
 ```
 
-_Response (403 - Forbidden)_
-
-```json
-{
-  "message": "Forbiden to Access"
-}
-```
-
 _Response (404 - Not found)_
 
 ```json
@@ -365,6 +389,14 @@ _Response (401 - Unauthorized)_
 ```json
 {
   "message": "Invalid token"
+}
+```
+
+_Response (403 - Forbidden)_
+
+```json
+{
+  "message": "Forbiden to Access"
 }
 ```
 

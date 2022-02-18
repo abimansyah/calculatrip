@@ -16,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   Saving.init({
     name: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: "Name is required"
@@ -28,7 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     amount: {
       type: DataTypes.INTEGER,
-      allowNull: true,
+      allowNull: false,
       validate: {
         notEmpty: {
           msg: "Amount is required"
@@ -53,9 +53,9 @@ module.exports = (sequelize, DataTypes) => {
         notNull: {
           msg: "Saving Date is required"
         },
-      isDate: {
-        msg: "Invalid input date"
-      }
+        isDate: {
+          msg: "Invalid input date"
+        }
     }
   },
     tripId: DataTypes.INTEGER,

@@ -1,13 +1,8 @@
 const {
-  User,
   Expense,
-  ExpenseCategory,
-  Images,
-  PaymentMethod,
   Saving,
   Trip,
   UserTrip,
-  sequelize,
 } = require("../models/index");
 
 const tripAuthorization = async (req, res, next) => {
@@ -38,13 +33,13 @@ const tripAuthorization = async (req, res, next) => {
     });
 
     if (!userTrip) {
-      throw { name: "UserTripNotFound" };
+      throw { name: "Forbidden to Access" };
     }
 
     if (userTrip.role === "owner") {
       next();
     } else {
-      throw { name: "Forbiden to Access" };
+      throw { name: "Forbidden to Access" };
     }
   } catch (err) {
     next(err);

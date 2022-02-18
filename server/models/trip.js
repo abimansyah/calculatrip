@@ -22,6 +22,9 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         notEmpty: {
           msg: "Trip name is required"
+        },
+        notNull: {
+          msg: "Trip name is required"
         }
       }
     },
@@ -30,7 +33,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "startDate is required"
+          msg: "Start Date is required"
+        },
+        notNull:{
+          msg: "Start Date is required"
         },
         isDate:true
       }
@@ -40,14 +46,19 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "endDate is required"
+          msg: "End Date is required"
         },
-        isDate:true,
+        notNull: {
+          msg: "End Date is required"
+        },
+        isDate:{
+          msg: "Invalid date format"
+        },
         examineDate() {
           const sDate = this.startDate.getTime()
           const eDate = this.endDate.getTime()
           if(sDate > eDate){
-            throw new Error("endDate cannot end before startDate");
+            throw new Error("End Date cannot end before Start Date");
           }
         }
       }
@@ -57,8 +68,11 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         notEmpty: {
-          msg: "homeCurrency is required"
-        }
+          msg: "Home Currency is required"
+        },
+        notNull: {
+          msg: "Home Currency is required"
+        },
       }
     },
     tripImageUrl: {
