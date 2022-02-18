@@ -11,6 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Saving.belongsTo(models.User, {
+        foreignKey: "userId"
+      })
     }
   }
   Saving.init({
@@ -37,8 +40,8 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Amount is required"
         },
         belowZero() {
-          if(this.amount <= 0) {
-            throw new error("Amount can't be 0 or below")
+          if (this.amount <= 0) {
+            throw "Amount can't be 0 or below"
           }
         }
       }
@@ -46,7 +49,7 @@ module.exports = (sequelize, DataTypes) => {
     savingDate: {
       type: DataTypes.DATE,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: {
           msg: "Saving Date is required"
         },
@@ -56,8 +59,8 @@ module.exports = (sequelize, DataTypes) => {
         isDate: {
           msg: "Invalid input date"
         }
-    }
-  },
+      }
+    },
     tripId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER
   }, {
