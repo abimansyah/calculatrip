@@ -1,9 +1,9 @@
 import { StyleSheet, Dimensions } from "react-native";
 
-const logoColor = '#72c1f2'
-const backgroundColor = '#fff'
-const mainColor = '#0487d9'
-const secondColor = '#0378a6'
+export const logoColor = '#72c1f2'
+export const backgroundColor = '#fff'
+export const mainColor = '#0487d9'
+export const secondColor = '#0378a6'
 
 export const styles = StyleSheet.create({
   mainContainer: {
@@ -12,7 +12,7 @@ export const styles = StyleSheet.create({
     position: 'relative'
   },
 
-  
+
   screenSize: {
     height: Dimensions.get('window').height,
     width: Dimensions.get('window').width
@@ -25,7 +25,37 @@ export const styles = StyleSheet.create({
     fontWeight: '500',
     textAlign: 'center',
     borderRadius: 5,
-    paddingVertical: 5
+    paddingVertical: 5,
+    overflow: 'hidden'
+  },
+
+  divInput: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingVertical: 5,
+    paddingHorizontal: 15
+  },
+
+  input: {
+    borderWidth: 1,
+    borderColor: '#c1c1c1',
+    borderRadius: 5,
+    width: '100%',
+    height: 40,
+    color: '#000',
+    paddingLeft: 10
+  },
+
+  inputOnFocus: {
+    borderWidth: 1,
+    borderColor: '#c1c1c1',
+    borderRadius: 5,
+    width: '100%',
+    height: 40,
+    color: '#000',
+    paddingLeft: 10,
+    borderBottomColor: mainColor,
+    borderBottomWidth: 3
   }
 });
 
