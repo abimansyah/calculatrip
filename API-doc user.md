@@ -54,19 +54,19 @@ OR
 }
 OR
 {
-  "message": "username must be unique"
+  "message": "Username must be unique"
 }
 OR
 {
-  "message": "username can not contain symbols"
+  "message": "Username can not contain symbols"
 }
 OR
 {
-  "message": "username must have more than 6 characters"
+  "message": "Username must have more than 6 characters"
 }
 OR
 {
-  "message": "username is required"
+  "message": "Username is required"
 }
 OR
 {
@@ -75,6 +75,22 @@ OR
 OR
 {
   "message": "Password must contain more than 7 characters"
+}
+OR
+{
+  "message": "Invalid date format"
+}
+OR
+{
+  "message": "Birth Date is required"
+}
+OR
+{
+  "message": "Phone Number has already been taken"
+}
+OR
+{
+  "message": "Phone Number is required"
 }
 ```
 

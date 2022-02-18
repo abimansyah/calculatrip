@@ -17,9 +17,9 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "Password is required") {
         status = 400
         message = "Password is required"
-    } else if (err.name === "Forbiden to Access") {
+    } else if (err.name === "Forbidden to Access") {
         status = 401
-        message = "Forbiden to Access"
+        message = "Forbidden to Access"
     } else if (err.name === "User not found") {
         status = 404
         message = "User not found"
@@ -35,9 +35,6 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "TripNotFound") {
         status = 404
         message = "Trip not found"
-    } else if (err.name === "UserTripNotFound") {
-        status = 404
-        message = "User Trip not found"
     } else if (err.name === "ExpenseNotFound") {
         status = 404
         message = "Expense not found"

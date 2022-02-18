@@ -1,9 +1,4 @@
-const {
-  User,
-  Trip,
-  UserTrip,
-  sequelize,
-} = require("../models/index");
+const { User, Trip, UserTrip, sequelize } = require("../models/index");
 const imageRandomizer = require("../helpers/imageRandomizer");
 
 const defaultBackgrounds = [
@@ -19,14 +14,7 @@ class TripController {
   static async postTrip(req, res, next) {
     const t = await sequelize.transaction();
     try {
-      const {
-        name,
-        startDate,
-        endDate,
-        homeCurrency,
-        tripImageUrl,
-        targetBudget,
-      } = req.body;
+      const { name, startDate, endDate, homeCurrency, tripImageUrl, targetBudget } = req.body;
 
       const newTrip = await Trip.create(
         {
@@ -35,7 +23,7 @@ class TripController {
           endDate,
           homeCurrency,
           tripImageUrl,
-          targetBudget,
+          targetBudget: targetBudget || 0,
         },
         { transaction: t }
       );
@@ -70,15 +58,27 @@ class TripController {
           {
             model: Trip,
             order: [["createdAt", "desc"]],
+            attributes: {
+              exclude: ["createdAt","updatedAt"]
+            },
+            include: [
+              {
+                model: UserTrip,
+                attributes: {
+                  exclude: ["createdAt", "updatedAt"],
+                },
+              },
+            ],
             through: {
               attributes: {
-                exclude: ["createdAt", "updatedAt", "password"],
+                exclude: ["createdAt", "updatedAt"],
               },
             },
           },
         ],
       });
-      res.status(200).json(output.Trips);
+
+      res.status(200).json(output);
     } catch (err) {
       next(err);
     }
@@ -132,14 +132,7 @@ class TripController {
   static async editTrip(req, res, next) {
     const t = await sequelize.transaction();
     try {
-      const {
-        name,
-        startDate,
-        endDate,
-        homeCurrency,
-        tripImageUrl,
-        targetBudget,
-      } = req.body;
+      const { name, startDate, endDate, homeCurrency, tripImageUrl, targetBudget } = req.body;
 
       const { id } = req.params;
 
@@ -154,9 +147,7 @@ class TripController {
             startDate,
             endDate,
             homeCurrency,
-            tripImageUrl:
-              tripImageUrl ||
-              defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
+            tripImageUrl: tripImageUrl || defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
             targetBudget,
           },
           { where: { id }, returning: true },

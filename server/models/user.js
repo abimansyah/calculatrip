@@ -69,14 +69,42 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Username must have more than 6 characters"
         },
         is: {
-          args: ["^[a-z]+$", 'i'],
+          args: ["^[A-Za-z0-9]+$",'i'],
           msg: "username can not contain symbols"
         },
       }
     },
     avatar: DataTypes.STRING,
-    phoneNumber: DataTypes.STRING,
-    birthDate: DataTypes.DATE
+    phoneNumber: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: {
+        msg: "Phone Number has already been taken"
+      },
+      validate:{
+        notNull:{
+          msg: "Phone Number is required"
+        },
+        notEmpty:{
+          msg: "Phone Number is required"
+        },
+      }
+    },
+    birthDate: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        notNull:{
+          msg: "Birth Date is required"
+        },
+        notEmpty:{
+          msg: "Birth Date is required"
+        },
+        isDate: {
+          msg: "Invalid date format"
+        }
+      }
+    }
   }, {
     hooks: {
       beforeCreate(inst, opt) {
