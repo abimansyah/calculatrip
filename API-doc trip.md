@@ -104,7 +104,13 @@ _Response (200 - OK)_
     "endDate": "date",
     "homeCurrency": "string",
     "tripImageUrl": "string",
-    "targetBudget": "integer"
+    "targetBudget": "integer",
+    "UserTrip": {
+        "UserId": 1,
+        "TripId": 1,
+        "status": "string",
+        "role": "string",
+    }
   },
   {
     "id": 2,
@@ -113,7 +119,13 @@ _Response (200 - OK)_
     "endDate": "date",
     "homeCurrency": "string",
     "tripImageUrl": "string",
-    "targetBudget": "integer"
+    "targetBudget": "integer",
+    "UserTrip": {
+        "UserId": 1,
+        "TripId": 2,
+        "status": "string",
+        "role": "string",
+    }
   },
   ...,
 ]
@@ -217,19 +229,31 @@ _Response (200 - OK)_
 }
 ```
 
+_Response (403 - Forbidden)_
+
+```json
+{
+  "message": "Forbiden to Access"
+}
+```
+
 _Response (404 - Not found)_
 
 ```json
 {
   "message": "Trip not found"
 }
-```
-
-_Response (403 - Forbidden)_
-
-```json
+OR
 {
-  "message": "Forbidden access!"
+  "message": "User Trip not found"
+}
+OR
+{
+  "message": "Expense not found"
+}
+OR
+{
+  "message": "Saving not found"
 }
 ```
 
@@ -308,7 +332,7 @@ _Response (403 - Forbidden)_
 
 ```json
 {
-  "message": "Forbidden access!"
+  "message": "Forbiden to Access"
 }
 ```
 
@@ -317,6 +341,18 @@ _Response (404 - Not found)_
 ```json
 {
   "message": "Trip not found"
+}
+OR
+{
+  "message": "User Trip not found"
+}
+OR
+{
+  "message": "Expense not found"
+}
+OR
+{
+  "message": "Saving not found"
 }
 ```
 
