@@ -17,9 +17,9 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "Password is required") {
         status = 400
         message = "Password is required"
-    } else if (err.name === "Forbidden to Access") {
+    } else if (err.name === "Forbiden to Access") {
         status = 401
-        message = "Forbidden to Access"
+        message = "Forbiden to Access"
     } else if (err.name === "User not found") {
         status = 404
         message = "User not found"
@@ -41,6 +41,9 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "SavingNotFound") {
         status = 404
         message = "Saving not found"
+    } else if (err.name === 'Unauthorize') {
+        status = 403
+        message = 'Unauthorize - Forbiden to Access'
     }
 
     res.status(status).json({

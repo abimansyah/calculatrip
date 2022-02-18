@@ -33,13 +33,13 @@ const tripAuthorization = async (req, res, next) => {
     });
 
     if (!userTrip) {
-      throw { name: "Forbidden to Access" };
+      throw { name: "Unauthorize" };
     }
 
     if (userTrip.role === "owner") {
       next();
     } else {
-      throw { name: "Forbidden to Access" };
+      throw { name: "Unauthorize" };
     }
   } catch (err) {
     next(err);
@@ -102,7 +102,7 @@ const expenseAuthorization = async (req, res, next) => {
         next();
       }
     } else {
-      throw { name: "Forbiden to Access" };
+      throw { name: "Unauthorize" };
     }
   } catch (err) {
     next();
@@ -141,7 +141,7 @@ const savingAuthorization = async (req, res, next) => {
       },
     });
     if (!trip) {
-      throw { name: "Forbidden to Access" };
+      throw { name: "Unauthorize" };
     }
     
     const userTrip = await UserTrip.findOne({
@@ -154,7 +154,7 @@ const savingAuthorization = async (req, res, next) => {
     console.log("tapi sampe sini");
     
     if (!userTrip) {
-      throw { name: "Forbidden to Access" };
+      throw { name: "Unauthorize" };
     }
 
     if (userTrip.role === "owner") {
@@ -164,7 +164,7 @@ const savingAuthorization = async (req, res, next) => {
         next();
       }
     } else {
-      throw { name: "Forbidden to Access" };
+      throw { name: "Unauthorize" };
     }
   } catch (err) {
     next(err);

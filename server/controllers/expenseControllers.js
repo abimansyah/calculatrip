@@ -29,6 +29,7 @@ class ExpenseController {
         message: "Expense added!"
       })
     } catch (error) {
+      console.log(error, "ini dari controller???????????????");
       next(error)
     }
   }
