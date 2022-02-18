@@ -94,7 +94,7 @@ Request:
 }
 ```
 
-_Response (200 - OK)_
+_Response (200 - OK) 
 
 ```json
 {

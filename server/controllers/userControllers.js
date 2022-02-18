@@ -164,9 +164,9 @@ class UserController {
                 avatar: req.body.avatar,
                 birthDate: req.body.birthDate
             }
-            const userFound = await Movie.findByPk(idUser)
+            const userFound = await User.findByPk(idUser)
             if (!userFound) throw {
-                name: "User not Found"
+                name: "User not found"
             }
             const user = await User.update(input, {
                 where: {
