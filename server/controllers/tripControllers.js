@@ -1,10 +1,5 @@
 const {
   User,
-  Expense,
-  ExpenseCategory,
-  Images,
-  PaymentMethod,
-  Saving,
   Trip,
   UserTrip,
   sequelize,

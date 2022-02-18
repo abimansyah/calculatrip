@@ -35,9 +35,13 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "TripNotFound") {
         status = 404
         message = "Trip not found"
+    } else if (err.name === "SavingNotFound") {
+        status = 404
+        message = "Saving not found"
+    } else if (err.name === "ExpenseNotFound") {
+        status = 404
+        message = "Expense not found"
     }
-
-
 
     res.status(status).json({
         message

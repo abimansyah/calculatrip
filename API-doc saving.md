@@ -3,7 +3,8 @@
 List of available endpoints for Savings:
 
 - `POST /savings/:tripId`
-- `GET /savings/:tripId`
+- `GET /savings/trip/:tripId`
+- `GET /savings/:savingId`
 - `DELETE / savings/:savingId`
 
 &nbsp;
@@ -35,6 +36,7 @@ Request:
 {
   "name": "string",
   "amount": "integer",
+  "savingDate": "date"
 }
 ```
 
@@ -58,13 +60,21 @@ OR
 }
 OR
 {
-  "message": "Amount can't be below 0"
+  "message": "Amount can't be 0 or below"
+}
+OR
+{
+  "message": "Saving date  input date"
+}
+OR
+{
+  "message": "Invalid input date"
 }
 ```
 
 &nbsp;
 
-## 2. GET /savings/:tripId
+## 2. GET /savings/trip/:tripId
 
 Description:
 - Get all savings inside a trip
@@ -79,6 +89,14 @@ Request:
 }
 ```
 
+- params:
+
+```json
+{
+  "tripId": "integer"
+}
+```
+
 _Response (200 - OK)_
 
 ```json
@@ -89,7 +107,9 @@ _Response (200 - OK)_
     "tripId": "integer",
     "amount": "integer",
     "userId": "integer",
+    "savingDate": "date",
     "createdAt": "date",
+    "updatedAt": "date",
     "User": {
               "username": "string",
               "email": "string"
@@ -101,7 +121,7 @@ _Response (200 - OK)_
     "tripId": "integer",
     "amount": "integer",
     "userId": "integer",
-    "createdAt": "date",
+    "savingDate": "date",
     "User": {
               "username": "string",
               "email": "string"
@@ -113,7 +133,51 @@ _Response (200 - OK)_
 
 &nbsp;
 
-## 3. DELETE /savings/:savingId
+## 3. GET /savings/:savingId
+
+Description:
+- Get one saving of a trip
+
+Request:
+
+- headers: 
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+  "savingId": "integer"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+  {
+    "id": 1,
+    "name": "string",
+    "tripId": "integer",
+    "amount": "integer",
+    "userId": "integer",
+    "savingDate": "date",
+    "createdAt": "date",
+    "updatedAt": "date",
+    "User": {
+              "username": "string",
+              "email": "string"
+            }
+  }
+```
+
+&nbsp;
+
+## 4. DELETE /savings/:savingId
 
 Description:
 - Delete one saving from a trip
@@ -131,7 +195,7 @@ Request:
 
 ```json
 {
-  "expenseId": "integer"
+  "savingId": "integer"
 }
 ```
 
@@ -139,7 +203,7 @@ _Response (200 - OK)_
 
 ```json
 {
-  "message": "Saving with ID: ID has been deleted!"
+  "message": "Saving has been deleted!"
 }
 ```
 Response (403 - Forbidden)_
