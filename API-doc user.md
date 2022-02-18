@@ -92,6 +92,10 @@ OR
 {
   "message": "Phone Number is required"
 }
+OR
+{
+  "message": "Phone Number should contain 8-13 digits"
+}
 ```
 
 &nbsp;
@@ -271,6 +275,7 @@ Request:
 
 ```json
 {
+  "email": "string",
   "password": "string",
   "username": "string",
   "avatar": "string",
