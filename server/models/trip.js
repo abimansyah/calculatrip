@@ -38,7 +38,9 @@ module.exports = (sequelize, DataTypes) => {
         notNull:{
           msg: "Start Date is required"
         },
-        isDate:true
+        isDate:{
+          msg: "Invalid date format"
+        }
       }
     },
     endDate: {
@@ -58,7 +60,7 @@ module.exports = (sequelize, DataTypes) => {
           const sDate = this.startDate.getTime()
           const eDate = this.endDate.getTime()
           if(sDate > eDate){
-            throw new Error("End Date cannot end before Start Date");
+            throw "End Date cannot end before Start Date"
           }
         }
       }
@@ -80,11 +82,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     targetBudget: {
       type: DataTypes.INTEGER,
-      validate: {
-        isNumeric: {
-          msg: 'Target Budget Must be in Number!'
-        }
-      }
     }
   }, {
     sequelize,
