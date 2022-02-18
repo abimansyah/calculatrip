@@ -5,7 +5,7 @@ class SavingController {
     try {
       const { tripId } = req.params
       const userId = req.user.id
-      const { name,amount } = req.body
+      const { name,amount,savingDate } = req.body
       const trip = await Trip.findByPk(tripId)
 
       if(!trip) {
@@ -25,6 +25,7 @@ class SavingController {
         message: "Happy saving!"
       })
     } catch (error) {
+
       next(error)
     }
   }
@@ -40,6 +41,7 @@ class SavingController {
       })
       res.status(200).json(savings)
     } catch (error) {
+      console.log(error);
       next(error)
     }
   }
@@ -47,11 +49,10 @@ class SavingController {
   static async getSavingById(req,res,next) {
     try {
       const { savingId } = req.params
-      const savings = await Saving.findAll({
+      const savings = await Saving.findOne({
         where: {
           id: savingId
-        },
-        include: [User]
+        }
       })
       res.status(200).json(savings)
     } catch (error) {

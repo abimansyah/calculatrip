@@ -126,35 +126,35 @@ const savingAuthorization = async (req, res, next) => {
 
 */
   try {
-    const { id } = req.params;
-
+    const { savingId } = req.params;
     const saving = await Saving.findOne({
       where: {
-        id: id,
+        id: savingId,
       },
     });
     if (!saving) {
       throw { name: "SavingNotFound" };
     }
-
     const trip = await Trip.findOne({
       where: {
         id: saving.tripId,
       },
     });
     if (!trip) {
-      throw { name: "TripNotFound" };
+      throw { name: "Forbidden to Access" };
     }
-
+    
     const userTrip = await UserTrip.findOne({
       where: {
         UserId: req.user.id,
         TripId: trip.id,
       },
     });
-
+    
+    console.log("tapi sampe sini");
+    
     if (!userTrip) {
-      throw { name: "UserTripNotFound" };
+      throw { name: "Forbidden to Access" };
     }
 
     if (userTrip.role === "owner") {
@@ -164,7 +164,7 @@ const savingAuthorization = async (req, res, next) => {
         next();
       }
     } else {
-      throw { name: "Forbiden to Access" };
+      throw { name: "Forbidden to Access" };
     }
   } catch (err) {
     next(err);
