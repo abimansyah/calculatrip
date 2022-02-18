@@ -56,6 +56,10 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
+      expenseDate:{
+        allowNull: false,
+        type: Sequelize.DATE
+      },
       location: {
         type: Sequelize.STRING
       },

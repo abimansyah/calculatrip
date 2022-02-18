@@ -4,6 +4,7 @@ List of available endpoints for Expenses:
 
 - `POST /expenses/:tripId`
 - `GET /expenses/:tripId`
+- `GET /expenses/trip/:expenseId`
 - `DELETE / expenses/:expenseId`
 
 &nbsp;
@@ -42,6 +43,7 @@ Request:
   "paymentMethodId": "integer",
   "location": "string",
   "description": "text",
+  "expenseDate": "date",
 }
 ```
 
@@ -57,7 +59,7 @@ _Response (400 - Bad Request)_
 
 ```json
 {
-  "message": "Name is required"
+  "message": "Expense name is required"
 }
 OR
 {
@@ -65,7 +67,7 @@ OR
 }
 OR
 {
-  "message": "Amount can't be below 0"
+  "message": "Amount can't be 0 or below"
 }
 OR
 {
@@ -75,11 +77,27 @@ OR
 {
   "message": "Choose expenses payment method!"
 }
+OR
+{
+  "message": "Expense Date is required"
+}
+OR
+{
+  "message": "Invalid input date"
+}
+```
+
+_Response (404 - Not found)_
+
+```json
+{
+  "message": "Trip not found"
+}
 ```
 
 &nbsp;
 
-## 2. GET /expenses/:tripId
+## 2. GET /expenses/trip/:tripId
 
 Description:
 
@@ -95,6 +113,14 @@ Request:
 }
 ```
 
+- params:
+
+```json
+{
+  "tripId": "integer"
+}
+```
+
 _Response (200 - OK)_
 
 ```json
@@ -107,11 +133,13 @@ _Response (200 - OK)_
   "location": "string",
   "description": "text",
   "userId": "integer",
-  "Category": {
-    "name": "string"
+  "ExpenseCategory": {
+    "name": "string",
+    "icon": "string"
   },
   "PaymentMethod": {
-    "name": "string"
+    "name": "string",
+    "icon": "string"
   },
   "User": {
     "username": "string",
@@ -141,9 +169,75 @@ _Response (200 - OK)_
 ]
 ```
 
+_Response (404 - Not found)_
+
+```json
+{
+  "message": "Trip not found"
+}
+```
+
 &nbsp;
 
-## 3. DELETE /expenses/:expenseId
+## 3. GET /expenses/:expenseId
+
+Description:
+
+- Get 1 expense inside a trip
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+  "expenseId": "integer"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+  {
+  "name": "string",
+  "amount": "integer",
+  "categoryId": "integer",
+  "paymentMethodId": "integer",
+  "location": "string",
+  "description": "text",
+  "userId": "integer",
+  "Category": {
+    "name": "string"
+  },
+  "PaymentMethod": {
+    "name": "string"
+  },
+  "User": {
+    "username": "string",
+    "email": "string"
+  }
+}
+```
+
+_Response (404 - Not found)_
+
+```json
+{
+  "message": "Expense not found"
+}
+```
+
+&nbsp;
+
+## 4. DELETE /expenses/:expenseId
 
 Description:
 
@@ -171,7 +265,7 @@ _Response (200 - OK)_
 
 ```json
 {
-  "message": "Expense with ID: ID has been deleted!"
+  "message": "Expense has been deleted!"
 }
 ```
 
@@ -179,7 +273,7 @@ Response (403 - Forbidden)_
 
 ```json
 {
-  "message": "Forbidden access!"
+  "message": "Forbidden to access"
 }
 ```
 

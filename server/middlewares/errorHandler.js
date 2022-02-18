@@ -46,8 +46,6 @@ const errorHandler = (err, req, res, next) => {
         message = "Saving not found"
     }
 
-
-
     res.status(status).json({
         message
     })
