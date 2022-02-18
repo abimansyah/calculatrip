@@ -1,33 +1,112 @@
-import { StyleSheet, Text, View, Dimensions } from 'react-native';
+import React, { useState } from 'react'
+import {
+  Text,
+  View,
+  Image,
+  TouchableWithoutFeedback,
+  Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform
+} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import Input from 'react-native-input-style';
+import { styles } from '../styles';
+import logo from '../assets/logo.png'
 
 export default function Login() {
+  const keyboardVerticalOffset = Platform.OS === 'ios' ? 10 : 40
+  const [emailUsername, setEmailUsername] = useState('')
+  const [password, setPassword] = useState('')
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.card}>
-        <Text>left</Text>
-        <Text>center</Text>
-        <Text>right</Text>
-      </View>
-    </SafeAreaView>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.mainContainer}>
+        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}>
+
+          <View style={
+            {
+              height: '55%'
+            }
+          }>
+            <Image
+              source={logo}
+              style={
+                {
+                  width: 300,
+                  height: 300,
+                  position: 'absolute',
+                  left: 160,
+                  top: 30,
+                }
+              }
+            />
+          </View>
+
+          <View style={{ paddingHorizontal: 30 }}>
+            <View
+              style={
+                {
+                  paddingLeft: 10,
+                  paddingBottom: 20
+                }
+              }>
+              <Text
+                style={
+                  {
+                    fontSize: 40,
+                    fontWeight: '700'
+                  }
+                }
+              >
+                Sign In
+              </Text>
+            </View>
+
+            <View>
+              <Input
+                id="name"
+                label="Email / Username"
+                onInputChange={setEmailUsername}
+                keyboardType="default"
+                required
+                outlined
+                borderColor="#0487d9"
+              />
+              <Input
+                id="password"
+                label="Password"
+                secureTextEntry
+                onInputChange={setPassword}
+                keyboardType="default"
+                required
+                outlined
+                borderColor="#0487d9"
+              />
+            </View>
+            <View style={
+              {
+                paddingHorizontal: 15,
+                paddingTop: 20,
+              }
+            }>
+              <Text style={styles.mainButton}>Sign In</Text>
+            </View>
+          </View>
+
+          <View style={
+            {
+              flex: 1,
+              paddingTop: 20,
+              alignItems: 'center'
+            }
+          }>
+            <Text>
+              Don't have an account?  
+              <Text style={{color: '#0487d9', textDecorationLine: 'underline'}}> Sign Up Here</Text>
+            </Text>
+          </View>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#0487d9',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  card: {
-    flex: 1,
-    backgroundColor: '#fff',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    flexDirection: 'row',
-    width: '100%',
-    height: '100%'
-  },
-  
-});
