@@ -11,7 +11,9 @@ const {
   PaymentMethod,
 } = require("../models/index");
 
-const { createToken } = require("../helpers/jwt");
+const {
+  createToken
+} = require("../helpers/jwt");
 
 let token = "";
 let tokenUserTwo = "";
@@ -100,8 +102,7 @@ beforeAll(async () => {
       startDate: "01-02-2021",
       endDate: "01-03-2021",
       homeCurrency: "USD",
-      tripImageUrl:
-        "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+      tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
       targetBudget: 10000,
     });
     await Trip.create({
@@ -109,8 +110,7 @@ beforeAll(async () => {
       startDate: "01-02-2021",
       endDate: "01-03-2021",
       homeCurrency: "USD",
-      tripImageUrl:
-        "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+      tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
       targetBudget: 12000,
     });
 
@@ -196,9 +196,9 @@ beforeAll(async () => {
 });
 
 describe("POST /expenses/:tripId - create new trip", () => {
-  test.only("POST /expenses/:tripId success status (201) - should return success with status (201)", (done) => {
+  test("POST /expenses/:tripId success status (201) - should return success with status (201)", (done) => {
     request(app)
-      .post("/expenses/expenses/1")
+      .post("/expenses/1")
       .set("access_token", token)
       .send({
         name: "expense trip one",
@@ -211,10 +211,10 @@ describe("POST /expenses/:tripId - create new trip", () => {
       })
       .then((resp) => {
         const result = resp.body;
-        console.log(result,"<<<<<<<<<<<<<<<<<<<<<");
+        console.log(result, "<<<<<<<<<<<<<<<<<<<<<");
         expect(resp.status).toBe(201);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Expense added!");
+        expect(result).toHaveProperty("message", "Expense added!");
         done();
       })
       .catch((err) => {

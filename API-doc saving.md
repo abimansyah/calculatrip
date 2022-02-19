@@ -234,6 +234,14 @@ _Response (401 - Unauthorized)_
 }
 ```
 
+_Response (403 - Unauthorize - Forbiden to Access)_
+
+```json
+{
+  "message": "Unauthorize - Forbiden to Access"
+}
+```
+
 _Response (500 - Internal Server Error)_
 
 ```json
