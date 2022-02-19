@@ -116,7 +116,7 @@ beforeAll(async () => {
         });
 
         await UserTrip.create({
-            UserId: 1,
+            UserId: 2,
             TripId: 2,
             status: "active",
             role: "owner",
@@ -340,6 +340,28 @@ describe('POST /savings/:tripsId - create new saving', () => {
                 console.log(err)
             })
     })
+
+    test('POST /savings/:tripsId Error status (400) - should return error when id trip is not exist', (done) => {
+        request(app)
+            .post('/savings/111')
+            .set('access_token', token)
+            .send({
+                name: "test saving",
+                amount: 100000,
+                savingDate: "02-01-2022",
+            })
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(404)
+                expect(result).toEqual(expect.any(Object))
+                expect(result).toHaveProperty("message", "Trip not found");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
 })
 
 describe('GET /savings/trip/:tripsId - Get all savings inside a trip', () => {
@@ -349,7 +371,6 @@ describe('GET /savings/trip/:tripsId - Get all savings inside a trip', () => {
             .set('access_token', token)
             .then(resp => {
                 const result = resp.body
-                // console.log(result)
                 expect(resp.status).toBe(200)
                 expect(result).toEqual(expect.any(Array))
                 expect(result[0]).toEqual(expect.any(Object));
@@ -370,10 +391,25 @@ describe('GET /savings/trip/:tripsId - Get all savings inside a trip', () => {
             .set('access_token', token)
             .then(resp => {
                 const result = resp.body
-                // console.log(result)
                 expect(resp.status).toBe(404)
                 expect(result).toEqual(expect.any(Object))
                 expect(result).toHaveProperty("message", "Trip not found");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('GET /savings/trip/:tripsId Error status (403) - should return error when trip id not owner user', (done) => {
+        request(app)
+            .get('/savings/trip/2')
+            .set('access_token', token)
+            .then(resp => {
+                const result = resp.body
+                expect(resp.status).toBe(403)
+                expect(result).toEqual(expect.any(Object))
+                expect(result).toHaveProperty("message", "Unauthorize - Forbiden to Access");
                 done()
             })
             .catch(err => {
@@ -387,7 +423,6 @@ describe('GET /savings/trip/:tripsId - Get all savings inside a trip', () => {
             .set('access_token', wrongToken)
             .then(resp => {
                 const result = resp.body
-                // console.log(result)
                 expect(resp.status).toBe(401)
                 expect(result).toEqual(expect.any(Object))
                 expect(result).toHaveProperty("message", 'Forbiden to Access');
@@ -398,4 +433,167 @@ describe('GET /savings/trip/:tripsId - Get all savings inside a trip', () => {
             })
     })
 
+})
+
+describe('GET /savings/:savingId - Get savings inside a trip by Id', () => {
+    test('GET /savings/:savingId Success status (200) - should return saving', (done) => {
+        request(app)
+            .get('/savings/1')
+            .set('access_token', token)
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(200)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("id", expect.any(Number));
+                expect(result).toHaveProperty("name", expect.any(String));
+                expect(result).toHaveProperty("amount", expect.any(Number));
+                expect(result).toHaveProperty("User", expect.any(Object));
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('GET /savings/:savingId Error status (403) - should return error when id saving not owner user', (done) => {
+        request(app)
+            .get('/savings/3')
+            .set('access_token', token)
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(403)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("message", 'Unauthorize - Forbiden to Access');
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('GET /savings/:savingId Error status (403) - should return error when id saving not exist', (done) => {
+        request(app)
+            .get('/savings/333')
+            .set('access_token', token)
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(404)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("message", "Saving not found");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('GET /savings/:savingId Error status (403) - should return error when token is wrong', (done) => {
+        request(app)
+            .get('/savings/1')
+            .set('access_token', wrongToken)
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(401)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("message", "Forbiden to Access");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+})
+
+describe('DELETE /savings/:savingId - Delete one saving from a trip by Id', () => {
+    beforeEach(() => {
+        jest.restoreAllMocks()
+    })
+
+    test('DELETE /savings/:savingId Success status (200) - should return saving deleted', (done) => {
+        request(app)
+            .delete('/savings/1')
+            .set('access_token', token)
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(200)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("message", "Saving has been deleted!");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('DELETE /savings/:savingId Error status (403) - should return error when saving not owner user', (done) => {
+        request(app)
+            .delete('/savings/3')
+            .set('access_token', token)
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(403)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("message", 'Unauthorize - Forbiden to Access');
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('DELETE /savings/:savingId Error status (404) - should return error when id saving not exist', (done) => {
+        request(app)
+            .delete('/savings/333')
+            .set('access_token', token)
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(404)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("message", "Saving not found");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('DELETE /savings/:savingId Error status (401) - should return error when token is wrong', (done) => {
+        request(app)
+            .delete('/savings/1')
+            .set('access_token', wrongToken)
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(401)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("message", "Forbiden to Access");
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('Should handle error when hit delete', async () => {
+        jest.spyOn(Saving, 'destroy').mockRejectedValue('Error')
+        return request(app)
+            .delete('/savings/2')
+            .set('access_token', token)
+            .then((resp) => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(500)
+                expect(result).toHaveProperty("message", 'Internal Server Error')
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+    })
 })

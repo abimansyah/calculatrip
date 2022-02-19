@@ -11,7 +11,12 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Saving.belongsTo(models.User, {foreignKey:"userId"})
+      Saving.belongsTo(models.User, {
+        foreignKey: "userId"
+      })
+      Saving.belongsTo(models.Trip, {
+        foreignKey: "tripId"
+      })
     }
   }
   Saving.init({

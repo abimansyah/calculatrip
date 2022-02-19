@@ -62,6 +62,10 @@ beforeAll(async () => {
 })
 
 
+beforeEach(() => {
+    jest.restoreAllMocks()
+})
+
 
 describe('POST /users/register - create new user', () => {
     test('POST /users/register success status (201) - should return id username new user', (done) => {
@@ -536,6 +540,9 @@ describe('POST /users/Login - User login', () => {
 })
 
 describe('GET /users - Get data user from database', () => {
+    beforeEach(() => {
+        jest.restoreAllMocks()
+    })
     test('GET /users success(200) - get all user from database with correct access token', (done) => {
         request(app)
             .get("/users")
@@ -599,6 +606,22 @@ describe('GET /users - Get data user from database', () => {
                 done()
             })
             .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('GET /users Error status (500), Should handle error when hit get User', async () => {
+        jest.spyOn(User, 'findAll').mockRejectedValue('Error')
+        return request(app)
+            .get('/users')
+            .set('access_token', token)
+            .then((resp) => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(500)
+                expect(result).toHaveProperty("message", 'Internal Server Error')
+            })
+            .catch((err) => {
                 console.log(err)
             })
     })
