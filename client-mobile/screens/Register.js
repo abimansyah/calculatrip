@@ -8,9 +8,11 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  TextInput
+  TextInput,
+  Button
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';'react-native-keyboard-aware-scroll-view'
+import { SafeAreaView } from 'react-native-safe-area-context';
+import DateField from 'react-native-datefield';
 import { styles, mainColor } from '../styles';
 import logo from '../assets/logo.png'
 
@@ -20,19 +22,31 @@ export default function Register() {
   const topViewHeight = Platform.OS === 'ios' ? '22%' : '25%'
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [date, setDate] = useState('');
+  const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState('')
 
+  function formatDate(value) {
+    let newDate = []
+    let formated = value.toISOString().split('T')[0];
+    formated = formated.split('-')
+    newDate.push(formated[1])
+    newDate.push(formated[2])
+    newDate.push(formated[0])
+    newDate = newDate.join('-')
+    setDate(newDate);
+  }
+
   return (
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SafeAreaView style={styles.mainContainer}>
-          <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.mainContainer}>
+        <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}>
           <View style={{ height: '100%' }}>
             <View style={
               {
                 height: topViewHeight,
-                backgroundColor: '#fff'
               }
             }>
               <Image
@@ -110,12 +124,13 @@ export default function Register() {
                   />
                 </View>
 
-                <View style={styles.divInput}>
-                  <TextInput
-                    secureTextEntry={true}
-                    style={focused === 'password' ? styles.inputOnFocus : styles.input}
-                    placeholder='Date'
-                    onFocus={() => setFocused('password')}
+                <View style={styles.dateinput}>
+                  <Text style={{color: 'grey', marginVertical: 1}}>Birth Of Date</Text>
+                  <DateField
+                    labelDate="Input date"
+                    labelMonth="Input month"
+                    labelYear="Input year"
+                    onSubmit={(value) => formatDate(value)}
                   />
                 </View>
 
@@ -155,9 +170,9 @@ export default function Register() {
               </View>
             </View>
           </View>
-          </KeyboardAvoidingView>
-        </SafeAreaView>
-      </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
 
   );
 }

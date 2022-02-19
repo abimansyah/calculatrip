@@ -1,7 +1,7 @@
 import { StyleSheet, Dimensions } from "react-native";
 
 export const logoColor = '#72c1f2'
-export const backgroundColor = '#fff'
+export const backgroundColor = '#f0f1f2'
 export const mainColor = '#0487d9'
 export const secondColor = '#0378a6'
 
@@ -56,6 +56,15 @@ export const styles = StyleSheet.create({
     paddingLeft: 10,
     borderBottomColor: mainColor,
     borderBottomWidth: 3
-  }
+  },
+
+  dateinput: {
+    width: '90%',
+    borderRadius: 5,
+    borderColor: '#c1c1c1',
+    borderWidth: 1,
+    paddingHorizontal: 15,
+    marginLeft: 15
+  },
 });
 
