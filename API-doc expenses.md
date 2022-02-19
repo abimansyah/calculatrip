@@ -39,7 +39,7 @@ Request:
 {
   "name": "string",
   "amount": "integer",
-  "categoryId": "integer",
+  "expenseCategoryId": "integer",
   "paymentMethodId": "integer",
   "location": "string",
   "description": "text",
