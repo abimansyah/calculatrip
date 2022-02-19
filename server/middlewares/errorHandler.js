@@ -60,7 +60,7 @@ const errorHandler = (err, req, res, next) => {
         status = 400
         message = "Can't read file image file"
     } else if (err.name === "ImageNotFound") {
-        status = 400
+        status = 404
         message = "Image not found"
     } 
 

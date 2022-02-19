@@ -1,0 +1,219 @@
+[
+  {
+    "UserId": 2,
+    "TripId": 1,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 5,
+    "TripId": 1,
+    "status": "reject",
+    "role": "companion"
+  },
+  {
+    "UserId": 3,
+    "TripId": 2,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 1,
+    "TripId": 3,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 5,
+    "TripId": 3,
+    "status": "owner",
+    "role": "companion"
+  },
+  {
+    "UserId": 2,
+    "TripId": 4,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 1,
+    "TripId": 4,
+    "status": "accept",
+    "role": "companion"
+  },
+  {
+    "UserId": 3,
+    "TripId": 5,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 2,
+    "TripId": 6,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 3,
+    "TripId": 6,
+    "status": "reject",
+    "role": "companion"
+  },
+  {
+    "UserId": 1,
+    "TripId": 6,
+    "status": "accept",
+    "role": "companion"
+  },
+  {
+    "UserId": 1,
+    "TripId": 7,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 4,
+    "TripId": 7,
+    "status": "accept",
+    "role": "companion"
+  },
+  {
+    "UserId": 3,
+    "TripId": 7,
+    "status": "pending",
+    "role": "companion"
+  },
+  {
+    "UserId": 5,
+    "TripId": 8,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 1,
+    "TripId": 8,
+    "status": "reject",
+    "role": "companion"
+  },
+  {
+    "UserId": 5,
+    "TripId": 9,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 4,
+    "TripId": 9,
+    "status": "pending",
+    "role": "companion"
+  },
+  {
+    "UserId": 1,
+    "TripId": 9,
+    "status": "accept",
+    "role": "companion"
+  },
+  {
+    "UserId": 1,
+    "TripId": 10,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 2,
+    "TripId": 10,
+    "status": "reject",
+    "role": "companion"
+  },
+  {
+    "UserId": 3,
+    "TripId": 10,
+    "status": "accept",
+    "role": "companion"
+  },
+  {
+    "UserId": 5,
+    "TripId": 10,
+    "status": "pending",
+    "role": "companion"
+  },
+  {
+    "UserId": 2,
+    "TripId": 11,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 3,
+    "TripId": 11,
+    "status": "pending",
+    "role": "companion"
+  },
+  {
+    "UserId": 1,
+    "TripId": 11,
+    "status": "pending",
+    "role": "companion"
+  },
+  {
+    "UserId": 5,
+    "TripId": 11,
+    "status": "accept",
+    "role": "companion"
+  },
+  {
+    "UserId": 1,
+    "TripId": 12,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 3,
+    "TripId": 13,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 5,
+    "TripId": 13,
+    "status": "accept",
+    "role": "companion"
+  },
+  {
+    "UserId": 1,
+    "TripId": 13,
+    "status": "pending",
+    "role": "companion"
+  },
+  {
+    "UserId": 2,
+    "TripId": 14,
+    "status": "accept",
+    "role": "owner"
+  },
+  {
+    "UserId": 3,
+    "TripId": 14,
+    "status": "pending",
+    "role": "companion"
+  },
+  {
+    "UserId": 5,
+    "TripId": 14,
+    "status": "reject",
+    "role": "companion"
+  },
+  {
+    "UserId": 4,
+    "TripId": 14,
+    "status": "accept",
+    "role": "companion"
+  },
+  {
+    "UserId": 3,
+    "TripId": 15,
+    "status": "accept",
+    "role": "owner"
+  }
+
+]
