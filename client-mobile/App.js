@@ -9,7 +9,7 @@ export default function App() {
   return (
     <SafeAreaProvider style={styles.mainContainer}>
       <View style={styles.screenSize}>
-        <Register />
+        <Login />
         <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>
