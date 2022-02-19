@@ -44,7 +44,26 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === 'Unauthorize') {
         status = 403
         message = 'Unauthorize - Forbiden to Access'
-    }
+    } else if (err.name === 'InvalidImageFormat') {
+        status = 400
+        message = 'Invalid Image Format'
+    } else if (err.name === 'InvalidImageSize') {
+        status = 400
+        message = "Image size can't exceed 3MB"
+    } else if (err.name === 'Error Create Data') {
+        status = 400
+        message = "Error Create Data"
+    } else if (err.name === "Can't read file image file") {
+        status = 400
+        message = "Can't read file image file"
+    } else if (err.name === "Can't read file image file") {
+        status = 400
+        message = "Can't read file image file"
+    } else if (err.name === "ImageNotFound") {
+        status = 400
+        message = "Image not found"
+    } 
+
 
     res.status(status).json({
         message

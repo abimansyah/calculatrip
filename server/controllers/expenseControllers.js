@@ -1,4 +1,4 @@
-const { Expense, Trip, ExpenseCategory, PaymentMethod, User } = require("../models/index");
+const { Expense, Trip, ExpenseCategory, PaymentMethod, User, Images } = require("../models/index");
 
 class ExpenseController {
   static async postExpense(req, res, next) {
@@ -116,6 +116,42 @@ class ExpenseController {
       })
       res.status(200).json({
         message: "Expense has been deleted!"
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async uploadImage(req,res,next) {
+    try {
+      const { expenseId } = req.params
+      await Images.create({
+        expenseId,
+        imageUrl: req.uploadUrl,
+      })
+      res.status(200).json({
+        message: "Image has been added to expense!"
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  static async deleteImage(req,res,next) {
+    try {
+      const { expenseId, imageId } = req.params
+      const deleteImage = await Image.findByPk(imageId)
+      if(!deleteImage) {
+        throw {name: "ImageNotFound"}
+      }
+      await Image.destroy({
+        where: {
+          imageId,
+          expenseId
+        }
+      })
+      res.status(200).json({
+        message: "Image has been removed"
       })
     } catch (error) {
       next(error)
