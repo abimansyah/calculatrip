@@ -24,21 +24,21 @@ Request:
 ```
 Response (200 - Ok )_
 ```json
-{
-    "AED": {
-        "description": "United Arab Emirates Dirham",
-        "code": "AED"
+[
+    {
+      "description": "United Arab Emirates Dirham",
+      "code": "AED"
     },
-    "AFN": {
-        "description": "Afghan Afghani",
-        "code": "AFN"
+    {
+      "description": "Afghan Afghani",
+      "code": "AFN"
     },
-    "ALL": {
-        "description": "Albanian Lek",
-        "code": "ALL"
+    {
+      "description": "Albanian Lek",
+      "code": "ALL"
     },
     ...
-}
+]
 
 ```
 

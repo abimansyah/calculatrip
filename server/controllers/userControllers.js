@@ -74,11 +74,6 @@ class UserController {
                 email: user.email
             }
             token = createToken(token)
-            if (!token) {
-                throw {
-                    name: 'JsonWebTokenError'
-                }
-            }
             res.status(200).json({
                 access_token: token
             });

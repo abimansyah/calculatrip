@@ -7,116 +7,172 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   ScrollView,
-  Platform
+  Platform,
+  TextInput,
+  Button
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Input from 'react-native-input-style';
-import { styles } from '../styles';
+import DateField from 'react-native-datefield';
+import { styles, mainColor } from '../styles';
 import logo from '../assets/logo.png'
 
+
 export default function Register() {
-  const keyboardVerticalOffset = Platform.OS === 'ios' ? 10 : 40
+  const keyboardVerticalOffset = Platform.OS === 'ios' ? 0 : 2
+  const topViewHeight = Platform.OS === 'ios' ? '22%' : '25%'
+  const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   const [email, setEmail] = useState('')
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [date, setDate] = useState('');
+  const [open, setOpen] = useState(false);
+  const [focused, setFocused] = useState('')
+
+  function formatDate(value) {
+    let newDate = []
+    let formated = value.toISOString().split('T')[0];
+    formated = formated.split('-')
+    newDate.push(formated[1])
+    newDate.push(formated[2])
+    newDate.push(formated[0])
+    newDate = newDate.join('-')
+    setDate(newDate);
+  }
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer}>
         <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}>
-
-          <View style={
-            {
-              height: '42%'
-            }
-          }>
-            <Image
-              source={logo}
-              style={
-                {
-                  width: 300,
-                  height: 300,
-                  position: 'absolute',
-                  left: 160,
-                  top: 30,
-                }
-              }
-            />
-          </View>
-
-          <View style={{ paddingHorizontal: 30 }}>
-            <View
-              style={
-                {
-                  paddingLeft: 10,
-                  paddingBottom: 20
-                }
-              }>
-              <Text
-                style={
-                  {
-                    fontSize: 40,
-                    fontWeight: '700'
-                  }
-                }
-              >
-                Sign Up
-              </Text>
-            </View>
-
-            <View>
-              <Input
-                id="name"
-                label="Email"
-                onInputChange={setEmail}
-                keyboardType="default"
-                required
-                outlined
-                borderColor="#0487d9"
-              />
-              <Input
-                id="name"
-                label="Username"
-                onInputChange={setUsername}
-                keyboardType="default"
-                required
-                outlined
-                borderColor="#0487d9"
-              />
-              <Input
-                id="password"
-                label="Password"
-                secureTextEntry
-                onInputChange={setPassword}
-                keyboardType="default"
-                required
-                outlined
-                borderColor="#0487d9"
-              />
-            </View>
+          <View style={{ height: '100%' }}>
             <View style={
               {
-                paddingHorizontal: 15,
-                paddingTop: 20,
+                height: topViewHeight,
               }
             }>
-              <Text style={styles.mainButton}>Sign In</Text>
+              <Image
+                source={logo}
+                style={
+                  {
+                    width: 280,
+                    height: 280,
+                    position: 'absolute',
+                    left: 190,
+                    top: 0,
+                  }
+                }
+              />
             </View>
-          </View>
 
-          <View style={
-            {
-              flex: 1,
-              paddingTop: 20,
-              alignItems: 'center'
-            }
-          }>
-            <Text>
-              Already Registered?  
-              <Text style={{color: '#0487d9', textDecorationLine: 'underline'}}> Sign In Here</Text>
-            </Text>
+            {/* title */}
+            <View style={{ paddingHorizontal: 30 }}>
+              <View
+                style={
+                  {
+                    paddingLeft: 10,
+                    paddingBottom: 20
+                  }
+                }>
+                <Text
+                  style={
+                    {
+                      fontSize: 40,
+                      fontWeight: '700'
+                    }
+                  }
+                >
+                  Create
+                </Text>
+                <Text
+                  style={
+                    {
+                      fontSize: 40,
+                      fontWeight: '700'
+                    }
+                  }
+                >
+                  An Account
+                </Text>
+
+              </View>
+              {/* title */}
+
+
+              <View style={{ height: '55%' }}>
+                <View style={styles.divInput}>
+                  <TextInput
+                    style={focused === 'username' ? styles.inputOnFocus : styles.input}
+                    placeholder='Username'
+                    onFocus={() => setFocused('username')}
+                  />
+                </View>
+
+                <View style={styles.divInput}>
+                  <TextInput
+                    keyboardType='email-address'
+                    style={focused === 'email' ? styles.inputOnFocus : styles.input}
+                    placeholder='Email'
+                    onFocus={() => setFocused('email')}
+                  />
+                </View>
+
+                <View style={styles.divInput}>
+                  <TextInput
+                    secureTextEntry={true}
+                    style={focused === 'password' ? styles.inputOnFocus : styles.input}
+                    placeholder='Password'
+                    onFocus={() => setFocused('password')}
+                  />
+                </View>
+
+                <View style={styles.dateinput}>
+                  <Text style={{color: 'grey', marginVertical: 1}}>Birth Of Date</Text>
+                  <DateField
+                    labelDate="Input date"
+                    labelMonth="Input month"
+                    labelYear="Input year"
+                    onSubmit={(value) => formatDate(value)}
+                  />
+                </View>
+
+                <View style={styles.divInput}>
+                  <TextInput
+                    keyboardType={phoneInput}
+                    style={focused === 'phoneNumber' ? styles.inputOnFocus : styles.input}
+                    placeholder='Phone Number'
+                    onFocus={() => setFocused('phoneNumber')}
+                  />
+                </View>
+
+
+                <View style={
+                  {
+                    paddingHorizontal: 15,
+                    paddingTop: 20,
+                  }
+                }
+                >
+                  <Text style={styles.mainButton}>Sign Up</Text>
+                </View>
+              </View>
+
+              <View style={
+                {
+                  padding: 10,
+                  alignItems: 'center',
+                  height: 40
+
+                }
+              }>
+                <Text>
+                  Already Registered?
+                  <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign In Here</Text>
+                </Text>
+              </View>
+            </View>
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
     </TouchableWithoutFeedback>
+
   );
 }
