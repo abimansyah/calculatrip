@@ -295,6 +295,17 @@ _Response (401 - Unauthorized)_
 {
   "message": "Invalid token"
 }
+OR
+{
+  "message": "Forbiden to Access"
+}
+```
+_Response (403 - Forbidden)_
+
+```json
+{
+  "message": "Unauthorize - Forbiden to Access"
+}
 ```
 
 _Response (500 - Internal Server Error)_
