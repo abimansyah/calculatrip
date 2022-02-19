@@ -78,11 +78,11 @@ const expenseAuthorization = async (req, res, next) => {
       },
     });
 
-    if (!expense) {
-      throw {
-        name: "ExpenseNotFound"
-      };
-    }
+    // if (!expense) {
+    //   throw {
+    //     name: "ExpenseNotFound"
+    //   };
+    // }
 
     const trip = await Trip.findOne({
       where: {
