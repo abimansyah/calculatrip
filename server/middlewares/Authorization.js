@@ -38,17 +38,13 @@ const tripAuthorization = async (req, res, next) => {
     });
 
     if (!userTrip) {
-      throw {
-        name: 'Unauthorize'
-      };
+      throw { name: "Unauthorize" };
     }
 
     if (userTrip.role === "owner") {
       next();
     } else {
-      throw {
-        name: 'Unauthorize'
-      };
+      throw { name: "Unauthorize" };
     }
   } catch (err) {
     next(err);
@@ -119,9 +115,7 @@ const expenseAuthorization = async (req, res, next) => {
         next();
       }
     } else {
-      throw {
-        name: 'Unauthorize'
-      };
+      throw { name: "Unauthorize" };
     }
   } catch (err) {
     next();
@@ -145,13 +139,10 @@ const savingAuthorization = async (req, res, next) => {
 
 */
   try {
-    const {
-      id
-    } = req.params;
-
+    const { savingId } = req.params;
     const saving = await Saving.findOne({
       where: {
-        id: id,
+        id: savingId,
       },
     });
     if (!saving) {
@@ -159,29 +150,24 @@ const savingAuthorization = async (req, res, next) => {
         name: "SavingNotFound"
       };
     }
-
     const trip = await Trip.findOne({
       where: {
         id: saving.tripId,
       },
     });
     if (!trip) {
-      throw {
-        name: "TripNotFound"
-      };
+      throw { name: "Unauthorize" };
     }
-
+    
     const userTrip = await UserTrip.findOne({
       where: {
         UserId: req.user.id,
         TripId: trip.id,
       },
     });
-
+    
     if (!userTrip) {
-      throw {
-        name: "UserTripNotFound"
-      };
+      throw { name: "Unauthorize" };
     }
 
     if (userTrip.role === "owner") {
@@ -191,9 +177,7 @@ const savingAuthorization = async (req, res, next) => {
         next();
       }
     } else {
-      throw {
-        name: 'Unauthorize'
-      };
+      throw { name: "Unauthorize" };
     }
   } catch (err) {
     next(err);

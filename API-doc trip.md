@@ -344,15 +344,15 @@ _Response (400 - Bad Request)_
 }
 OR
 {
-  "message": "startDate is required"
+  "message": "Start Date is required"
 }
 OR
 {
-  "message": "endDate cannot be before startDate"
+  "message": "End Date cannot be before Start Date"
 }
 OR
 {
-  "message": "endDate is required"
+  "message": "End Date is required"
 }
 OR
 {
@@ -390,13 +390,17 @@ _Response (401 - Unauthorized)_
 {
   "message": "Invalid token"
 }
+OR
+{
+  "message": "Forbiden to Access"
+}
 ```
 
 _Response (403 - Forbidden)_
 
 ```json
 {
-  "message": "Forbiden to Access"
+  "message": "Unauthorize - Forbiden to Access"
 }
 ```
 
