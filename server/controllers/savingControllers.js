@@ -1,7 +1,8 @@
 const {
   Saving,
   Trip,
-  User
+  User,
+  UserTrip
 } = require('../models/index')
 
 class SavingController {
@@ -50,6 +51,16 @@ class SavingController {
       if (!trip) throw {
         name: "TripNotFound"
       }
+      const userTrip = await UserTrip.findOne({
+        where: {
+          UserId: req.user.id,
+          TripId: trip.id
+        }
+      })
+      if (!userTrip) throw {
+        name: "Unauthorize"
+      }
+
       const savings = await Saving.findAll({
         where: {
           tripId: tripId
@@ -66,19 +77,42 @@ class SavingController {
       })
       res.status(200).json(savings)
     } catch (error) {
-      console.log(error);
       next(error)
     }
   }
 
   static async getSavingById(req, res, next) {
     try {
-      const { savingId } = req.params
+      const {
+        savingId
+      } = req.params
       const savings = await Saving.findOne({
         where: {
           id: savingId
+        },
+        include: [{
+            model: User,
+            attributes: {
+              exclude: ["password", "createdAt", "updatedAt"]
+            }
+          },
+          {
+            model: Trip,
+            attributes: {
+              exclude: ["createdAt", "updatedAt"]
+            }
+          }
+        ],
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "userId"]
         }
       })
+      if (!savings) throw {
+        name: "SavingNotFound"
+      }
+      if (savings.User.id !== req.user.id) throw {
+        name: 'Unauthorize'
+      }
       res.status(200).json(savings)
     } catch (error) {
       next(error)
@@ -91,12 +125,6 @@ class SavingController {
       const {
         savingId
       } = req.params
-      const saving = await Saving.findByPk(savingId)
-      if (!saving) {
-        throw {
-          name: "SavingNotFound"
-        }
-      }
       await Saving.destroy({
         where: {
           id: savingId
@@ -106,6 +134,7 @@ class SavingController {
         message: `Saving has been deleted!`
       })
     } catch (error) {
+      // console.log(error)
       next(error)
     }
   }
