@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Expense.belongsTo(models.ExpenseCategory, {foreignKey:"expenseCategoryId"})
+      Expense.belongsTo(models.PaymentMethod, {foreignKey:"paymentMethodId"})
+      Expense.belongsTo(models.User, {foreignKey:"userId"})
+
     }
   }
   Expense.init({
@@ -42,18 +46,34 @@ module.exports = (sequelize, DataTypes) => {
         },
         belowZero() {
           if(this.amount <= 0) {
-            throw new error("Amount can't be 0 or below")
+            throw "Amount can't be 0 or below"
           }
         }
       }
     },
     expenseCategoryId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Choose expenses category!"
+        },
+        notNull: {
+          msg: "Choose expenses category!"
+        },
+      }
     },
     paymentMethodId: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          msg: "Choose expenses payment method!"
+        },
+        notNull: {
+          msg: "Choose expenses payment method!"
+        },
+      }
     },
     userId: {
       type: DataTypes.INTEGER,

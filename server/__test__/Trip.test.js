@@ -195,6 +195,10 @@ beforeAll(async () => {
   }
 });
 
+beforeEach(() => {
+  jest.restoreAllMocks()
+})
+
 describe("POST /trips - create new trip", () => {
   test("POST /trips success status (201) - should return success with status (201)", (done) => {
     request(app)
@@ -393,6 +397,7 @@ describe("POST /trips - create new trip", () => {
 });
 
 describe("GET /trips - get all trips", () => {
+  
   test("GET /trips success (200) - get all trips for user with access_token", (done) => {
     request(app)
       .get("/trips")
@@ -423,6 +428,22 @@ describe("GET /trips - get all trips", () => {
         console.log(err);
       });
   });
+  test("GET /trips error (500) - should handle error with status (500)", async () => {
+    jest.spyOn(User, 'findOne').mockRejectedValue('Error')
+    return request(app)
+      .get("/trips")
+      .set("access_token", token)
+      .then((resp) => {
+        const result = resp.body;
+        // console.log(result,"<<<<<<<<<<<<<<<<<<<<<<<");
+        expect(resp.status).toBe(500);
+        expect(result).toHaveProperty("message", "Internal Server Error");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  
 });
 
 describe("GET /trips/:id - get trips by id", () => {
@@ -766,6 +787,35 @@ describe("DELETE /trips/:id - delete trip", () => {
         expect(result).toEqual(expect.any(Object));
         expect(result).toHaveProperty("message", "Trip not found");
         done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  test("DELETE /trips/:id error status (404) - should return error when trip is not found", (done) => {
+    request(app)
+      .delete("/trips/500")
+      .set("access_token", token)
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(404);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty("message", "Trip not found");
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  test("GET /trips error (500) - should handle error with status (500)", async () => {
+    jest.spyOn(Trip, 'destroy').mockRejectedValue('Error')
+    return request(app)
+      .delete("/trips/2")
+      .set("access_token", token)
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(500);
+        expect(result).toHaveProperty("message", "Internal Server Error");
       })
       .catch((err) => {
         console.log(err);
