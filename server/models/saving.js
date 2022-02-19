@@ -38,7 +38,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Amount is required"
         },
         belowZero() {
-          if(this.amount <= 0) {
+          if (this.amount <= 0) {
             throw "Amount can't be 0 or below"
           }
         }
@@ -47,7 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     savingDate: {
       type: DataTypes.DATE,
       allowNull: false,
-      validate:{
+      validate: {
         notEmpty: {
           msg: "Saving Date is required"
         },
@@ -57,8 +57,8 @@ module.exports = (sequelize, DataTypes) => {
         isDate: {
           msg: "Invalid input date"
         }
-    }
-  },
+      }
+    },
     tripId: DataTypes.INTEGER,
     userId: DataTypes.INTEGER
   }, {

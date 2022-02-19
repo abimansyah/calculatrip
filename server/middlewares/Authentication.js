@@ -22,7 +22,7 @@ const authentication = async (req, res, next) => {
         const user = await User.findByPk(verify.id)
         if (!user) {
             throw {
-                name: 'Forbiden to Access'
+                name: "Forbiden to Access"
             }
         }
         req.user = {
