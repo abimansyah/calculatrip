@@ -1,0 +1,235 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "email": "mdorsey0@studiopress.com",
+      "password": "12345",
+      "username": "jkattenhorn0",
+      "avatar": "https://robohash.org/dolordistinctioneque.png?size=100x100&set=set1",
+      "phoneNumber": "769-270-1300",
+      "birthDate": "1998-06-09 22:34:42"
+    },
+    {
+      "id": 2,
+      "email": "oskatcher1@ow.ly",
+      "password": "tespass",
+      "username": "wshitliffe1",
+      "avatar": "https://robohash.org/fugailloatque.png?size=100x100&set=set1",
+      "phoneNumber": "822-961-1072",
+      "birthDate": "1990-04-21 07:54:56"
+    },
+    {
+      "id": 3,
+      "email": "agrimes2@slashdot.org",
+      "password": "12345",
+      "username": "mcunniam2",
+      "avatar": "https://robohash.org/quorerumnemo.png?size=100x100&set=set1",
+      "phoneNumber": "865-724-9517",
+      "birthDate": "1993-01-02 11:07:08"
+    },
+    {
+      "id": 4,
+      "email": "ddanton3@mozilla.com",
+      "password": "12345",
+      "username": "rtunsley3",
+      "avatar": "https://robohash.org/ipsaminventorequae.png?size=100x100&set=set1",
+      "phoneNumber": "470-790-9489",
+      "birthDate": "1999-03-02 22:34:22"
+    },
+    {
+      "id": 5,
+      "email": "depinay4@feedburner.com",
+      "password": "tespass",
+      "username": "srawsthorne4",
+      "avatar": "https://robohash.org/ducimusrationeomnis.png?size=100x100&set=set1",
+      "phoneNumber": "700-230-7960",
+      "birthDate": "1999-09-11 07:45:06"
+    }
+  ],
+  "trips": [
+    {
+      "id": 1,
+      "name": "tempor convallis nulla",
+      "startDate": "2021-02-22 07:51:23",
+      "endDate": "2022-02-02 08:53:33",
+      "homeCurrency": "idr",
+      "tripImageUrl": "http://dummyimage.com/208x100.png/cc0000/ffffff",
+      "targetBudget": 9810055,
+      "UserTrips": [
+        {
+          "userId": 2,
+          "tripId": 1,
+          "status": "accept",
+          "role": "owner"
+        },
+        {
+          "userId": 5,
+          "tripId": 1,
+          "status": "reject",
+          "role": "companion"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "enim sit",
+      "startDate": "2021-05-12 01:18:31",
+      "endDate": "2022-01-22 21:25:16",
+      "homeCurrency": "idr",
+      "tripImageUrl": "http://dummyimage.com/106x100.png/5fa2dd/ffffff",
+      "targetBudget": 2614270,
+      "UserTrips": [
+        {
+          "userId": 3,
+          "tripId": 2,
+          "status": "accept",
+          "role": "owner"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "non mi",
+      "startDate": "2021-11-14 15:49:20",
+      "endDate": "2021-09-06 02:23:08",
+      "homeCurrency": "usd",
+      "tripImageUrl": "http://dummyimage.com/149x100.png/dddddd/000000",
+      "targetBudget": 8212147,
+      "UserTrips": [
+        {
+          "userId": 1,
+          "tripId": 3,
+          "status": "accept",
+          "role": "owner"
+        },
+        {
+          "userId": 5,
+          "tripId": 3,
+          "status": "owner",
+          "role": "companion"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "vel lectus in",
+      "startDate": "2021-10-01 00:57:05",
+      "endDate": "2021-04-08 16:03:10",
+      "homeCurrency": "usd",
+      "tripImageUrl": "http://dummyimage.com/165x100.png/dddddd/000000",
+      "targetBudget": 4865134,
+      "UserTrips": [
+        {
+          "userId": 2,
+          "tripId": 4,
+          "status": "accept",
+          "role": "owner"
+        },
+        {
+          "userId": 1,
+          "tripId": 4,
+          "status": "accept",
+          "role": "companion"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "at feugiat non",
+      "startDate": "2021-07-09 11:31:36",
+      "endDate": "2021-07-18 03:59:48",
+      "homeCurrency": "idr",
+      "tripImageUrl": "http://dummyimage.com/184x100.png/ff4444/ffffff",
+      "targetBudget": 8476497,
+      "UserTrips": [
+        {
+          "userId": 3,
+          "tripId": 5,
+          "status": "accept",
+          "role": "owner"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "in congue",
+      "startDate": "2021-03-17 16:51:53",
+      "endDate": "2021-09-04 08:47:59",
+      "homeCurrency": "idr",
+      "tripImageUrl": "http://dummyimage.com/113x100.png/ff4444/ffffff",
+      "targetBudget": 9484310,
+      "UserTrips": [
+        {
+          "userId": 2,
+          "tripId": 6,
+          "status": "accept",
+          "role": "owner"
+        },
+        {
+          "userId": 3,
+          "tripId": 6,
+          "status": "reject",
+          "role": "companion"
+        },
+        {
+          "userId": 1,
+          "tripId": 6,
+          "status": "accept",
+          "role": "companion"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "tempus semper est",
+      "startDate": "2021-03-09 01:41:32",
+      "endDate": "2021-06-06 02:16:39",
+      "homeCurrency": "idr",
+      "tripImageUrl": "http://dummyimage.com/236x100.png/5fa2dd/ffffff",
+      "targetBudget": 3582468,
+      "UserTrips": [
+        {
+          "userId": 1,
+          "tripId": 7,
+          "status": "accept",
+          "role": "owner"
+        },
+        {
+          "userId": 4,
+          "tripId": 7,
+          "status": "accept",
+          "role": "companion"
+        },
+        {
+          "userId": 3,
+          "tripId": 7,
+          "status": "pending",
+          "role": "companion"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "vestibulum velit id",
+      "startDate": "2021-09-26 11:33:07",
+      "endDate": "2021-03-01 03:45:33",
+      "homeCurrency": "idr",
+      "tripImageUrl": "http://dummyimage.com/144x100.png/cc0000/ffffff",
+      "targetBudget": 1162895,
+      "UserTrips": [
+        {
+          "userId": 5,
+          "tripId": 8,
+          "status": "accept",
+          "role": "owner"
+        },
+        {
+          "userId": 1,
+          "tripId": 8,
+          "status": "reject",
+          "role": "companion"
+        }
+      ]
+    }
+  ]
+}

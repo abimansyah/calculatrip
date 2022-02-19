@@ -4,12 +4,13 @@ import { styles } from './styles/index'
 
 import Login from './screens/Login';
 import Register from './screens/Register';
+import Home from './screens/Home';
 
 export default function App() {
   return (
     <SafeAreaProvider style={styles.mainContainer}>
       <View style={styles.screenSize}>
-        <Register />
+        <Home />
         <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>
