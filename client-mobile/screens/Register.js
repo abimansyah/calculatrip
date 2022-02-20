@@ -125,11 +125,10 @@ export default function Register() {
                 </View>
 
                 <View style={styles.dateinput}>
-                  <Text style={{color: 'grey', marginVertical: 1}}>Birth Of Date</Text>
                   <DateField
-                    labelDate="Input date"
-                    labelMonth="Input month"
-                    labelYear="Input year"
+                    labelDate="Birth date"
+                    labelMonth="Birth month"
+                    labelYear="Birth year"
                     onSubmit={(value) => formatDate(value)}
                   />
                 </View>
