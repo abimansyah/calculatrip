@@ -11,7 +11,7 @@ export default function App() {
   return (
     <SafeAreaProvider style={styles.mainContainer}>
       <View style={styles.screenSize}>
-        <Trip />
+        <Register />
         <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>
