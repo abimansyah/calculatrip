@@ -66,5 +66,62 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 15,
     marginLeft: 15
   },
+  
+  modalHeader: {
+    backgroundColor: '#fff',
+    shadowColor: '#333333',
+    shadowOffset: {
+      width: -1,
+      height: -4
+    },
+    shadowRadius: 2,
+    shadowOpacity: 0.07,
+    paddingTop: 20,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+  },
+
+  modalPanelHeader: {
+    alignItems: 'center'
+  },
+
+  modalPanelHandle: {
+    width: 40,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#7f7c7d',
+    marginBottom: 10
+  },
+
+  modalData: {
+    backgroundColor: backgroundColor,
+    color: '#fff',
+    alignItems: 'center',
+    height: '80%',
+    justifyContent: 'center'
+  },
+  
+  modalInput: {
+    borderColor: '#000',
+    borderWidth: 1,
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    marginVertical: 10,
+    borderRadius: 10,
+    width: 250,
+    height: 40
+  },
+
+  expenseIcon: {
+    backgroundColor: mainColor,
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    marginTop: 5,
+    marginHorizontal: 5,
+    marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  }
 });
 
