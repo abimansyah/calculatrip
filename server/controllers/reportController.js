@@ -51,10 +51,24 @@ class reportController {
           age: "26",
         },
       ];
+
+      const { id } = req.params;
+      const trip= await Trip.findByPk(id, {
+        include: [{
+          model: User,
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "password"],
+          },
+        },{model:Expense}, {model:Saving}
+      ],
+      });
+      console.log(typeof trip.dataValues);
+      
       let document = {
         html: html,
         data: {
-          users: users,
+          // users: users,
+          trip: trip.dataValues
         },
         path: "./trip-report.pdf",
         type: "",
@@ -68,9 +82,10 @@ class reportController {
         .catch((error) => {
           console.error(error);
         });
-      res.status(200).json({
-        message: "Your trip report has been created",
-      });
+      // res.status(200).json({
+      //   message: "Your trip report has been created",
+      // });
+      res.status(200).json(trip);
     } catch (err) {
       console.log(err);
       // next(err)
