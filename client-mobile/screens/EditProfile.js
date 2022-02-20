@@ -11,7 +11,7 @@ export default function EditProfile() {
   const [email, setEmail] = useState("Email@gmail.com")
   const [birthDate, setBirthDate] = useState("12/25/2021")
   const [phoneNumber, setPhoneNumber] = useState("081108101")
-  const [avatar, setAvatar] = useState("081108101")
+  const [avatar, setAvatar] = useState("airplane")
   const [focused, setFocused] = useState('')
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
 
@@ -79,35 +79,43 @@ export default function EditProfile() {
             onChangeText={setPhoneNumber}
           />
         </View>
-        <View style={{flexDirection: 'row', justifyContent: "space-between", flexWrap: "wrap", marginHorizontal: 40}}>
-          <TouchableOpacity onPress={() => setAvatar("A")}>
-            <Image source={logo} style={{height: 70, width: 70, backgroundColor: "#fff", borderRadius: 30, marginVertical: 10}} />
+        <View style={editProfileStyle.avatarContainer}>
+          <TouchableOpacity onPress={() => setAvatar("airplane")}
+          style={avatar === "airplane" ? editProfileStyle.avatarViewCheck : editProfileStyle.avatarView}>
+            <Ionicons name="airplane" size={48} color={avatar === "airplane" ? "white" : "#0378a6"} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setAvatar("B")}>
-            <Image source={logo} style={{height: 70, width: 70, backgroundColor: "#fff", borderRadius: 30, marginVertical: 10}} />
+          <TouchableOpacity onPress={() => setAvatar("location")}
+          style={avatar === "location" ? editProfileStyle.avatarViewCheck : editProfileStyle.avatarView}>
+            <Ionicons name="location" size={48} color={avatar === "location" ? "white" : "#0378a6"} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setAvatar("C")}>
-            <Image source={logo} style={{height: 70, width: 70, backgroundColor: "#fff", borderRadius: 30, marginVertical: 10}} />
+          <TouchableOpacity onPress={() => setAvatar("boat")}
+          style={avatar === "boat" ? editProfileStyle.avatarViewCheck : editProfileStyle.avatarView}>
+            <Ionicons name="boat" size={48} color={avatar === "boat" ? "white" : "#0378a6"} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setAvatar("D")}>
-            <Image source={logo} style={{height: 70, width: 70, backgroundColor: "#fff", borderRadius: 30, marginVertical: 10}} />
+          <TouchableOpacity onPress={() => setAvatar("bus")}
+          style={avatar === "bus" ? editProfileStyle.avatarViewCheck : editProfileStyle.avatarView}>
+            <Ionicons name="bus" size={48} color={avatar === "bus" ? "white" : "#0378a6"} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setAvatar("A")}>
-            <Image source={logo} style={{height: 70, width: 70, backgroundColor: "#fff", borderRadius: 30, marginVertical: 10}} />
+          <TouchableOpacity onPress={() => setAvatar("car-sport")}
+          style={avatar === "car-sport" ? editProfileStyle.avatarViewCheck : editProfileStyle.avatarView}>
+            <Ionicons name="car-sport" size={48} color={avatar === "car-sport" ? "white" : "#0378a6"} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setAvatar("B")}>
-            <Image source={logo} style={{height: 70, width: 70, backgroundColor: "#fff", borderRadius: 30, marginVertical: 10}} />
+          <TouchableOpacity onPress={() => setAvatar("earth")}
+          style={avatar === "earth" ? editProfileStyle.avatarViewCheck : editProfileStyle.avatarView}>
+            <Ionicons name="earth" size={48} color={avatar === "earth" ? "white" : "#0378a6"} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setAvatar("C")}>
-            <Image source={logo} style={{height: 70, width: 70, backgroundColor: "#fff", borderRadius: 30, marginVertical: 10}} />
+          <TouchableOpacity onPress={() => setAvatar("fast-food")}
+          style={avatar === "fast-food" ? editProfileStyle.avatarViewCheck : editProfileStyle.avatarView}>
+            <Ionicons name="fast-food" size={48} color={avatar === "fast-food" ? "white" : "#0378a6"} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => setAvatar("D")}>
-            <Image source={logo} style={{height: 70, width: 70, backgroundColor: "#fff", borderRadius: 30, marginVertical: 10}} />
+          <TouchableOpacity onPress={() => setAvatar("home")}
+          style={avatar === "home" ? editProfileStyle.avatarViewCheck : editProfileStyle.avatarView}>
+            <Ionicons name="home" size={48} color={avatar === "home" ? "white" : "#0378a6"} />
           </TouchableOpacity>
         </View>
         <View style={editProfileStyle.checkContainer}>
           <TouchableOpacity style={{ alignSelf: 'flex-start' }}>
-            <Ionicons name="checkmark" size={24} color="black" style={editProfileStyle.checkButton} />
+            <Ionicons name="checkmark" size={24} color="#0378a6" style={editProfileStyle.checkButton} />
           </TouchableOpacity>
         </View>
       </View>
@@ -128,7 +136,6 @@ const editProfileStyle = StyleSheet.create({
     borderBottomColor: "#fff",
     borderBottomWidth: 1
   },
-
   inputDate: {
     borderWidth: 1,
     borderColor: '#c1c1c1',
@@ -150,7 +157,6 @@ const editProfileStyle = StyleSheet.create({
     paddingLeft: 10,
     marginVertical: 10
   },
-
   inputOnFocus: {
     borderWidth: 1,
     borderColor: '#c1c1c1',
@@ -161,6 +167,30 @@ const editProfileStyle = StyleSheet.create({
     paddingLeft: 10,
     borderBottomColor: "#72c1f2",
     borderBottomWidth: 3,
+    marginVertical: 10
+  },
+  avatarContainer: {
+    flexDirection: 'row',
+    justifyContent: "space-between",
+    flexWrap: "wrap",
+    marginHorizontal: 40
+  },
+  avatarView: {
+    height: 70,
+    width: 70,
+    justifyContent: 'center',
+    alignItems: "center",
+    backgroundColor: "#fff",
+    borderRadius: 30,
+    marginVertical: 10
+  },
+  avatarViewCheck: {
+    height: 70,
+    width: 70,
+    justifyContent: 'center',
+    alignItems: "center",
+    backgroundColor: "#0378a6",
+    borderRadius: 30,
     marginVertical: 10
   },
   checkContainer: {
