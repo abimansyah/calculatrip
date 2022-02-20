@@ -12,13 +12,14 @@ import Trip from './screens/Trip';
 import Saving from './screens/Saving';
 import Expenses from './screens/Expenses';
 import Companion from './screens/Companion';
+import EditProfile from './screens/EditProfile';
 
 
 export default function App() {
   return (
     <SafeAreaProvider style={styles.mainContainer}>
       <View style={styles.screenSize}>
-        <Companion />
+        <EditProfile />
         <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>

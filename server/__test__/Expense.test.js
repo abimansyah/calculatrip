@@ -131,8 +131,23 @@ beforeAll(async () => {
     await UserTrip.create({
       UserId: 1,
       TripId: 2,
+
       status: "accept",
+      role: "companion",
+    });
+
+    await UserTrip.create({
+      UserId: 2,
+      TripId: 2,
+
       role: "owner",
+    });
+
+    await UserTrip.create({
+      UserId: 2,
+      TripId: 1,
+      status: "active",
+      role: "companion",
     });
 
     await Saving.create({
@@ -189,7 +204,7 @@ beforeAll(async () => {
     await Expense.create({
       name: "expense trip one",
       userId: 1,
-      tripId: 1,
+      tripId: 2,
       amount: 10000,
       expenseCategoryId: 1,
       paymentMethodId: 1,
@@ -200,8 +215,8 @@ beforeAll(async () => {
 
     await Expense.create({
       name: "expense trip two",
-      userId: 1,
-      tripId: 2,
+      userId: 2,
+      tripId: 1,
       amount: 2000,
       expenseCategoryId: 1,
       paymentMethodId: 1,
@@ -213,7 +228,7 @@ beforeAll(async () => {
     await Expense.create({
       name: "expense trip two",
       userId: 2,
-      tripId: 1,
+      tripId: 2,
       amount: 2000,
       expenseCategoryId: 1,
       paymentMethodId: 1,
@@ -373,10 +388,10 @@ describe("POST /expenses/:tripId - create new trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(400);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty(
-          "message",
-          "Choose expenses payment method!"
-        );
+
+
+        expect(result).toHaveProperty("message", "Choose expenses payment method!");
+
         done();
       })
       .catch((err) => {
@@ -618,13 +633,16 @@ describe("DELETE /expenses/:expenseId - delete one expense from a trip", () => {
         console.log(err);
       });
   });
-  test("GET /expenses error (500) - should handle error with status (500)", async () => {
-    jest.spyOn(Expense, "destroy").mockRejectedValue("Error");
+
+  test("GET /trips error (500) - should handle error with status (500)", async () => {
+    jest.spyOn(Expense, 'destroy').mockRejectedValue('Error')
+
     return request(app)
       .delete("/expenses/2")
       .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
+        // console.log(result);
         expect(resp.status).toBe(500);
         expect(result).toHaveProperty("message", "Internal Server Error");
       })

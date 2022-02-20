@@ -4,6 +4,9 @@ import { styles } from '../styles'
 
 export default inviteCompanion = () => {
   const [focused, setFocused] = useState('')
+  const [name, setName] = useState('')
+  const [amount, setAmount] = useState('')
+  const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   return (
     <View style={styles.modalData}>
       <View>
@@ -14,12 +17,16 @@ export default inviteCompanion = () => {
           style={focused === "name" ? styles.modalInputOnFocus : styles.modalInput}
           placeholder='Saving Name'
           onFocus={() => setFocused('name')}
+          value={name}
+          onChangeText={setName}
         />
         <TextInput
           style={focused === "amount" ? styles.modalInputOnFocus : styles.modalInput}
           placeholder='Saving Amount'
           keyboardType={phoneInput}
           onFocus={() => setFocused('amount')}
+          value={amount}
+          onChangeText={setAmount}
         />
       </View>
       <TouchableOpacity style={savingModalStyle.buttonContainer}>
