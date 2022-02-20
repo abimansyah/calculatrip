@@ -18,7 +18,7 @@ export default inviteCompanion = () => {
         <TextInput
           style={focused === "amount" ? styles.modalInputOnFocus : styles.modalInput}
           placeholder='Saving Amount'
-          keyboardType={phoneInput}
+          keyboardType="numeric"
           onFocus={() => setFocused('amount')}
         />
       </View>
