@@ -10,13 +10,14 @@ import Test from './screens/TestBottomModal';
 import Home from './screens/Home';
 import Trip from './screens/Trip';
 import Saving from './screens/Saving';
+import Expenses from './screens/Expenses';
 
 
 export default function App() {
   return (
     <SafeAreaProvider style={styles.mainContainer}>
       <View style={styles.screenSize}>
-        <Saving />
+        <Expenses />
         <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>

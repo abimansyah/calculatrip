@@ -132,7 +132,7 @@ export default function Saving() {
             />
           ) : (
             <View style={savingStyle.emptyContainer}>
-              <Text style={{textAlign: "center"}}>Add your expenses to see{"\n"}the summary of trip expenses</Text>
+              <Text style={{textAlign: "center"}}>Add your saving to see{"\n"}all of saving data</Text>
             </View>
           ) }
         </View>
@@ -190,6 +190,6 @@ const savingStyle = StyleSheet.create({
   emptyContainer: {
     justifyContent: "center",
     alignItems: "center",
-    height: '50%'
+    height: '100%'
   }
 })
