@@ -9,6 +9,7 @@ import logo from '../assets/logo.png'
 export default function EditProfile() {
   const [username, setUsername] = useState("Username")
   const [email, setEmail] = useState("Email@gmail.com")
+  const [password, setPassword] = useState("")
   const [birthDate, setBirthDate] = useState("12/25/2021")
   const [phoneNumber, setPhoneNumber] = useState("081108101")
   const [avatar, setAvatar] = useState("airplane")
@@ -60,6 +61,8 @@ export default function EditProfile() {
             style={focused === 'password' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
             placeholder="New Password"
             onFocus={() => setFocused('password')}
+            value={password}
+            onChangeText={setPassword}
           />
           <View style={editProfileStyle.inputDate}>
             <DateField

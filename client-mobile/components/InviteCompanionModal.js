@@ -4,6 +4,7 @@ import { styles } from '../styles'
 
 export default inviteCompanion = () => {
   const [focused, setFocused] = useState('')
+  const [email, setEmail] = useState('')
   return (
     <View style={styles.modalData}>
 
@@ -19,6 +20,8 @@ export default inviteCompanion = () => {
           keyboardType='email-address'
           placeholder='Email / Username'
           onFocus={() => setFocused('email')}
+          value={email}
+          onChangeText={setEmail}
         />
       </View>
       <View style={
