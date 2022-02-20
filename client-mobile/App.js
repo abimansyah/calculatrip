@@ -9,6 +9,9 @@ import { BottomModal } from './components/InviteCompanionModal';
 import Test from './screens/TestBottomModal';
 import Home from './screens/Home';
 import Trip from './screens/Trip';
+import Saving from './screens/Saving';
+import Expenses from './screens/Expenses';
+import Companion from './screens/Companion';
 
 
 export default function App() {
@@ -18,6 +21,7 @@ export default function App() {
 
         {/* <Test /> */}
         <Register />
+        <Companion />
         <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>
