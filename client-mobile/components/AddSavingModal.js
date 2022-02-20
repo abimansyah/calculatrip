@@ -4,6 +4,7 @@ import { styles } from '../styles'
 
 export default inviteCompanion = () => {
   const [focused, setFocused] = useState('')
+  const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   return (
     <View style={styles.modalData}>
       <View>
@@ -18,7 +19,7 @@ export default inviteCompanion = () => {
         <TextInput
           style={focused === "amount" ? styles.modalInputOnFocus : styles.modalInput}
           placeholder='Saving Amount'
-          keyboardType="numeric"
+          keyboardType={phoneInput}
           onFocus={() => setFocused('amount')}
         />
       </View>
