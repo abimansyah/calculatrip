@@ -9,11 +9,10 @@ const {
   Expense,
   ExpenseCategory,
   PaymentMethod,
+  Images,
 } = require("../models/index");
 
-const {
-  createToken
-} = require("../helpers/jwt");
+const { createToken } = require("../helpers/jwt");
 
 let token = "";
 let tokenUserTwo = "";
@@ -63,6 +62,12 @@ beforeAll(async () => {
       restartIdentity: true,
       cascade: true,
     });
+    await Images.destroy({
+      where: {},
+      truncate: true,
+      restartIdentity: true,
+      cascade: true,
+    });
 
     await User.create({
       username: "usernametest",
@@ -102,7 +107,8 @@ beforeAll(async () => {
       startDate: "01-02-2021",
       endDate: "01-03-2021",
       homeCurrency: "USD",
-      tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+      tripImageUrl:
+        "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
       targetBudget: 10000,
     });
     await Trip.create({
@@ -110,21 +116,22 @@ beforeAll(async () => {
       startDate: "01-02-2021",
       endDate: "01-03-2021",
       homeCurrency: "USD",
-      tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+      tripImageUrl:
+        "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
       targetBudget: 12000,
     });
 
     await UserTrip.create({
       UserId: 1,
       TripId: 1,
-      status: "active",
+      status: "accept",
       role: "owner",
     });
 
     await UserTrip.create({
       UserId: 1,
       TripId: 2,
-      status: "active",
+      status: "accept",
       role: "owner",
     });
 
@@ -214,14 +221,23 @@ beforeAll(async () => {
       description: "ini testing expense trip two",
       expenseDate: "02-01-2022",
     });
+
+    await Images.create({
+      expenseId: 2,
+      imageUrl: "www.dummy.com",
+    });
+    await Images.create({
+      expenseId: 2,
+      imageUrl: "www.dummy.com",
+    });
   } catch (err) {
     console.log(err);
   }
 });
 
 beforeEach(() => {
-  jest.restoreAllMocks()
-})
+  jest.restoreAllMocks();
+});
 
 describe("POST /expenses/:tripId - create new trip", () => {
   test("POST /expenses/:tripId success status (201) - should return success with status (201)", (done) => {
@@ -264,7 +280,7 @@ describe("POST /expenses/:tripId - create new trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(400);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Expense name is required");
+        expect(result).toHaveProperty("message", "Expense name is required");
         done();
       })
       .catch((err) => {
@@ -287,7 +303,7 @@ describe("POST /expenses/:tripId - create new trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(400);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Amount is required");
+        expect(result).toHaveProperty("message", "Amount is required");
         done();
       })
       .catch((err) => {
@@ -311,7 +327,7 @@ describe("POST /expenses/:tripId - create new trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(400);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Amount can't be 0 or below");
+        expect(result).toHaveProperty("message", "Amount can't be 0 or below");
         done();
       })
       .catch((err) => {
@@ -334,7 +350,7 @@ describe("POST /expenses/:tripId - create new trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(400);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Choose expenses category!");
+        expect(result).toHaveProperty("message", "Choose expenses category!");
         done();
       })
       .catch((err) => {
@@ -357,7 +373,10 @@ describe("POST /expenses/:tripId - create new trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(400);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Choose expenses payment method!");
+        expect(result).toHaveProperty(
+          "message",
+          "Choose expenses payment method!"
+        );
         done();
       })
       .catch((err) => {
@@ -380,7 +399,7 @@ describe("POST /expenses/:tripId - create new trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(400);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Expense Date is required");
+        expect(result).toHaveProperty("message", "Expense Date is required");
         done();
       })
       .catch((err) => {
@@ -404,7 +423,7 @@ describe("POST /expenses/:tripId - create new trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(400);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Invalid input date");
+        expect(result).toHaveProperty("message", "Invalid input date");
         done();
       })
       .catch((err) => {
@@ -428,7 +447,7 @@ describe("POST /expenses/:tripId - create new trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(404);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Trip not found");
+        expect(result).toHaveProperty("message", "Trip not found");
         done();
       })
       .catch((err) => {
@@ -452,7 +471,7 @@ describe("POST /expenses/:tripId - create new trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(401);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Forbiden to Access");
+        expect(result).toHaveProperty("message", "Forbiden to Access");
         done();
       })
       .catch((err) => {
@@ -484,7 +503,7 @@ describe("GET /expenses/trip/:tripId - get all expenses inside a trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(404);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Trip not found");
+        expect(result).toHaveProperty("message", "Trip not found");
         done();
       })
       .catch((err) => {
@@ -492,7 +511,7 @@ describe("GET /expenses/trip/:tripId - get all expenses inside a trip", () => {
       });
   });
   test("GET /trips error (500) - should handle error with status (500)", async () => {
-    jest.spyOn(Expense, 'findAll').mockRejectedValue('Error')
+    jest.spyOn(Expense, "findAll").mockRejectedValue("Error");
     return request(app)
       .get("/expenses/trip/1")
       .set("access_token", token)
@@ -505,7 +524,7 @@ describe("GET /expenses/trip/:tripId - get all expenses inside a trip", () => {
         console.log(err);
       });
   });
-})
+});
 
 describe("GET /expenses/:expenseId - get one expense inside a trip", () => {
   test("GET /expenses/:expenseId success status (200) - should return all expenses inside a trip", (done) => {
@@ -530,7 +549,7 @@ describe("GET /expenses/:expenseId - get one expense inside a trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(404);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Expense not found");
+        expect(result).toHaveProperty("message", "Expense not found");
         done();
       })
       .catch((err) => {
@@ -538,7 +557,7 @@ describe("GET /expenses/:expenseId - get one expense inside a trip", () => {
       });
   });
   test("GET /trips error (500) - should handle error with status (500)", async () => {
-    jest.spyOn(Expense, 'findAll').mockRejectedValue('Error')
+    jest.spyOn(Expense, "findAll").mockRejectedValue("Error");
     return request(app)
       .get("/expenses/1")
       .set("access_token", token)
@@ -551,7 +570,7 @@ describe("GET /expenses/:expenseId - get one expense inside a trip", () => {
         console.log(err);
       });
   });
-})
+});
 
 describe("DELETE /expenses/:expenseId - delete one expense from a trip", () => {
   test("DELETE /expenses/:expenseId success status (200) - should delete one expense from a trip", (done) => {
@@ -562,13 +581,13 @@ describe("DELETE /expenses/:expenseId - delete one expense from a trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(200);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Expense has been deleted!");
+        expect(result).toHaveProperty("message", "Expense has been deleted!");
         done();
       })
       .catch((err) => {
         console.log(err);
       });
-  })
+  });
   test("DELETE /expenses/:expenseId error status (404) - should return error with status (404) when expense is not found", (done) => {
     request(app)
       .delete("/expenses/6")
@@ -577,13 +596,13 @@ describe("DELETE /expenses/:expenseId - delete one expense from a trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(404);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Expense not found");
+        expect(result).toHaveProperty("message", "Expense not found");
         done();
       })
       .catch((err) => {
         console.log(err);
       });
-  })
+  });
   test("DELETE /expenses/:expenseId error status (401) - should return error with status (401) when token is invalid", (done) => {
     request(app)
       .delete("/expenses/1")
@@ -592,17 +611,17 @@ describe("DELETE /expenses/:expenseId - delete one expense from a trip", () => {
         const result = resp.body;
         expect(resp.status).toBe(401);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message","Forbiden to Access");
+        expect(result).toHaveProperty("message", "Forbiden to Access");
         done();
       })
       .catch((err) => {
         console.log(err);
       });
-  })
-  test("GET /trips error (500) - should handle error with status (500)", async () => {
-    jest.spyOn(Expense, 'destroy').mockRejectedValue('Error')
+  });
+  test("GET /expenses error (500) - should handle error with status (500)", async () => {
+    jest.spyOn(Expense, "destroy").mockRejectedValue("Error");
     return request(app)
-      .delete("/expenses/1")
+      .delete("/expenses/2")
       .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
@@ -613,5 +632,52 @@ describe("DELETE /expenses/:expenseId - delete one expense from a trip", () => {
         console.log(err);
       });
   });
+});
 
-})
+describe("DELETE /expenses/:expenseId/image - delete image from expense", () => {
+  test("DELETE /expenses/:expenseId/image - should delete one image from expense", (done) => {
+    request(app)
+      .delete("/expenses/2/image/1")
+      .set("access_token", tokenUserTwo)
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(200);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty("message", "Image has been removed");
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  test("DELETE /expenses/:expenseId/image - should return error with status (404) when image is not exist", (done) => {
+    request(app)
+      .delete("/expenses/2/image/600")
+      .set("access_token", tokenUserTwo)
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(404);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty("message", "Image not found");
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+  test("DELETE /expenses/:expenseId/image - should return error with status (404) when expense is not exist", (done) => {
+    request(app)
+      .delete("/expenses/400/image/1")
+      .set("access_token", tokenUserTwo)
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(404);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty("message", "Expense not found");
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+});

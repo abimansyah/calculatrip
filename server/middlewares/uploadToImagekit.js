@@ -10,7 +10,7 @@ const uploadToImagekit = async (req, res, next) => {
               }
           }
       }
-      if (req.file.size > 3000000) {
+      if (req.file.size > 5000000) {
           throw {
               name: 'InvalidImageSize'
           }
