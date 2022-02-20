@@ -111,14 +111,14 @@ beforeAll(async () => {
         await UserTrip.create({
             UserId: 1,
             TripId: 1,
-            status: "active",
+            status: "accept",
             role: "owner",
         });
 
         await UserTrip.create({
             UserId: 2,
             TripId: 2,
-            status: "active",
+            status: "accept",
             role: "owner",
         });
 
