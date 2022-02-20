@@ -1,6 +1,7 @@
 const axios = require('axios');
 const instanceAxiosOcr = require('../apis/ocr')
 const FormData = require('form-data')
+const fs = require('fs')
 
 class OcrController {
   static async postOcr (req,res,next){
@@ -9,33 +10,40 @@ class OcrController {
       // console.log(req.file);
 
       if (req.file.buffer) {
-        const data = req.file.buffer.toString("base64")
-        const dataName = req.file.originalname
-        let form = new FormData()
-        form.append('file', data)
-        form.append('fileName', dataName)
+        const image = req.file.buffer
+        // const image = req.file.buffer.toString("base64")
+        const imageName = req.file.originalname
+        // form.append('file', 'data:image/jpeg;base64,'+ image)
+        // fs.createReadStream('../server/controllers/Capture.JPG')
 
-        // console.log('data:image/jpeg;base64,'+data);
+        let form = new FormData()
+        // form.append('file', image)
+        // form.append('fileName', imageName)
+        // form.append('file', 'data:image/jpeg;base64,'+ image)
+        form.append("file",fs.createReadStream('../server/controllers/Capture.JPG'))
+        form.append('language', "eng")
+        form.append('isCreateSearchablePdf', true)
+        form.append('isSearchablePdfHideTextLayer', false)
+        // form.append('fileType', "JPG")
 
         let newHeaders = form.getHeaders()
-
-        const test = 'data:image/jpeg;base64,'+data
-        // console.log(test);
 
         const response = await axios({
           method: "post",
           url:'https://api.ocr.space/parse/image',
           headers:{
             apikey: "K89321088288957",
-            ...form.getHeaders()
+            ...form.getHeaders(),
+            "Content-Type": "multipart/form-data"
           },
-          data:{
-            language:"eng",
-            base64Image:test,
-            // fileType:"JPG",
-            isCreateSearchablePdf:true,
-            isSearchablePdfHideTextLayer:false,
-          }
+          data:{file:form},
+          // data:{
+          //   file: image,
+          //   language:"eng",
+          //   isCreateSearchablePdf:true,
+          //   isSearchablePdfHideTextLayer:false,
+          //   filetype:"JPG"
+          // }
         })
         // if (!response) {
         //     throw {
@@ -46,12 +54,13 @@ class OcrController {
         // req.uploadUrl = response.data.url
         // console.log(response.data);
         // next()
+        res.status(200).json(response.data)
     } else {
         throw {name: 'Cant read file image file'}
     }
-      
+
     } catch (err) {
-      console.log(err);
+      console.log(err,"<<<<<<<<<<<<<<<<");
       next(err)
     }
   }
