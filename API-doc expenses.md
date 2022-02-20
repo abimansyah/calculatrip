@@ -39,7 +39,7 @@ Request:
 {
   "name": "string",
   "amount": "integer",
-  "categoryId": "integer",
+  "expenseCategoryId": "integer",
   "paymentMethodId": "integer",
   "location": "string",
   "description": "text",
@@ -294,6 +294,17 @@ _Response (401 - Unauthorized)_
 ```json
 {
   "message": "Invalid token"
+}
+OR
+{
+  "message": "Forbiden to Access"
+}
+```
+_Response (403 - Forbidden)_
+
+```json
+{
+  "message": "Unauthorize - Forbiden to Access"
 }
 ```
 

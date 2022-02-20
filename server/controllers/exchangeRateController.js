@@ -5,8 +5,10 @@ class ExchangeRateController {
     static async getSymbols(req, res, next) {
         try {
             const result = await axios.get('https://api.exchangerate.host/symbols')
-            res.status(200).json(result.data.symbols)
+            let symbols = Object.values(result.data.symbols)
+            res.status(200).json(symbols)
         } catch (err) {
+            console.log(err)
             next(err)
         }
     }

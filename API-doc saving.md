@@ -7,7 +7,7 @@ List of available endpoints for Savings:
 - `GET /savings/:savingId`
 - `DELETE / savings/:savingId`
 
-&nbsp;
+&nbsp; 
 
 ## 1. POST /savings/:tripId
 
@@ -64,7 +64,7 @@ OR
 }
 OR
 {
-  "message": "Saving date  input date"
+  "message": "Saving Date is required"
 }
 OR
 {
@@ -231,6 +231,14 @@ _Response (401 - Unauthorized)_
 ```json
 {
   "message": "Invalid token"
+}
+```
+
+_Response (403 - Unauthorize - Forbiden to Access)_
+
+```json
+{
+  "message": "Unauthorize - Forbiden to Access"
 }
 ```
 

@@ -17,9 +17,9 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "Password is required") {
         status = 400
         message = "Password is required"
-    } else if (err.name === "Forbidden to Access") {
+    } else if (err.name === "Forbiden to Access") {
         status = 401
-        message = "Forbidden to Access"
+        message = "Forbiden to Access"
     } else if (err.name === "User not found") {
         status = 404
         message = "User not found"
@@ -41,7 +41,29 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "SavingNotFound") {
         status = 404
         message = "Saving not found"
-    }
+    } else if (err.name === 'Unauthorize') {
+        status = 403
+        message = 'Unauthorize - Forbiden to Access'
+    } else if (err.name === 'InvalidImageFormat') {
+        status = 400
+        message = 'Invalid Image Format'
+    } else if (err.name === 'InvalidImageSize') {
+        status = 400
+        message = "Image size can't exceed 3MB"
+    } else if (err.name === 'Error Create Data') {
+        status = 400
+        message = "Error Create Data"
+    } else if (err.name === "Can't read file image file") {
+        status = 400
+        message = "Can't read file image file"
+    } else if (err.name === "Can't read file image file") {
+        status = 400
+        message = "Can't read file image file"
+    } else if (err.name === "ImageNotFound") {
+        status = 404
+        message = "Image not found"
+    } 
+
 
     res.status(status).json({
         message

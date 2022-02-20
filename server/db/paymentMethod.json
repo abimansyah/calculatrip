@@ -1,0 +1,10 @@
+[
+  {
+    "name":"Cash",
+    "icon":"http://dummyimage.com/169x100.png/cc0000/ffffff"
+  },
+  {
+    "name":"Credit Card",
+    "icon":"http://dummyimage.com/248x100.png/dddddd/000000"
+  }
+]

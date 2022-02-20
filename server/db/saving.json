@@ -1,0 +1,58 @@
+[
+  {
+    "name":"saving name",
+    "amount":10000,
+    "userId":1,
+    "tripId":1,
+    "savingDate":"02-01-2022"
+  },
+  {
+    "name":"saving name",
+    "amount":10000,
+    "userId":1,
+    "tripId":2,
+    "savingDate":"02-01-2022"
+  },
+  {
+    "name":"saving name",
+    "amount":10000,
+    "userId":1,
+    "tripId":3,
+    "savingDate":"02-01-2022"
+  },
+  {
+    "name":"saving name",
+    "amount":10000,
+    "userId":1,
+    "tripId":4,
+    "savingDate":"02-01-2022"
+  },
+  {
+    "name":"saving name",
+    "amount":10000,
+    "userId":2,
+    "tripId":1,
+    "savingDate":"02-01-2022"
+  },
+  {
+    "name":"saving name",
+    "amount":10000,
+    "userId":2,
+    "tripId":2,
+    "savingDate":"02-01-2022"
+  },
+  {
+    "name":"saving name",
+    "amount":10000,
+    "userId":2,
+    "tripId":3,
+    "savingDate":"02-01-2022"
+  },
+  {
+    "name":"saving name",
+    "amount":10000,
+    "userId":2,
+    "tripId":4,
+    "savingDate":"02-01-2022"
+  }
+]

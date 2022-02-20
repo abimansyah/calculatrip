@@ -88,6 +88,10 @@ module.exports = (sequelize, DataTypes) => {
         notEmpty:{
           msg: "Phone Number is required"
         },
+        len: {
+          args: [8,13],
+          msg: "Phone Number should contain 8-13 digits"
+        }
       }
     },
     birthDate: {

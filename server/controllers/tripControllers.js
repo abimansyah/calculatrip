@@ -14,7 +14,14 @@ class TripController {
   static async postTrip(req, res, next) {
     const t = await sequelize.transaction();
     try {
-      const { name, startDate, endDate, homeCurrency, tripImageUrl, targetBudget } = req.body;
+      const {
+        name,
+        startDate,
+        endDate,
+        homeCurrency,
+        tripImageUrl,
+        targetBudget,
+      } = req.body;
 
       const newTrip = await Trip.create(
         {
@@ -59,7 +66,7 @@ class TripController {
             model: Trip,
             order: [["createdAt", "desc"]],
             attributes: {
-              exclude: ["createdAt","updatedAt"]
+              exclude: ["createdAt", "updatedAt"],
             },
             include: [
               {
@@ -114,16 +121,13 @@ class TripController {
     try {
       const { id } = req.params;
       const findTrip = await Trip.findByPk(id);
-      if (!findTrip) {
-        throw { name: "TripNotFound" };
-      } else {
-        await Trip.destroy({
-          where: { id },
-        });
-        res.status(200).json({
-          message: `Trip ${findTrip.name} has been deleted!`,
-        });
-      }
+
+      await Trip.destroy({
+        where: { id },
+      });
+      res.status(200).json({
+        message: `Trip ${findTrip.name} has been deleted!`,
+      });
     } catch (err) {
       next(err);
     }
@@ -132,33 +136,38 @@ class TripController {
   static async editTrip(req, res, next) {
     const t = await sequelize.transaction();
     try {
-      const { name, startDate, endDate, homeCurrency, tripImageUrl, targetBudget } = req.body;
+      const {
+        name,
+        startDate,
+        endDate,
+        homeCurrency,
+        tripImageUrl,
+        targetBudget,
+      } = req.body;
 
       const { id } = req.params;
 
       const findTrip = await Trip.findByPk(id);
 
-      if (!findTrip) {
-        throw { name: "TripNotFound" };
-      } else {
-        const editedTrip = await Trip.update(
-          {
-            name,
-            startDate,
-            endDate,
-            homeCurrency,
-            tripImageUrl: tripImageUrl || defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
-            targetBudget,
-          },
-          { where: { id }, returning: true },
-          { transaction: t }
-        );
+      const editedTrip = await Trip.update(
+        {
+          name,
+          startDate,
+          endDate,
+          homeCurrency,
+          tripImageUrl:
+            tripImageUrl ||
+            defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
+          targetBudget,
+        },
+        { where: { id }, returning: true },
+        { transaction: t }
+      );
 
-        await t.commit();
-        res.status(201).json({
-          message: `Trip ${editedTrip[1][0].name} has been updated!`,
-        });
-      }
+      await t.commit();
+      res.status(201).json({
+        message: `Trip ${editedTrip[1][0].name} has been updated!`,
+      });
     } catch (err) {
       await t.rollback();
       next(err);

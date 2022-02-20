@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       UserTrip.belongsTo(models.Trip)
-      // UserTrip.belongsTo(models.User)
+      UserTrip.belongsTo(models.User)
     }
   }
   UserTrip.init({
