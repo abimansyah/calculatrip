@@ -104,14 +104,33 @@ export const styles = StyleSheet.create({
   },
   
   modalInput: {
-    borderColor: '#000',
-    borderWidth: 1,
     paddingVertical: 5,
     paddingHorizontal: 15,
-    marginVertical: 10,
+    marginBottom: 10,
     borderRadius: 10,
     width: 250,
-    height: 40
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#c1c1c1',
+    borderRadius: 5,
+    color: '#000',
+    paddingLeft: 10
+  },
+
+  modalInputOnFocus: {
+    paddingVertical: 5,
+    paddingHorizontal: 15,
+    marginBottom: 10,
+    borderRadius: 10,
+    width: 250,
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#c1c1c1',
+    borderRadius: 5,
+    color: '#000',
+    paddingLeft: 10,
+    borderBottomColor: mainColor,
+    borderBottomWidth: 3
   },
 
   expenseIcon: {

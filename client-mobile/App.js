@@ -9,13 +9,16 @@ import { BottomModal } from './components/InviteCompanionModal';
 import Test from './screens/TestBottomModal';
 import Home from './screens/Home';
 import Trip from './screens/Trip';
+import Saving from './screens/Saving';
+import Expenses from './screens/Expenses';
+import Companion from './screens/Companion';
 
 
 export default function App() {
   return (
     <SafeAreaProvider style={styles.mainContainer}>
       <View style={styles.screenSize}>
-        <Test />
+        <Companion />
         <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>

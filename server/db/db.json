@@ -231,5 +231,197 @@
         }
       ]
     }
+  ],
+  "expenses": [
+    {
+      "name": "expense trip one",
+      "userId": 1,
+      "tripId": 1,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip one",
+      "userId": 1,
+      "tripId": 2,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip one",
+      "userId": 1,
+      "tripId": 3,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip one",
+      "userId": 1,
+      "tripId": 4,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip ",
+      "userId": 2,
+      "tripId": 1,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip ",
+      "userId": 2,
+      "tripId": 2,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip",
+      "userId": 2,
+      "tripId": 3,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip",
+      "userId": 2,
+      "tripId": 4,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip ",
+      "userId": 3,
+      "tripId": 1,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip ",
+      "userId": 3,
+      "tripId": 2,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip",
+      "userId": 3,
+      "tripId": 3,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    },
+    {
+      "name": "expense trip",
+      "userId": 3,
+      "tripId": 4,
+      "amount": 5000,
+      "expenseCategoryId": 1,
+      "paymentMethodId": 1,
+      "location": "Indonesia",
+      "description": "trip expense",
+      "expenseDate": "02-01-2022"
+    }
+  ],
+  "savings": [
+    {
+      "name":"saving name",
+      "amount":10000,
+      "userId":1,
+      "tripId":1,
+      "savingDate":"02-01-2022"
+    },
+    {
+      "name":"saving name",
+      "amount":10000,
+      "userId":1,
+      "tripId":2,
+      "savingDate":"02-01-2022"
+    },
+    {
+      "name":"saving name",
+      "amount":10000,
+      "userId":1,
+      "tripId":3,
+      "savingDate":"02-01-2022"
+    },
+    {
+      "name":"saving name",
+      "amount":10000,
+      "userId":1,
+      "tripId":4,
+      "savingDate":"02-01-2022"
+    },
+    {
+      "name":"saving name",
+      "amount":10000,
+      "userId":2,
+      "tripId":1,
+      "savingDate":"02-01-2022"
+    },
+    {
+      "name":"saving name",
+      "amount":10000,
+      "userId":2,
+      "tripId":2,
+      "savingDate":"02-01-2022"
+    },
+    {
+      "name":"saving name",
+      "amount":10000,
+      "userId":2,
+      "tripId":3,
+      "savingDate":"02-01-2022"
+    },
+    {
+      "name":"saving name",
+      "amount":10000,
+      "userId":2,
+      "tripId":4,
+      "savingDate":"02-01-2022"
+    }
   ]
 }
