@@ -64,7 +64,9 @@ export const styles = StyleSheet.create({
     borderColor: '#c1c1c1',
     borderWidth: 1,
     paddingHorizontal: 15,
-    marginLeft: 15
+    paddingVertical: 8,
+    marginLeft: 15,
+    marginVertical: 8
   },
   
   modalHeader: {
