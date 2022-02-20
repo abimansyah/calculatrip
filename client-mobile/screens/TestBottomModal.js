@@ -12,7 +12,7 @@ export default function Test() {
   const fall = new Animated.Value(1);
   const [focused, setFocused] = useState('')
 
-  
+
 
   const headerModal = () => {
     return (
@@ -42,8 +42,9 @@ export default function Test() {
           opacity: Animated.add(0.1, Animated.multiply(fall, 1.0))
         }
       }>
+        <Text> ini test untuk bottom modal</Text>
         <TouchableOpacity onPress={() => bs.current.snapTo(0)}>
-          <Image source={logo} style={{height: 100, width: 100}} />
+          <Image source={logo} style={{ height: 100, width: 100 }} />
           <Text> ini test untuk bottom modal</Text>
         </TouchableOpacity>
       </Animated.View>

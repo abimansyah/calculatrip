@@ -20,7 +20,7 @@ export default function Home() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true)
   useEffect(() => {
-    axios.get('http://a874-103-78-115-90.ngrok.io/trips')
+    axios.get('https://a730-125-165-106-74.ngrok.io/trips')
       .then(res => {
         res.data = res.data.map(el => {
           el.UserTrips = el.UserTrips.length
@@ -48,7 +48,7 @@ export default function Home() {
               renderItem={({ item }) => (<HomeCard data={item} />)}
               keyExtractor={(item) => `Trips${item.id}`}
               ListHeaderComponent={<HomeProfile />}
-              contentContainerStyle={{ paddingBottom: 200 }}
+              contentContainerStyle={{ paddingBottom: 170 }}
             />
           </View>
         ) : (
@@ -103,7 +103,7 @@ const homeStyle = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     position: 'absolute',
-    bottom: 30
+    bottom: 10
   },
   addButton: {
     fontSize: 32,

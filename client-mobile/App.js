@@ -16,8 +16,8 @@ export default function App() {
     <SafeAreaProvider style={styles.mainContainer}>
       <View style={styles.screenSize}>
 
-        <Test />
-        <Trip />
+        {/* <Test /> */}
+        <Register />
         <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>
