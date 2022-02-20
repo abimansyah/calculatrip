@@ -11,7 +11,9 @@ const {
   PaymentMethod,
 } = require("../models/index");
 
-const { createToken } = require("../helpers/jwt");
+const {
+  createToken
+} = require("../helpers/jwt");
 
 let token = "";
 let tokenUserTwo = "";
@@ -100,8 +102,7 @@ beforeAll(async () => {
       startDate: "01-02-2021",
       endDate: "01-03-2021",
       homeCurrency: "USD",
-      tripImageUrl:
-        "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+      tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
       targetBudget: 10000,
     });
     await Trip.create({
@@ -109,8 +110,7 @@ beforeAll(async () => {
       startDate: "01-02-2021",
       endDate: "01-03-2021",
       homeCurrency: "USD",
-      tripImageUrl:
-        "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+      tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
       targetBudget: 12000,
     });
 
@@ -125,7 +125,21 @@ beforeAll(async () => {
       UserId: 1,
       TripId: 2,
       status: "active",
+      role: "companion",
+    });
+
+    await UserTrip.create({
+      UserId: 2,
+      TripId: 2,
+      status: "active",
       role: "owner",
+    });
+
+    await UserTrip.create({
+      UserId: 2,
+      TripId: 1,
+      status: "active",
+      role: "companion",
     });
 
     await Saving.create({
@@ -209,8 +223,7 @@ describe("POST /trips - create new trip", () => {
         startDate: "02-02-2021",
         endDate: "02-03-2021",
         homeCurrency: "IDR",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 20000,
       })
       .then((resp) => {
@@ -235,8 +248,7 @@ describe("POST /trips - create new trip", () => {
         startDate: "02-02-2021",
         endDate: "02-03-2021",
         homeCurrency: "IDR",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 20000,
       })
       .then((resp) => {
@@ -258,8 +270,7 @@ describe("POST /trips - create new trip", () => {
         name: "jalan jalan ke bandung",
         startDate: "02-02-2021",
         homeCurrency: "IDR",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 20000,
       })
       .then((resp) => {
@@ -281,8 +292,7 @@ describe("POST /trips - create new trip", () => {
         name: "jalan jalan ke bandung",
         endDate: "02-03-2021",
         homeCurrency: "IDR",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 20000,
       })
       .then((resp) => {
@@ -305,8 +315,7 @@ describe("POST /trips - create new trip", () => {
         startDate: "300-02-2021",
         endDate: "300-03-2021",
         homeCurrency: "IDR",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 20000,
       })
       .then((resp) => {
@@ -329,8 +338,7 @@ describe("POST /trips - create new trip", () => {
         startDate: "02-02-2021",
         endDate: "01-03-2021",
         homeCurrency: "IDR",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 20000,
       })
       .then((resp) => {
@@ -355,8 +363,7 @@ describe("POST /trips - create new trip", () => {
         name: "jalan jalan ke bandung",
         startDate: "02-02-2021",
         endDate: "02-03-2021",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 20000,
       })
       .then((resp) => {
@@ -379,8 +386,7 @@ describe("POST /trips - create new trip", () => {
         startDate: "02-02-2021",
         endDate: "02-03-2021",
         homeCurrency: "IDR",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 20000,
       })
       .then((resp) => {
@@ -397,7 +403,7 @@ describe("POST /trips - create new trip", () => {
 });
 
 describe("GET /trips - get all trips", () => {
-  
+
   test("GET /trips success (200) - get all trips for user with access_token", (done) => {
     request(app)
       .get("/trips")
@@ -429,13 +435,13 @@ describe("GET /trips - get all trips", () => {
       });
   });
   test("GET /trips error (500) - should handle error with status (500)", async () => {
-    jest.spyOn(User, 'findOne').mockRejectedValue('Error')
+    jest.spyOn(User, "findOne").mockRejectedValue('Error')
     return request(app)
       .get("/trips")
       .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
-        // console.log(result,"<<<<<<<<<<<<<<<<<<<<<<<");
+        // console.log(result, "<<<<<<<<<<<<<<<<<<<<<<<");
         expect(resp.status).toBe(500);
         expect(result).toHaveProperty("message", "Internal Server Error");
       })
@@ -443,7 +449,7 @@ describe("GET /trips - get all trips", () => {
         console.log(err);
       });
   });
-  
+
 });
 
 describe("GET /trips/:id - get trips by id", () => {
@@ -492,7 +498,7 @@ describe("GET /trips/:id - get trips by id", () => {
         console.log(err);
       });
   });
-  
+
 });
 
 describe("PUT /trips/:id - edit trip", () => {
@@ -505,8 +511,7 @@ describe("PUT /trips/:id - edit trip", () => {
         startDate: "02-02-2021",
         endDate: "02-03-2021",
         homeCurrency: "USD",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 50000,
       })
       .then((resp) => {
@@ -532,8 +537,7 @@ describe("PUT /trips/:id - edit trip", () => {
         startDate: "02-02-2021",
         endDate: "02-03-2021",
         homeCurrency: "USD",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 50000,
       })
       .then((resp) => {
@@ -556,8 +560,7 @@ describe("PUT /trips/:id - edit trip", () => {
         startDate: null,
         endDate: "02-03-2021",
         homeCurrency: "USD",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 50000,
       })
       .then((resp) => {
@@ -580,8 +583,7 @@ describe("PUT /trips/:id - edit trip", () => {
         startDate: "02-03-2021",
         endDate: null,
         homeCurrency: "USD",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 50000,
       })
       .then((resp) => {
@@ -604,8 +606,7 @@ describe("PUT /trips/:id - edit trip", () => {
         startDate: "02-03-2021",
         endDate: "01-03-2021",
         homeCurrency: "USD",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 50000,
       })
       .then((resp) => {
@@ -631,8 +632,7 @@ describe("PUT /trips/:id - edit trip", () => {
         startDate: "01-03-2021",
         endDate: "02-03-2021",
         homeCurrency: null,
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 50000,
       })
       .then((resp) => {
@@ -655,8 +655,7 @@ describe("PUT /trips/:id - edit trip", () => {
         startDate: "01-03-2021",
         endDate: "02-03-2021",
         homeCurrency: "IDR",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 50000,
       })
       .then((resp) => {
@@ -679,8 +678,7 @@ describe("PUT /trips/:id - edit trip", () => {
         startDate: "01-03-2021",
         endDate: "02-03-2021",
         homeCurrency: "IDR",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 50000,
       })
       .then((resp) => {
@@ -697,14 +695,13 @@ describe("PUT /trips/:id - edit trip", () => {
   test("PUT /trips/:id error status (403) - should return error when user is unauthorized", (done) => {
     request(app)
       .put("/trips/2")
-      .set("access_token", tokenUserTwo)
+      .set("access_token", token)
       .send({
         name: "jalan jalan ke bandung edited by user Two",
         startDate: "01-03-2021",
         endDate: "02-03-2021",
         homeCurrency: "IDR",
-        tripImageUrl:
-          "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
         targetBudget: 50000,
       })
       .then((resp) => {
@@ -761,7 +758,7 @@ describe("DELETE /trips/:id - delete trip", () => {
   test("DELETE /trips/:id error status (403) - should return error when user is tried to delete another user trip", (done) => {
     request(app)
       .delete("/trips/2")
-      .set("access_token", tokenUserTwo)
+      .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
         expect(resp.status).toBe(403);

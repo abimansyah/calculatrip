@@ -8,7 +8,6 @@ class ExchangeRateController {
             let symbols = Object.values(result.data.symbols)
             res.status(200).json(symbols)
         } catch (err) {
-            console.log(err)
             next(err)
         }
     }
