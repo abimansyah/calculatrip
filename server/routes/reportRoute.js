@@ -8,7 +8,7 @@ const authentication = require('../middlewares/Authentication')
 // controller 
 const reportController = require('../controllers/reportController')
 
-reportRouter.get('/', reportController.getReport)
+reportRouter.get('/:id', reportController.getReport)
 
 
 module.exports = reportRouter
