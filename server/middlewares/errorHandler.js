@@ -2,6 +2,8 @@ const errorHandler = (err, req, res, next) => {
     let status = 500
     let message = 'Internal Server Error'
 
+    // console.log(err);
+
     if (err.name === "SequelizeValidationError" || err.name === "SequelizeUniqueConstraintError") {
         status = 400
         message = err.errors[0].message
@@ -61,10 +63,26 @@ const errorHandler = (err, req, res, next) => {
         message = "Can't read file image file"
     } else if (err.name === "ImageNotFound") {
         status = 404
-        message = "Image not found"
-    } 
-
-
+        message = "Image not found"     
+    } else if (err.name === "Latitude is required") {
+        status = 400
+        message = "Latitude is required"
+    } else if (err.name === "Longitude is required") {
+        status = 400
+        message = "Longitude is required"
+    } else if (err.name === "city is required") {
+        status = 400
+        message = "City is required"
+    } else if (err.response.data && err.response.data.message === "wrong latitude") {
+        status = 400
+        message = "Wrong Latitude"
+    } else if (err.response.data && err.response.data.message === "wrong longitude") {
+        status = 400
+        message = "Wrong Longitude"
+    } else if (err.response.data && err.response.data.message === 'city not found') {
+        status = 404
+        message = 'City not found'
+    }
     res.status(status).json({
         message
     })
