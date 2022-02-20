@@ -50,6 +50,14 @@ class reportController {
           name: "Vitthal",
           age: "26",
         },
+        {
+          name: "Abi",
+          age: "26",
+        },
+        {
+          name: "Ab2i",
+          age: "26",
+        }
       ];
 
       const { id } = req.params;
@@ -67,21 +75,15 @@ class reportController {
       let document = {
         html: html,
         data: {
-          // users: users,
+          users: users,
           trip: trip.dataValues
         },
         path: "./trip-report.pdf",
         type: "",
       };
 
-      pdf
-        .create(document, options)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      await pdf.create(document, options)
+       
       // res.status(200).json({
       //   message: "Your trip report has been created",
       // });

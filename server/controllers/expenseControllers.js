@@ -167,13 +167,20 @@ class ExpenseController {
   static async deleteImage(req,res,next) {
     try {
       const { expenseId, imageId } = req.params
-      const deleteImage = await Image.findByPk(imageId)
+
+      const expense = await Expense.findByPk(expenseId)
+      
+      if(!expense){
+        throw{name:"ExpenseNotFound"}
+      }
+
+      const deleteImage = await Images.findByPk(imageId)
       if(!deleteImage) {
         throw {name: "ImageNotFound"}
       }
-      await Image.destroy({
+      await Images.destroy({
         where: {
-          imageId,
+          id:imageId,
           expenseId
         }
       })
@@ -181,6 +188,7 @@ class ExpenseController {
         message: "Image has been removed"
       })
     } catch (error) {
+      console.log(error);
       next(error)
     }
   }
