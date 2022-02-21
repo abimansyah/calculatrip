@@ -15,35 +15,65 @@ import HomeProfile from '../components/HomeProfile';
 import HomeCard from '../components/HomeCard';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export default function Home() {
+
+export default function Home({ navigation }) {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true)
+  const [token, setToken] = useState('')
+  const loginCheck = async () => {
+    try {
+      const getAccessToken = await AsyncStorage.getItem('access_token')
+      if (getAccessToken !== null) {
+        navigation.navigate('Home')
+        setToken(getAccessToken);
+
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+
   useEffect(() => {
-    axios.get('https://a730-125-165-106-74.ngrok.io/trips')
-      .then(res => {
-        res.data = res.data.map(el => {
-          el.UserTrips = el.UserTrips.length
-          return el
+    if (token) {
+      axios.get('https://efdf-125-165-106-74.ngrok.io/trips', {
+        headers: {
+          access_token: token
+        }
+      })
+        .then(res => {
+          const response = res.data.Trips.map(el => {
+            el.UserTrips = el.UserTrips.length
+            return el
+          })
+
+          setTrips(response)
+          setLoading(false)
         })
-        setTrips(res.data)
-        setLoading(false)
-      })
-      .catch(err => {
-        console.log(err)
-      })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }, [token])
+
+  useEffect(() => {
+    loginCheck()
+
   }, [])
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
         <View style={homeStyle.headerContainer}>
-          <Image source={logo} style={ homeStyle.headerImage } />
+          <Image source={logo} style={homeStyle.headerImage} />
           <Text style={homeStyle.headerText}>Calculatrip</Text>
         </View>
-        { !loading && trips.length > 0 ? (
+        {!loading && trips.length > 0 ? (
           <View>
             <FlatList
-              nestedScrollEnabled={true} 
+              nestedScrollEnabled={true}
               data={trips}
               renderItem={({ item }) => (<HomeCard data={item} />)}
               keyExtractor={(item) => `Trips${item.id}`}
@@ -55,10 +85,10 @@ export default function Home() {
           <>
             <HomeProfile />
             <View style={homeStyle.emptyContainer}>
-              <Text style={{textAlign: "center"}}>Add your trip to see{"\n"}all of trips data</Text>
+              <Text style={{ textAlign: "center" }}>Add your trip to see{"\n"}all of trips data</Text>
             </View>
           </>
-        ) }
+        )}
         <View style={homeStyle.addContainer}>
           <TouchableOpacity style={{ alignSelf: 'flex-start' }}>
             <Text style={homeStyle.addButton}>+</Text>

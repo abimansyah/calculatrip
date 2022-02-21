@@ -39,7 +39,7 @@ export default function Companion() {
     <SafeAreaView style={styles.mainContainer}>
       <BottomSheet
         ref={bs}
-        snapPoints={[450, 0]}
+        snapPoints={[320, 0]}
         renderContent={() => { return (<InviteCompanionModal/>) }}
         renderHeader={headerModal}
         initialSnap={1}

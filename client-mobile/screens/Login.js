@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   Text,
   View,
@@ -8,18 +8,49 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  TextInput
+  TextInput,
+  TouchableOpacity
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Input from 'react-native-input-style';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { styles } from '../styles';
 import logo from '../assets/logo.png'
 
-export default function Login() {
+
+export default function Login({ navigation }) {
   const keyboardVerticalOffset = Platform.OS === 'ios' ? 0 : 40
   const [emailUsername, setEmailUsername] = useState('')
   const [password, setPassword] = useState('')
   const [focused, setFocused] = useState('')
+
+  // send data to server
+  const doLogin = async (req, res) => {
+    try {
+      const resp = await axios.post('https://efdf-125-165-106-74.ngrok.io/users/login', {
+        loginInput: emailUsername,
+        password: password
+      })
+      console.log(resp.data);
+      await AsyncStorage.setItem('access_token', resp.data.access_token)
+      navigation.navigate('Home')
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  const loginCheck = async () => {
+    const getAccessToken = await AsyncStorage.getItem('access_token')
+    if (getAccessToken !== null) {
+      navigation.navigate('Home')
+    }
+  }
+
+  useEffect(() => {
+    loginCheck()
+  }, [])
+
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer}>
@@ -72,6 +103,8 @@ export default function Login() {
                   style={focused === 'email' ? styles.inputOnFocus : styles.input}
                   placeholder='Email / Username'
                   onFocus={() => setFocused('email')}
+                  onChangeText={(emailUsernameData) => setEmailUsername(emailUsernameData)}
+                  value={emailUsername}
                 />
               </View>
 
@@ -81,19 +114,24 @@ export default function Login() {
                   style={focused === 'password' ? styles.inputOnFocus : styles.input}
                   placeholder='Password'
                   onFocus={() => setFocused('password')}
+                  onChangeText={(passwordData) => setPassword(passwordData)}
+                  value={password}
                 />
               </View>
 
             </ScrollView>
-            
-            <View style={
-              {
-                paddingHorizontal: 15,
-                paddingTop: 20,
-              }
-            }>
-              <Text style={styles.mainButton}>Sign In</Text>
-            </View>
+
+            <TouchableOpacity onPress={doLogin}>
+              <View style={
+                {
+                  paddingHorizontal: 15,
+                  paddingTop: 20,
+                }
+              }>
+
+                <Text style={styles.mainButton}>Sign In</Text>
+              </View>
+            </TouchableOpacity>
           </View>
 
           <View style={
@@ -105,11 +143,15 @@ export default function Login() {
           }>
             <Text>
               Don't have an account?
-              <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign Up Here</Text>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Register')}
+              >
+                <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign Up Here</Text>
+              </TouchableOpacity>
             </Text>
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
-    </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback >
   );
 }

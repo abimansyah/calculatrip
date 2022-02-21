@@ -7,6 +7,7 @@ import { styles } from "../styles"
 import InviteCompanionModal from '../components/InviteCompanionModal';
 import expenseCategory from '../components/ExpenseCategoryModal';
 import logo from '../assets/logo.png'
+import AddSavingModal from '../components/AddSavingModal';
 export default function Test() {
   const bs = React.createRef();
   const fall = new Animated.Value(1);
@@ -30,7 +31,7 @@ export default function Test() {
       <BottomSheet
         ref={bs}
         snapPoints={[450, 0]}
-        renderContent={expenseCategory}
+        renderContent={() => { return (<AddSavingModal />) }}
         renderHeader={headerModal}
         initialSnap={1}
         callbackNode={fall}
