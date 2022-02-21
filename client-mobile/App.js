@@ -19,6 +19,7 @@ import EditProfile from './screens/EditProfile';
 import AddTrip from './screens/AddTrip';
 import Editrip from './screens/EditTrip';
 import AddExpenses from './screens/AddExpenses';
+import DetailExpenses from './screens/DetailExpenses';
 
 
 
