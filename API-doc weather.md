@@ -75,6 +75,8 @@ OR
 &nbsp;
 
 
+## 2. GET /weather/city
+
 ## Global Error
 
 _Response (401 - Unauthorized)_
