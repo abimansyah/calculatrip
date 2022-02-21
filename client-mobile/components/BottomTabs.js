@@ -1,10 +1,11 @@
 import { View, TouchableOpacity } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useRoute, useNavigation } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
 export default function BottomTab({ data }) {
-  console.log(data);
+  console.log(data, 'bottom tab');
 
   const route = useRoute();
   const nav = useNavigation();
@@ -13,6 +14,7 @@ export default function BottomTab({ data }) {
   const weather = route.name === 'Weather' ? "cloudy-night" : "cloudy-night-outline"
   const saving = route.name === 'Saving' ? "wallet" : "wallet-outline"
   const expense = route.name === 'Expenses' ? "reader" : "reader-outline"
+  const companion = route.name === 'Companion' ? "person-add" : "person-add-outline"
 
   return (
     <View style={{
@@ -27,20 +29,47 @@ export default function BottomTab({ data }) {
     }}>
       <TouchableOpacity
         onPress={() => nav.navigate('Trip', {
-          tripId: data.id
+          tripId: data
         })}
       >
         <Ionicons name={tripHome} size={21} color="white" />
       </TouchableOpacity>
 
-      <Ionicons name="person-add-outline" size={21} color="white" />
-      <Ionicons name={weather} size={21} color="white" />
       <TouchableOpacity
-        onPress={() => nav.navigate('Saving')}
+        onPress={() => nav.navigate('Companion', {
+          tripId: data
+        })}
+      >
+        <Ionicons name={companion} size={21} color="white" />
+      </TouchableOpacity>
+
+      <Ionicons name={weather} size={21} color="white" />
+
+      <TouchableOpacity
+        onPress={() => nav.navigate('Saving', {
+          tripId: data
+        })}
       >
         <Ionicons name={saving} size={21} color="white" />
       </TouchableOpacity>
-      <Ionicons name={expense} size={21} color="white" />
+
+      <TouchableOpacity
+        onPress={() => nav.navigate('Expenses', {
+          tripId: data
+        })}
+      >
+        <Ionicons name={expense} size={21} color="white" />
+      </TouchableOpacity>
+
     </View>
   )
 }
+
+// export default function BottomTab() {
+//   return (
+//     <Tab.Navigator>
+//       <Tab.Screen name="Trip" component={Trip} data={}/>
+//       <Tab.Screen name="Saving" component={Saving} />
+//     </Tab.Navigator>
+//   );
+// }
