@@ -10,12 +10,11 @@ export default expenseCategory = () => {
         <Text style={{
           fontWeight: '700',
           fontSize: 23,
-          paddingTop: 50,
           paddingBottom: 20
         }}>Choose Expense Category</Text>
       </View>
-      <View>
 
+      <View style={{flexDirection: 'column'}}>
         <View style={{
           flex: 1,
           flexDirection: 'row',

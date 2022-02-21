@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Dimensions } from 'react-native'
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -12,67 +12,67 @@ export default function Saving() {
   const [saving, setSaving] = useState([
     {
       "id": 1,
-      "name":"saving name",
-      "amount":10000,
-      "userId":1,
-      "tripId":1,
-      "savingDate":"02-01-2022"
+      "name": "saving name",
+      "amount": 10000,
+      "userId": 1,
+      "tripId": 1,
+      "savingDate": "02-01-2022"
     },
     {
       "id": 2,
-      "name":"saving name",
-      "amount":10000,
-      "userId":1,
-      "tripId":2,
-      "savingDate":"02-01-2022"
+      "name": "saving name",
+      "amount": 10000,
+      "userId": 1,
+      "tripId": 2,
+      "savingDate": "02-01-2022"
     },
     {
       "id": 3,
-      "name":"saving name",
-      "amount":10000,
-      "userId":1,
-      "tripId":3,
-      "savingDate":"02-01-2022"
+      "name": "saving name",
+      "amount": 10000,
+      "userId": 1,
+      "tripId": 3,
+      "savingDate": "02-01-2022"
     },
     {
       "id": 4,
-      "name":"saving name",
-      "amount":10000,
-      "userId":1,
-      "tripId":4,
-      "savingDate":"02-01-2022"
+      "name": "saving name",
+      "amount": 10000,
+      "userId": 1,
+      "tripId": 4,
+      "savingDate": "02-01-2022"
     },
     {
       "id": 5,
-      "name":"saving name",
-      "amount":10000,
-      "userId":2,
-      "tripId":1,
-      "savingDate":"02-01-2022"
+      "name": "saving name",
+      "amount": 10000,
+      "userId": 2,
+      "tripId": 1,
+      "savingDate": "02-01-2022"
     },
     {
       "id": 6,
-      "name":"saving name",
-      "amount":10000,
-      "userId":2,
-      "tripId":2,
-      "savingDate":"02-01-2022"
+      "name": "saving name",
+      "amount": 10000,
+      "userId": 2,
+      "tripId": 2,
+      "savingDate": "02-01-2022"
     },
     {
       "id": 7,
-      "name":"saving name",
-      "amount":10000,
-      "userId":2,
-      "tripId":3,
-      "savingDate":"02-01-2022"
+      "name": "saving name",
+      "amount": 10000,
+      "userId": 2,
+      "tripId": 3,
+      "savingDate": "02-01-2022"
     },
     {
       "id": 8,
-      "name":"saving name",
-      "amount":10000,
-      "userId":2,
-      "tripId":4,
-      "savingDate":"02-01-2022"
+      "name": "saving name",
+      "amount": 10000,
+      "userId": 2,
+      "tripId": 4,
+      "savingDate": "02-01-2022"
     }
   ])
   const [loading, setLoading] = useState(false)
@@ -92,11 +92,11 @@ export default function Saving() {
   }
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <BottomSheet
         ref={bs}
         snapPoints={[450, 0]}
-        renderContent={() => { return (<AddSavingModal/>) }}
+        renderContent={() => { return (<AddSavingModal />) }}
         renderHeader={headerModal}
         initialSnap={1}
         callbackNode={fall}
@@ -106,7 +106,7 @@ export default function Saving() {
       <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
         <View style={savingStyle.headerContainer}>
           <View style={savingStyle.headerView}>
-            <TouchableOpacity style={{padding: 15}} >
+            <TouchableOpacity style={{ padding: 15 }} >
               <Ionicons name="arrow-back" size={30} color="white" />
             </TouchableOpacity>
             <Text style={savingStyle.title}>Saving</Text>
@@ -121,10 +121,10 @@ export default function Saving() {
             </TouchableOpacity>
           </View>
         </View>
-        <View style={{flex: 1}}>
-          { !loading && saving.length > 0 ? (
+        <View style={{ flex: 1 }}>
+          {!loading && saving.length > 0 ? (
             <FlatList
-              nestedScrollEnabled={true} 
+              nestedScrollEnabled={true}
               data={saving}
               renderItem={({ item }) => (<SavingCard data={item} />)}
               keyExtractor={(item) => `Saving${item.id}`}
@@ -132,9 +132,9 @@ export default function Saving() {
             />
           ) : (
             <View style={savingStyle.emptyContainer}>
-              <Text style={{textAlign: "center"}}>Add your saving to see{"\n"}all of saving data</Text>
+              <Text style={{ textAlign: "center" }}>Add your saving to see{"\n"}all of saving data</Text>
             </View>
-          ) }
+          )}
         </View>
       </Animated.View>
     </SafeAreaView>
@@ -147,7 +147,7 @@ const savingStyle = StyleSheet.create({
     top: 0
   },
   headerView: {
-    width: "100%",
+    width: Dimensions.get('window').width,
     height: 170,
     backgroundColor: "#72c1f2"
   },
