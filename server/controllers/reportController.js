@@ -37,30 +37,14 @@ class reportController {
         // },
       };
 
-      let users = [
-        {
-          name: "Shyam",
-          age: "26",
-        },
-        {
-          name: "Navjot",
-          age: "26",
-        },
-        {
-          name: "Vitthal",
-          age: "26",
-        },
-        {
-          name: "Abi",
-          age: "26",
-        },
-        {
-          name: "Ab2i",
-          age: "26",
-        },
-      ];
-
       const { tripId } = req.params;
+
+      let findTrip = await Trip.findByPk(tripId)
+
+      if(!findTrip){
+        throw {name:"TripNotFound"}
+      }
+
       let trip = await Trip.findByPk(tripId, {
         include: [
           {
@@ -73,11 +57,7 @@ class reportController {
           { model: Saving, include: [{ model: User }] },
         ],
       });
-      // console.log(typeof trip.dataValues)
-      // console.log(trip);
-      // console.log(trip.dataValues.Users,"<<<<<<<<<<<<<<<");
 
-      // console.log(trip.dataValues.Savings,"<<<<<<<<<<<<<<");
       let index = 0
 
       let savings = trip.dataValues.Savings.map((e,index)=>{
@@ -95,9 +75,6 @@ class reportController {
         expense.dataValues.id = index+1
         return expense
       })
-
-
-
 
       trip.dataValues.startDate = new Date(trip.dataValues.startDate).toISOString().split('T')[0]
 
@@ -125,7 +102,6 @@ class reportController {
       let document = {
         html: html,
         data: {
-          users: users,
           trip: trip.dataValues,
           companions: trip.dataValues.Users,
           savings: savings,
@@ -139,13 +115,12 @@ class reportController {
 
       await pdf.create(document, options);
 
-      // res.status(200).json({
-      //   message: "Your trip report has been created",
-      // });
-      res.status(200).json(trip.dataValues);
+      res.status(200).json({
+        message: "Your trip report has been created"
+      });
     } catch (err) {
-      console.log(err);
-      // next(err)
+      // console.log(err);
+      next(err)
     }
   }
 }

@@ -36,7 +36,53 @@ _Response (200 - Ok)_
 
 ```json
 {
-  "message": "Trip ${name} has been created!"
+    "coord": {
+        "lon": 106.8451,
+        "lat": -6.2146
+    },
+    "weather": [
+        {
+            "id": 502,
+            "main": "Rain",
+            "description": "heavy intensity rain",
+            "icon": "10n"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 29.04,
+        "feels_like": 32.09,
+        "temp_min": 24.13,
+        "temp_max": 29.49,
+        "pressure": 1009,
+        "humidity": 66,
+        "sea_level": 1009,
+        "grnd_level": 1008
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 1.99,
+        "deg": 311,
+        "gust": 2.51
+    },
+    "rain": {
+        "1h": 5.96
+    },
+    "clouds": {
+        "all": 100
+    },
+    "dt": 1645449109,
+    "sys": {
+        "type": 2,
+        "id": 2033644,
+        "country": "ID",
+        "sunrise": 1645397901,
+        "sunset": 1645442074
+    },
+    "timezone": 25200,
+    "id": 1642911,
+    "name": "Jakarta",
+    "cod": 200
 }
 ```
 
@@ -44,38 +90,118 @@ _Response (400 - Bad Request)_
 
 ```json
 {
-  "message": "Trip name is required"
+  "message": "Latitude is required"
 }
 OR
 {
-  "message": "Start Date is required"
+  "message": "Longitude is required"
 }
 OR
 {
-  "message": "End Date is required"
+  "message": "Wrong Longitude"
 }
-OR
-{
-  "message": "Invalid date format"
-}
-OR
-{
-  "message": "End Date cannot end before Start Date"
-}
-OR
-{
-  "message": "Home Currency is required"
-}
-OR
-{
-  "message": "Target Budget Must be in Number!"
-}
+
 ```
 
 &nbsp;
 
 
 ## 2. GET /weather/city
+
+Description:
+
+- Get weather by city
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- body:
+
+```json
+{
+  "lat":"city",
+}
+```
+
+_Response (200 - Ok)_
+
+```json
+{
+    "coord": {
+        "lon": 106.8451,
+        "lat": -6.2146
+    },
+    "weather": [
+        {
+            "id": 502,
+            "main": "Rain",
+            "description": "heavy intensity rain",
+            "icon": "10n"
+        }
+    ],
+    "base": "stations",
+    "main": {
+        "temp": 29.04,
+        "feels_like": 31.92,
+        "temp_min": 24.13,
+        "temp_max": 29.49,
+        "pressure": 1009,
+        "humidity": 65,
+        "sea_level": 1009,
+        "grnd_level": 1008
+    },
+    "visibility": 10000,
+    "wind": {
+        "speed": 1.99,
+        "deg": 311,
+        "gust": 2.51
+    },
+    "rain": {
+        "1h": 6.48
+    },
+    "clouds": {
+        "all": 100
+    },
+    "dt": 1645448807,
+    "sys": {
+        "type": 2,
+        "id": 2033644,
+        "country": "ID",
+        "sunrise": 1645397901,
+        "sunset": 1645442074
+    },
+    "timezone": 25200,
+    "id": 1642911,
+    "name": "Jakarta",
+    "cod": 200
+}
+```
+
+_Response (400 - Bad Request)_
+
+```json
+{
+  "message": "City is required"
+}
+
+```
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "City not found"
+}
+
+```
+
+&nbsp;
 
 ## Global Error
 

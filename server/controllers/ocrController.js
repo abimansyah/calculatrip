@@ -6,6 +6,10 @@ let form = new FormData();
 class OcrController {
   static async postOcr(req, res, next) {
       try {
+        if(!req.file){
+          throw{name:"Can't read file image file"}
+        }
+ 
         const stream = req.file.buffer.toString("base64");
         form.append('base64Image', 'data:image/jpg;base64,'+ stream);
         form.append('language', 'eng');
@@ -20,7 +24,9 @@ class OcrController {
               }
         };
         const response = await axios.post(url, form, options)
-        res.status(200).json(response.data.ParsedResults[0].ParsedText)
+        res.status(200).json({
+          message:response.data.ParsedResults[0].ParsedText
+        })
       } catch (error) {
         next(error)
       }
