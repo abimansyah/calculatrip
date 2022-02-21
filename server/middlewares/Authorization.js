@@ -37,6 +37,12 @@ const tripAuthorization = async (req, res, next) => {
       },
     });
 
+    if (!userTrip) {
+      throw {
+        name: "UserTripNotFound"
+      };
+    }
+
     if (userTrip.role === "owner") {
       next();
     } else {
@@ -182,9 +188,30 @@ const userAuthorization = async (req, res, next) => {
   }
 }
 
+const reportAuthorization = async (req,res,next) => {
+  try {
+    
+    const userTrip = await UserTrip.findOne({
+      where:{
+        UserId:req.user.id,
+        TripId:req.params.tripId
+      }
+    })
+    
+    if(!userTrip){
+      throw{name:'Unauthorize'}
+    }
+    next()
+
+  } catch (err) {
+    next(err)
+  }
+}
+
 module.exports = {
   tripAuthorization,
   expenseAuthorization,
   savingAuthorization,
-  userAuthorization
+  userAuthorization,
+  reportAuthorization
 };

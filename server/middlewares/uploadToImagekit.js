@@ -48,6 +48,7 @@ const uploadToImagekit = async (req, res, next) => {
           name: "Cant read file image file",
         };
       }
+
     }
   } catch (err) {
     next(err);
