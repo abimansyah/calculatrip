@@ -2,10 +2,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Hello world!</title>
+    <title>Trip Report</title>
   </head>
   <body>
-    <h1>User List</h1>
+    <h1>{{trip.name}}</h1>
+    <h1>{{trip.startDate}}</h1>
+    <h1>{{trip.endDate}}</h1>
+    
     <ul>
       {{#each users}}
       <li>Name: {{this.name}}</li>

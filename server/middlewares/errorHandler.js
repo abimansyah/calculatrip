@@ -37,6 +37,9 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "TripNotFound") {
         status = 404
         message = "Trip not found"
+    } else if (err.name === "UserTripNotFound") {
+        status = 404
+        message = "User Trip not found"
     } else if (err.name === "ExpenseNotFound") {
         status = 404
         message = "Expense not found"
@@ -51,7 +54,7 @@ const errorHandler = (err, req, res, next) => {
         message = 'Invalid Image Format'
     } else if (err.name === 'InvalidImageSize') {
         status = 400
-        message = "Image size can't exceed 3MB"
+        message = "Image size can't exceed 5MB"
     } else if (err.name === 'Error Create Data') {
         status = 400
         message = "Error Create Data"

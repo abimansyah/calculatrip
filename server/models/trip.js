@@ -13,6 +13,9 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Trip.belongsToMany(models.User, {through: models.UserTrip})
       Trip.hasMany(models.UserTrip)
+      Trip.hasMany(models.Expense, {foreignKey:"tripId"})
+      Trip.hasMany(models.Saving, {foreignKey:"tripId"})
+
     }
   }
   Trip.init({
