@@ -2,12 +2,13 @@
 
 List of available endpoints for Weather:
 
-- `GET /weather/coordinate`
+- `POST /weather/coordinate`
+- `POST /weather/city`
 
 
 &nbsp;
 
-## 1. GET /weather/coordinate
+## 1. POST /weather/coordinate
 
 Description:
 
@@ -27,10 +28,10 @@ Request:
 
 ```json
 {
-  "lat":"string",
-  "lon":"string"
+  "lat": "string",
+  "lon": "string"
 }
-```
+``` 
 
 _Response (200 - Ok)_
 
@@ -75,7 +76,7 @@ OR
 &nbsp;
 
 
-## 2. GET /weather/city
+## 2. POST /weather/city
 
 ## Global Error
 

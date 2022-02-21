@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require("../app")
-const axios = require('axios');
 
 const {
     User
@@ -67,57 +66,22 @@ beforeEach(() => {
     jest.restoreAllMocks()
 })
 
-describe('GET /exchangerate - Get Symbols money from 3rd party currency', () => {
-    test('GET /exchangerate succes status (200) - get all user from database with correct access token', (done) => {
+describe('POST /weather/coordinate - Get weather by coordinate', () => {
+    test('POST /weather/coordinate succes status (200) - Get weather by coordinate with correct access token', (done) => {
         request(app)
-            .get("/exchangerate")
+            .post("/weather/coordinate")
             .set('access_token', token)
+            .send({
+                lon: "-122.08",
+                lat: "37.39"
+            })
             .then(resp => {
-                const result = resp.body
-                expect(resp.status).toBe(200)
-                expect(result).toEqual(expect.any(Array));
-                expect(result[0]).toHaveProperty("description", expect.any(String));
-                expect(result[0]).toHaveProperty("code", expect.any(String));
-                done()
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    })
-
-    test('GET /exchangerate Error status (500), Should handle error when hit get exchangerate', async () => {
-        jest.spyOn(axios, 'get').mockRejectedValue('Error')
-        return request(app)
-            .get('/exchangerate')
-            .set('access_token', token)
-            .then((resp) => {
                 const result = resp.body
                 // console.log(result)
-                expect(resp.status).toBe(500)
-                expect(result).toHaveProperty("message", 'Internal Server Error')
-            })
-            .catch((err) => {
-                console.log(err)
-            })
-    })
-})
-
-describe('POST /exchangerate - Convert money with symbols money ', () => {
-    test('POST /exchangerate succes status (200) - Convert money with symbols money', (done) => {
-        request(app)
-            .post("/exchangerate")
-            .set('access_token', token)
-            .send({
-                from: "USD",
-                to: "IDR",
-                amount: 100
-            })
-            .then(resp => {
-                const result = resp.body
                 expect(resp.status).toBe(200)
                 expect(result).toEqual(expect.any(Object));
-                expect(result).toHaveProperty("rate", expect.any(Number));
-                expect(result).toHaveProperty("result", expect.any(Number));
+                expect(result.coord).toHaveProperty("lon", -122.08);
+                expect(result.coord).toHaveProperty("lat", 37.39);
                 done()
             })
             .catch(err => {
@@ -125,19 +89,18 @@ describe('POST /exchangerate - Convert money with symbols money ', () => {
             })
     })
 
-    test('POST /exchangerate error status (400) - Convert money with symbols money without from symbol', (done) => {
+    test('POST /weather/coordinate Error status (400) - Get weather by coordinate with wrong latitude and longitude', (done) => {
         request(app)
-            .post("/exchangerate")
+            .post("/weather/coordinate")
             .set('access_token', token)
             .send({
-                to: "IDR",
-                amount: 100
+                lat: "37.39"
             })
             .then(resp => {
                 const result = resp.body
                 expect(resp.status).toBe(400)
                 expect(result).toEqual(expect.any(Object));
-                expect(result).toHaveProperty("message", "From currency is required");
+                expect(result).toHaveProperty("message", 'Longitude is required');
                 done()
             })
             .catch(err => {
@@ -145,39 +108,18 @@ describe('POST /exchangerate - Convert money with symbols money ', () => {
             })
     })
 
-    test('POST /exchangerate error status (400) - Convert money with symbols money without to symbol', (done) => {
+    test('POST /weather/coordinate Error status (400) - Get weather by coordinate with wrong latitude and longitude', (done) => {
         request(app)
-            .post("/exchangerate")
+            .post("/weather/coordinate")
             .set('access_token', token)
             .send({
-                from: "IDR",
-                amount: 100
+                lon: "37.39"
             })
             .then(resp => {
                 const result = resp.body
                 expect(resp.status).toBe(400)
                 expect(result).toEqual(expect.any(Object));
-                expect(result).toHaveProperty("message", "To currency is required");
-                done()
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    })
-
-    test('POST /exchangerate error status (400) - Convert money with symbols money without amount', (done) => {
-        request(app)
-            .post("/exchangerate")
-            .set('access_token', token)
-            .send({
-                from: "IDR",
-                to: "USD"
-            })
-            .then(resp => {
-                const result = resp.body
-                expect(resp.status).toBe(400)
-                expect(result).toEqual(expect.any(Object));
-                expect(result).toHaveProperty("message", "Amount currency is required");
+                expect(result).toHaveProperty("message", 'Latitude is required');
                 done()
             })
             .catch(err => {
@@ -186,17 +128,19 @@ describe('POST /exchangerate - Convert money with symbols money ', () => {
     })
 })
 
-describe('GET /exchangerate/:base - Get latest rate Convert money with symbols money ', () => {
-    test('GET /exchangerate/:base succes status (200) - Get latest rate Convert money with symbols money ', (done) => {
+describe('POST /weather/city - Get weather by city', () => {
+    test('POST /weather/city succes status (200) - Get weather by city with correct access token', (done) => {
         request(app)
-            .get("/exchangerate/IDR")
+            .post("/weather/city")
             .set('access_token', token)
+            .send({
+                city: "jakarta",
+            })
             .then(resp => {
                 const result = resp.body
                 expect(resp.status).toBe(200)
                 expect(result).toEqual(expect.any(Object));
-                expect(result).toHaveProperty("base", expect.any(String));
-                expect(result).toHaveProperty("rates", expect.any(Object));
+                expect(result).toHaveProperty("name", "Jakarta");
                 done()
             })
             .catch(err => {
@@ -204,19 +148,41 @@ describe('GET /exchangerate/:base - Get latest rate Convert money with symbols m
             })
     })
 
-    test('GET /exchangerate/:base Error status (500), Should handle error when hit get exchangerate', async () => {
-        jest.spyOn(axios, 'get').mockRejectedValue('Error')
-        return request(app)
-            .get('/exchangerate//IDR')
+    test('POST /weather/city Error status (400) - Get weather by city with city not found', (done) => {
+        request(app)
+            .post("/weather/city")
             .set('access_token', token)
-            .then((resp) => {
-                const result = resp.body
-                // console.log(result)
-                expect(resp.status).toBe(500)
-                expect(result).toHaveProperty("message", 'Internal Server Error')
+            .send({
+                city: "yiyiuyiy"
             })
-            .catch((err) => {
+            .then(resp => {
+                const result = resp.body
+                expect(resp.status).toBe(404)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("message", 'City not found');
+                done()
+            })
+            .catch(err => {
                 console.log(err)
             })
     })
+
+    test('POST /weather/city Error status (400) - Get weather by city with not include city', (done) => {
+        request(app)
+            .post("/weather/city")
+            .set('access_token', token)
+            .send({})
+            .then(resp => {
+                const result = resp.body
+                expect(resp.status).toBe(400)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("message", 'City is required');
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
+
 })
