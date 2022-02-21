@@ -32,7 +32,7 @@ export default function Register({ navigation }) {
 
   const doRegister = async (req, res) => {
     try {
-      const resp = await axios.post('https://efdf-125-165-106-74.ngrok.io/users/register', {
+      const resp = await axios.post('https://07df-118-137-91-83.ngrok.io/users/register', {
         email: email,
         password: password,
         username: username,
