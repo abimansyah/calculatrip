@@ -44,10 +44,11 @@ export default function EditProfile() {
             onChangeText={setUsername}
           />
         </View>
-        <View style={{width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 25}}>
+        <View style={{width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 20, paddingBottom: 5 }}>
           <Text style={{fontSize: 18, fontWeight: "bold"}}>Edit Profile</Text>
         </View>
         <View style={{marginHorizontal: 40, marginVertical: 10}}>
+          <Text>Email Address</Text>
           <TextInput
             keyboardType='email-address'
             style={focused === 'email' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
@@ -56,6 +57,7 @@ export default function EditProfile() {
             value={email}
             onChangeText={setEmail}
           />
+          <Text>New Password</Text>
           <TextInput
             secureTextEntry={true}
             style={focused === 'password' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
@@ -64,6 +66,7 @@ export default function EditProfile() {
             value={password}
             onChangeText={setPassword}
           />
+          <Text>Birth Date</Text>
           <View style={editProfileStyle.inputDate}>
             <DateField
               labelDate="Birth date"
@@ -73,6 +76,7 @@ export default function EditProfile() {
               defaultValue={new Date(birthDate)}
             />
           </View>
+          <Text>Phone Number</Text>
           <TextInput
             keyboardType={phoneInput}
             style={focused === 'phoneNumber' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
@@ -82,6 +86,7 @@ export default function EditProfile() {
             onChangeText={setPhoneNumber}
           />
         </View>
+        <Text style={{marginHorizontal: 40}}>Avatar</Text>
         <View style={editProfileStyle.avatarContainer}>
           <TouchableOpacity onPress={() => setAvatar("airplane")}
           style={avatar === "airplane" ? editProfileStyle.avatarViewCheck : editProfileStyle.avatarView}>
