@@ -37,6 +37,9 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "TripNotFound") {
         status = 404
         message = "Trip not found"
+    } else if (err.name === "UserTripNotFound") {
+        status = 404
+        message = "User Trip not found"
     } else if (err.name === "ExpenseNotFound") {
         status = 404
         message = "Expense not found"
@@ -51,7 +54,7 @@ const errorHandler = (err, req, res, next) => {
         message = 'Invalid Image Format'
     } else if (err.name === 'InvalidImageSize') {
         status = 400
-        message = "Image size can't exceed 3MB"
+        message = "Image size can't exceed 5MB"
     } else if (err.name === 'Error Create Data') {
         status = 400
         message = "Error Create Data"
@@ -73,13 +76,14 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "city is required") {
         status = 400
         message = "City is required"
-    } else if (err.response.data && err.response.data.message === "wrong latitude") {
+    } 
+    else if (err.response && err.response.data.message === "wrong latitude") {
         status = 400
         message = "Wrong Latitude"
-    } else if (err.response.data && err.response.data.message === "wrong longitude") {
+    } else if (err.response && err.response.data.message === "wrong longitude") {
         status = 400
         message = "Wrong Longitude"
-    } else if (err.response.data && err.response.data.message === 'city not found') {
+    } else if (err.response && err.response.data.message === 'city not found') {
         status = 404
         message = 'City not found'
     }

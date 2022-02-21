@@ -50,10 +50,18 @@ class reportController {
           name: "Vitthal",
           age: "26",
         },
+        {
+          name: "Abi",
+          age: "26",
+        },
+        {
+          name: "Ab2i",
+          age: "26",
+        }
       ];
 
-      const { id } = req.params;
-      const trip= await Trip.findByPk(id, {
+      const { tripId } = req.params;
+      const trip= await Trip.findByPk(tripId, {
         include: [{
           model: User,
           attributes: {
@@ -62,30 +70,25 @@ class reportController {
         },{model:Expense}, {model:Saving}
       ],
       });
-      console.log(typeof trip.dataValues);
+      // console.log(typeof trip.dataValues)
+      console.log(trip);
       
       let document = {
         html: html,
         data: {
-          // users: users,
+          users: users,
           trip: trip.dataValues
         },
         path: "./trip-report.pdf",
         type: "",
       };
 
-      pdf
-        .create(document, options)
-        .then((res) => {
-          console.log(res);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+      await pdf.create(document, options)
+       
       // res.status(200).json({
       //   message: "Your trip report has been created",
       // });
-      res.status(200).json(trip);
+      res.status(200).json(trip.dataValues);
     } catch (err) {
       console.log(err);
       // next(err)
