@@ -2,16 +2,17 @@
 
 List of available endpoints for Weather:
 
-- `GET /weather/coordinate`
+- `POST /weather/coordinate`
+- `POST /weather/city`
 
 
 &nbsp;
 
-## 1. GET /weather/coordinate
+## 1. POST /weather/coordinate
 
 Description:
 
-- Get weather by coordinate
+- Post weather by coordinate
 
 Request:
 
@@ -27,10 +28,10 @@ Request:
 
 ```json
 {
-  "lat":"string",
-  "lon":"string"
+  "lat": "string",
+  "lon": "string"
 }
-```
+``` 
 
 _Response (200 - Ok)_
 
@@ -106,11 +107,11 @@ OR
 &nbsp;
 
 
-## 2. GET /weather/city
+## 2. POST /weather/city
 
 Description:
 
-- Get weather by city
+- Post weather by city
 
 Request:
 
@@ -201,34 +202,4 @@ _Response (404 - Not Found)_
 
 ```
 
-&nbsp;
 
-## Global Error
-
-_Response (401 - Unauthorized)_
-
-```json
-{
-  "message": "Invalid token"
-}
-OR
-{
-  "message": "Forbiden to Access"
-}
-```
-
-_Response (403 - Forbidden)_
-
-```json
-{
-  "message": "Unauthorize - Forbiden to Access"
-}
-```
-
-_Response (500 - Internal Server Error)_
-
-```json
-{
-  "message": "Internal server error"
-}
-```

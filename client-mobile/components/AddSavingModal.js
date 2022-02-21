@@ -2,7 +2,7 @@ import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-nativ
 import React, { useState } from 'react';
 import { styles } from '../styles'
 
-export default inviteCompanion = () => {
+export default addSaving = () => {
   const [focused, setFocused] = useState('')
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
@@ -23,7 +23,7 @@ export default inviteCompanion = () => {
         <TextInput
           style={focused === "amount" ? styles.modalInputOnFocus : styles.modalInput}
           placeholder='Saving Amount'
-          keyboardType={phoneInput}
+          keyboardType='numeric'
           onFocus={() => setFocused('amount')}
           value={amount}
           onChangeText={setAmount}

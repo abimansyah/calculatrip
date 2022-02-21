@@ -9,24 +9,43 @@ import {
   ScrollView,
   Platform,
   TextInput,
-  Button
+  TouchableOpacity
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateField from 'react-native-datefield';
 import { styles, mainColor } from '../styles';
 import logo from '../assets/logo.png'
+import axios from 'axios';
 
 
-export default function Register() {
+export default function Register({ navigation }) {
   const keyboardVerticalOffset = Platform.OS === 'ios' ? 0 : 2
   const topViewHeight = Platform.OS === 'ios' ? '22%' : '25%'
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   const [email, setEmail] = useState('')
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
   const [date, setDate] = useState('');
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState('')
+
+  const doRegister = async (req, res) => {
+    try {
+      const resp = await axios.post('https://efdf-125-165-106-74.ngrok.io/users/register', {
+        email: email,
+        password: password,
+        username: username,
+        birthDate: date,
+        phoneNumber: phone
+      })
+      if (resp.data !== null) {
+        navigation.navigate('Login')
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   function formatDate(value) {
     let newDate = []
@@ -103,6 +122,8 @@ export default function Register() {
                     style={focused === 'username' ? styles.inputOnFocus : styles.input}
                     placeholder='Username'
                     onFocus={() => setFocused('username')}
+                    onChangeText={(value) => setUsername(value)}
+                    value={username}
                   />
                 </View>
 
@@ -112,6 +133,8 @@ export default function Register() {
                     style={focused === 'email' ? styles.inputOnFocus : styles.input}
                     placeholder='Email'
                     onFocus={() => setFocused('email')}
+                    onChangeText={(value) => setEmail(value)}
+                    value={email}
                   />
                 </View>
 
@@ -121,6 +144,19 @@ export default function Register() {
                     style={focused === 'password' ? styles.inputOnFocus : styles.input}
                     placeholder='Password'
                     onFocus={() => setFocused('password')}
+                    onChangeText={(value) => setPassword(value)}
+                    value={password}
+                  />
+                </View>
+
+                <View style={styles.divInput}>
+                  <TextInput
+                    keyboardType={phoneInput}
+                    style={focused === 'phoneNumber' ? styles.inputOnFocus : styles.input}
+                    placeholder='Phone Number'
+                    onFocus={() => setFocused('phoneNumber')}
+                    onChangeText={(value) => setPhone(value)}
+                    value={phone}
                   />
                 </View>
 
@@ -133,25 +169,20 @@ export default function Register() {
                   />
                 </View>
 
-                <View style={styles.divInput}>
-                  <TextInput
-                    keyboardType={phoneInput}
-                    style={focused === 'phoneNumber' ? styles.inputOnFocus : styles.input}
-                    placeholder='Phone Number'
-                    onFocus={() => setFocused('phoneNumber')}
-                  />
-                </View>
 
 
-                <View style={
-                  {
-                    paddingHorizontal: 15,
-                    paddingTop: 20,
+                <TouchableOpacity onPress={doRegister}>
+
+                  <View style={
+                    {
+                      paddingHorizontal: 15,
+                      paddingTop: 20,
+                    }
                   }
-                }
-                >
-                  <Text style={styles.mainButton}>Sign Up</Text>
-                </View>
+                  >
+                    <Text style={styles.mainButton}>Sign Up</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
 
               <View style={
@@ -164,14 +195,18 @@ export default function Register() {
               }>
                 <Text>
                   Already Registered?
-                  <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign In Here</Text>
+                  <TouchableOpacity
+                    onPress={() => navigation.navigate('Login')}
+                  >
+                    <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign In Here</Text>
+                  </TouchableOpacity>
                 </Text>
               </View>
             </View>
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
-    </TouchableWithoutFeedback>
+    </TouchableWithoutFeedback >
 
   );
 }

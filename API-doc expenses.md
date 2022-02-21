@@ -352,7 +352,9 @@ _Response (404 - Not Found)_
 
 Description:
 
+
 - Delete image from expense
+
 
 Request:
 
@@ -369,7 +371,9 @@ Request:
 ```json
 {
   "expenseId": "integer",
+
   "imageId":"integer"
+
 }
 ```
 
@@ -381,13 +385,30 @@ _Response (200 - OK)_
 }
 ```
 
-_Response (404 - Not Found)_
+
+Response (403 - Forbidden)_
 
 ```json
 {
-  "message": "Image not found"
+  "message": "Forbidden to access"
 }
 ```
+
+_Response (404 - Not found)_
+
+```json
+{
+  "message":  "Image not found"
+}
+OR
+{
+  "message": "Expense not found"
+}
+
+```
+
+&nbsp;
+
 
 ## Global Error
 
