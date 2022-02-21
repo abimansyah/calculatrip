@@ -29,7 +29,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <SafeAreaProvider style={styles.mainContainer}>
-      {/* <NavigationContainer>
+      <NavigationContainer>
         <View style={styles.screenSize}>
           <Stack.Navigator screenOptions={{
             headerShown: false
@@ -44,8 +44,7 @@ export default function App() {
           </Stack.Navigator>
           <StatusBar style="auto" />
         </View>
-      </NavigationContainer> */}
-      <AddExpenses />
+      </NavigationContainer>
     </SafeAreaProvider>
   );
 }

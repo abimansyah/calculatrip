@@ -27,7 +27,7 @@ export default function Login({ navigation }) {
   // send data to server
   const doLogin = async (req, res) => {
     try {
-      const resp = await axios.post('https://efdf-125-165-106-74.ngrok.io/users/login', {
+      const resp = await axios.post('http://d65d-103-78-115-90.ngrok.io/users/login', {
         loginInput: emailUsername,
         password: password
       })

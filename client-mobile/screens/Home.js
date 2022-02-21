@@ -9,6 +9,7 @@ import {
   StyleSheet
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import logo from '../assets/logo.png'
 import { styles } from '../styles/index'
 import HomeProfile from '../components/HomeProfile';
@@ -39,7 +40,7 @@ export default function Home({ navigation }) {
 
   useEffect(() => {
     if (token) {
-      axios.get('https://efdf-125-165-106-74.ngrok.io/trips', {
+      axios.get('http://d65d-103-78-115-90.ngrok.io/trips', {
         headers: {
           access_token: token
         }
@@ -66,9 +67,17 @@ export default function Home({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
-        <View style={homeStyle.headerContainer}>
-          <Image source={logo} style={homeStyle.headerImage} />
-          <Text style={homeStyle.headerText}>Calculatrip</Text>
+        <View style={{position: "relative"}}>
+          <View style={homeStyle.headerContainer}>
+            <Image source={logo} style={homeStyle.headerImage} />
+            <Text style={homeStyle.headerText}>Calculatrip</Text>
+          </View>
+          <TouchableOpacity style={{position: "absolute", top: 0, right: 0, padding: 10, margin: 8}}>
+            <View style={{position: "relative"}}>
+              <Ionicons name="notifications" size={32} color="#0378a6" />
+              <Text style={{position: "absolute", right: 2, top: -2, fontSize: 15, color: "red"}}>⬤</Text>
+            </View>
+          </TouchableOpacity>
         </View>
         {!loading && trips.length > 0 ? (
           <View>
