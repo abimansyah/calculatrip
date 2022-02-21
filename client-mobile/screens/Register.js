@@ -32,18 +32,24 @@ export default function Register({ navigation }) {
 
   const doRegister = async (req, res) => {
     try {
-      const resp = await axios.post('https://efdf-125-165-106-74.ngrok.io/users/register', {
+      const resp = await axios.post('http://d65d-103-78-115-90.ngrok.io/users/register', {
         email: email,
         password: password,
         username: username,
         birthDate: date,
         phoneNumber: phone
       })
+      setEmail("")
+      setUsername("")
+      setPassword("")
+      setPhone("")
+      setDate("")
       if (resp.data !== null) {
         navigation.navigate('Login')
       }
     } catch (err) {
       console.log(err);
+      alert(err.response.data.message)
     }
   }
 
@@ -188,19 +194,18 @@ export default function Register({ navigation }) {
               <View style={
                 {
                   padding: 10,
+                  flexDirection: "row",
+                  justifyContent: "center",
                   alignItems: 'center',
                   height: 40
-
                 }
               }>
-                <Text>
-                  Already Registered?
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('Login')}
-                  >
-                    <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign In Here</Text>
-                  </TouchableOpacity>
-                </Text>
+                <Text>Already Registered?</Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Login')}
+                >
+                  <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign In Here</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>

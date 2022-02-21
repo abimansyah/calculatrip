@@ -4,7 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateField from 'react-native-datefield';
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
@@ -27,6 +26,7 @@ export default function TripForm({ type }) {
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   const [token, setToken] = useState('')
   const navigation = useNavigation()
+  const [isFile, setIsFile] = useState(false)
 
   function formatDate(value, type) {
     let newDate = []
@@ -49,35 +49,52 @@ export default function TripForm({ type }) {
     console.log(result);
 
     if (!result.cancelled) {
+      setIsFile(true)
       setTripImage(result.uri);
     }
   };
 
   const randomizeImage = async () => {
     let randomIndex = Math.floor(Math.random() * (5 + 1))
+    setIsFile(false)
     setTripImage(randomPhotos[randomIndex])
   }
 
   const submitTrip = async () => {
     try {
       let formDataBody = new FormData();
+      let localUri = tripImage;
+      let filename = localUri.split('/').pop();
+
+      // Infer the type of the image
+      if(isFile) {
+        let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      formDataBody.append('imageFile', { uri: tripImage, name: filename, type });
+      } else {
+        formDataBody.append('tripImageUrl', tripImage)
+      }
+      
       formDataBody.append('name', name)
       formDataBody.append('targetBudget', targetBudget)
       formDataBody.append('homeCurrency', homeCurrency)
       formDataBody.append('startDate', startDate)
       formDataBody.append('endDate', endDate)
-      formDataBody.append('imageFile', tripImage)
-      console.log(formDataBody)
-      const response = await axios({
-        method: 'post',
-        url:'https://efdf-125-165-106-74.ngrok.io/trips',
-        headers: {
-          access_token: token
-        },
-        data: formDataBody
-      })
+
+      const response = await fetch('https://07df-118-137-91-83.ngrok.io/trips', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
+        access_token: token,
+      },
+      body: formDataBody,
+    })
+      setName("")
+      setTargetBudget("")
+      console.log("Trip has been added");
+      navigation.navigate('Home')
     } catch (error) {
-      console.log(error);
+      console.log(error, "<<<<<<<<<<<<<");
     }
   }
 
@@ -95,12 +112,13 @@ export default function TripForm({ type }) {
   }
 
   useEffect(() => {
+    randomizeImage()
     loginCheck()
   }, [])
 
   return (
     <View style={{ position: 'relative', height: '100%' }}>
-      <ImageBackground style={editProfileStyle.imageContainer} source={{ uri: tripImage ? tripImage : "https://images.unsplash.com/photo-1642287458180-449fad5abc2f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80" }}>
+      <ImageBackground style={editProfileStyle.imageContainer} source={{ uri: tripImage }}>
         <LinearGradient style={editProfileStyle.imageGradientContainer} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.5 }}>
           <View style={editProfileStyle.iconContainer}>
             <TouchableOpacity style={editProfileStyle.iconButton}

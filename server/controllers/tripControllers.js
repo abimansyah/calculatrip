@@ -28,16 +28,18 @@ class TripController {
         targetBudget,
       } = req.body;
 
-      const newTrip = await Trip.create({
-        name,
-        startDate,
-        endDate,
-        homeCurrency,
-        tripImageUrl: tripImageUrl || defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
-        targetBudget: targetBudget || 0,
-      }, {
-        transaction: t
-      });
+      const newTrip = await Trip.create(
+        {
+          name,
+          startDate,
+          endDate,
+          homeCurrency,
+          tripImageUrl: req.uploadUrl,
+          targetBudget: targetBudget || 0,
+        },
+        { transaction: t }
+      );
+
 
       await UserTrip.create({
         UserId: req.user.id,
