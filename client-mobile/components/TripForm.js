@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateField from 'react-native-datefield';
 import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
 
 export default function TripForm({ type }) {
   const [randomPhotos] = useState([
@@ -41,6 +42,8 @@ export default function TripForm({ type }) {
         quality: 1,
       });
 
+      console.log(result);
+
       if (!result.cancelled) {
         setTripImage(result.uri);
       }
@@ -52,14 +55,28 @@ export default function TripForm({ type }) {
     }
 
     const submitTrip = async () => {
-      console.log({
-        name,
-        targetBudget,
-        homeCurrency,
-        startDate,
-        endDate,
-        tripImage,
-      });
+      try {
+        let input = new FormData();
+        input.append('imageFile', tripImage)
+        const response = await axios({
+          method: 'post',
+          url:'http://localhost:3000/trips',
+          headers: {
+            access_token: 'access_token'
+          },
+          data: {
+            name,
+            targetBudget,
+            homeCurrency,
+            startDate,
+            endDate,
+            input
+          }
+        })
+        console.log(response.data)
+      } catch (error) {
+        console.log(error);
+      }
     }
 
   return(
