@@ -39,6 +39,11 @@ export default function Register({ navigation }) {
         birthDate: date,
         phoneNumber: phone
       })
+      setEmail("")
+      setUsername("")
+      setPassword("")
+      setPhone("")
+      setDate("")
       if (resp.data !== null) {
         navigation.navigate('Login')
       }

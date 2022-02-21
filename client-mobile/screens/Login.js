@@ -32,6 +32,8 @@ export default function Login({ navigation }) {
         password: password
       })
       console.log(resp.data);
+      setEmailUsername("")
+      setPassword("")
       await AsyncStorage.setItem('access_token', resp.data.access_token)
       navigation.navigate('Home')
     } catch (err) {
