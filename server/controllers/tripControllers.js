@@ -29,7 +29,7 @@ class TripController {
           startDate,
           endDate,
           homeCurrency,
-          tripImageUrl: tripImageUrl || defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
+          tripImageUrl,
           targetBudget: targetBudget || 0,
         },
         { transaction: t }
@@ -57,66 +57,35 @@ class TripController {
 
   static async getTrips(req, res, next) {
     try {
-      // const output = await User.findOne({
-      //   where: {
-      //     id: req.user.id,
-      //   },
-      //   include: [
-      //     {
-      //       model: Trip,
-      //       order: [["createdAt", "desc"]],
-      //       attributes: {
-      //         exclude: ["createdAt", "updatedAt"],
-      //       },
-      //       include: [
-      //         {
-      //           model: UserTrip,
-      //           attributes: {
-      //             exclude: ["createdAt", "updatedAt"],
-      //           },
-      //         },
-      //       ],
-      //       through: {
-      //         attributes: {
-      //           exclude: ["createdAt", "updatedAt"],
-      //         },
-      //       },
-      //     },
-      //   ],
-      // });
-
-      const trip = await UserTrip.findAll({
+      const output = await User.findOne({
         where: {
-          UserId: req.user.id,
-          status: "accept",
-          
-        },
-        attributes: {
-          exclude: ["createdAt", "updatedAt"],
+          id: req.user.id,
         },
         include: [
           {
             model: Trip,
+            order: [["createdAt", "desc"]],
             attributes: {
               exclude: ["createdAt", "updatedAt"],
             },
             include: [
               {
-                model: User,
-                through: {
-                  attributes: {
-                    exclude: ["createdAt", "updatedAt"],
-                  },
-                },
+                model: UserTrip,
                 attributes: {
-                  exclude: ["createdAt", "updatedAt", "password"],
+                  exclude: ["createdAt", "updatedAt"],
                 },
               },
             ],
+            through: {
+              attributes: {
+                exclude: ["createdAt", "updatedAt"],
+              },
+            },
           },
         ],
       });
-      res.status(200).json(trip);
+
+      res.status(200).json(output);
     } catch (err) {
       next(err);
     }
@@ -201,74 +170,6 @@ class TripController {
       });
     } catch (err) {
       await t.rollback();
-      next(err);
-    }
-  }
-
-  static async addCompanion(req, res, next) {
-    try {
-      const { input } = req.body;
-
-      let findUser = await User.findOne({
-        where: {
-          username: input,
-        },
-      });
-
-      if (!findUser) {
-        findUser = await User.findOne({
-          where: {
-            email: input,
-          },
-        });
-      }
-      if (!findUser) {
-        throw { name: "User not found" };
-      }
-
-      await UserTrip.create({
-        UserId: findUser.id,
-        TripId: req.params.id,
-        status: "pending",
-        role: "companion",
-      });
-
-      res.status(201).json({
-        message: `Invitation sent to ${findUser.username}`,
-      });
-    } catch (err) {
-      next(err);
-    }
-  }
-
-  static async acceptInvitation(req, res, next) {
-    try {
-      const { userTripId } = req.params;
-      const { status } = req.body;
-
-      const userTrip = await UserTrip.findOne({
-        where: {
-          id: userTripId,
-          UserId: req.user.id,
-        },
-      });
-      if (!userTrip) {
-        throw { name: "UserTripNotFound" };
-      }
-
-      await UserTrip.update(
-        { status: status },
-        {
-          where: {
-            id: userTripId,
-            UserId: req.user.id,
-          },
-        }
-      );
-      res.status(200).json({
-        message: `You ${status} the invitation`,
-      });
-    } catch (err) {
       next(err);
     }
   }
