@@ -36,6 +36,7 @@ export default function Login({ navigation }) {
       navigation.navigate('Home')
     } catch (err) {
       console.log(err);
+      alert(err.response.data.message)
     }
   }
 
@@ -138,17 +139,19 @@ export default function Login({ navigation }) {
             {
               flex: 1,
               paddingTop: 20,
+              flexDirection: "row",
+              justifyContent: "center",
               alignItems: 'center'
             }
           }>
             <Text>
               Don't have an account?
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Register')}
-              >
-                <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign Up Here</Text>
-              </TouchableOpacity>
             </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Register')}
+            >
+              <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign Up Here</Text>
+            </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
