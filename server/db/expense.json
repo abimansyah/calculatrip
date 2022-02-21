@@ -1,6 +1,6 @@
 [
   {
-    "name": "expense trip one",
+    "name": "expense name",
     "userId": 1,
     "tripId": 1,
     "amount": 5000,
@@ -11,109 +11,170 @@
     "expenseDate": "02-01-2022"
   },
   {
-    "name": "expense trip one",
-    "userId": 1,
-    "tripId": 2,
-    "amount": 5000,
-    "expenseCategoryId": 1,
-    "paymentMethodId": 1,
-    "location": "Indonesia",
-    "description": "trip expense",
-    "expenseDate": "02-01-2022"
-  },
-  {
-    "name": "expense trip one",
-    "userId": 1,
-    "tripId": 3,
-    "amount": 5000,
-    "expenseCategoryId": 1,
-    "paymentMethodId": 1,
-    "location": "Indonesia",
-    "description": "trip expense",
-    "expenseDate": "02-01-2022"
-  },
-  {
-    "name": "expense trip one",
-    "userId": 1,
-    "tripId": 4,
-    "amount": 5000,
-    "expenseCategoryId": 1,
-    "paymentMethodId": 1,
-    "location": "Indonesia",
-    "description": "trip expense",
-    "expenseDate": "02-01-2022"
-  },
-  {
-    "name": "expense trip ",
+    "name": "expense name",
     "userId": 2,
     "tripId": 1,
-    "amount": 5000,
-    "expenseCategoryId": 1,
-    "paymentMethodId": 1,
+    "amount": 6000,
+    "expenseCategoryId": 2,
+    "paymentMethodId": 2,
     "location": "Indonesia",
     "description": "trip expense",
     "expenseDate": "02-01-2022"
   },
   {
-    "name": "expense trip ",
-    "userId": 2,
-    "tripId": 2,
-    "amount": 5000,
-    "expenseCategoryId": 1,
-    "paymentMethodId": 1,
-    "location": "Indonesia",
-    "description": "trip expense",
-    "expenseDate": "02-01-2022"
-  },
-  {
-    "name": "expense trip",
-    "userId": 2,
-    "tripId": 3,
-    "amount": 5000,
-    "expenseCategoryId": 1,
-    "paymentMethodId": 1,
-    "location": "Indonesia",
-    "description": "trip expense",
-    "expenseDate": "02-01-2022"
-  },
-  {
-    "name": "expense trip",
-    "userId": 2,
-    "tripId": 4,
-    "amount": 5000,
-    "expenseCategoryId": 1,
-    "paymentMethodId": 1,
-    "location": "Indonesia",
-    "description": "trip expense",
-    "expenseDate": "02-01-2022"
-  },
-  {
-    "name": "expense trip ",
+    "name": "expense",
     "userId": 3,
     "tripId": 1,
     "amount": 5000,
-    "expenseCategoryId": 1,
+    "expenseCategoryId": 3,
     "paymentMethodId": 1,
     "location": "Indonesia",
     "description": "trip expense",
     "expenseDate": "02-01-2022"
   },
   {
-    "name": "expense trip ",
+    "name": "expense name",
+    "userId": 4,
+    "tripId": 1,
+    "amount": 5000,
+    "expenseCategoryId": 4,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 5,
+    "tripId": 1,
+    "amount": 5000,
+    "expenseCategoryId": 5,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+
+
+  {
+    "name": "expense name",
+    "userId": 1,
+    "tripId": 2,
+    "amount": 5000,
+    "expenseCategoryId": 6,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 2,
+    "tripId": 2,
+    "amount": 6000,
+    "expenseCategoryId": 7,
+    "paymentMethodId": 2,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense",
     "userId": 3,
     "tripId": 2,
     "amount": 5000,
-    "expenseCategoryId": 1,
+    "expenseCategoryId": 8,
     "paymentMethodId": 1,
     "location": "Indonesia",
     "description": "trip expense",
     "expenseDate": "02-01-2022"
   },
   {
-    "name": "expense trip",
+    "name": "expense name",
+    "userId": 4,
+    "tripId": 2,
+    "amount": 5000,
+    "expenseCategoryId": 9,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 5,
+    "tripId": 2,
+    "amount": 5000,
+    "expenseCategoryId": 10,
+    "paymentMethodId": 2,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+
+
+  {
+    "name": "expense name",
+    "userId": 1,
+    "tripId": 3,
+    "amount": 5000,
+    "expenseCategoryId": 11,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 2,
+    "tripId": 3,
+    "amount": 6000,
+    "expenseCategoryId": 12,
+    "paymentMethodId": 2,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense",
     "userId": 3,
     "tripId": 3,
     "amount": 5000,
+    "expenseCategoryId": 13,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 4,
+    "tripId": 3,
+    "amount": 5000,
+    "expenseCategoryId": 14,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 5,
+    "tripId": 3,
+    "amount": 5000,
+    "expenseCategoryId": 15,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+
+
+  {
+    "name": "expense name",
+    "userId": 1,
+    "tripId": 4,
+    "amount": 5000,
     "expenseCategoryId": 1,
     "paymentMethodId": 1,
     "location": "Indonesia",
@@ -121,14 +182,105 @@
     "expenseDate": "02-01-2022"
   },
   {
-    "name": "expense trip",
+    "name": "expense name",
+    "userId": 2,
+    "tripId": 4,
+    "amount": 6000,
+    "expenseCategoryId": 2,
+    "paymentMethodId": 2,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense",
     "userId": 3,
     "tripId": 4,
     "amount": 5000,
-    "expenseCategoryId": 1,
+    "expenseCategoryId": 3,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 4,
+    "tripId": 4,
+    "amount": 5000,
+    "expenseCategoryId": 4,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 5,
+    "tripId": 4,
+    "amount": 5000,
+    "expenseCategoryId": 5,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+
+
+  {
+    "name": "expense name",
+    "userId": 1,
+    "tripId": 5,
+    "amount": 5000,
+    "expenseCategoryId": 6,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 2,
+    "tripId": 5,
+    "amount": 6000,
+    "expenseCategoryId": 7,
+    "paymentMethodId": 2,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense",
+    "userId": 3,
+    "tripId": 5,
+    "amount": 5000,
+    "expenseCategoryId": 8,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 4,
+    "tripId": 5,
+    "amount": 5000,
+    "expenseCategoryId": 9,
+    "paymentMethodId": 1,
+    "location": "Indonesia",
+    "description": "trip expense",
+    "expenseDate": "02-01-2022"
+  },
+  {
+    "name": "expense name",
+    "userId": 5,
+    "tripId": 5,
+    "amount": 5000,
+    "expenseCategoryId": 10,
     "paymentMethodId": 1,
     "location": "Indonesia",
     "description": "trip expense",
     "expenseDate": "02-01-2022"
   }
+  
 ]
