@@ -8,6 +8,7 @@ List of available endpoints for Users:
 - `GET users/profile/:input`
 - `GET users/profile`
 - `PUT users/:id`
+- `GET users/invitaton`
 
 &nbsp;
 
@@ -329,6 +330,35 @@ _Response (403 - Forbidden)_
 
 &nbsp;
 
+## 7. GET /users/invitation
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string",
+}
+```
+
+_Response (200 - OK)_
+
+```json
+[
+    {
+        "id": 37,
+        "UserId": 2,
+        "TripId": 3,
+        "status": "pending",
+        "role": "companion",
+        "createdAt": "2022-02-20T15:32:43.506Z",
+        "updatedAt": "2022-02-20T16:21:56.257Z"
+    }
+]
+```
+
+&nbsp;
 
 ## Global Error
 

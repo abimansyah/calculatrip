@@ -1,7 +1,10 @@
 import { View, Text, TextInput } from 'react-native'
+import { useState } from 'react';
 import { styles } from '../styles'
 
 export default inviteCompanion = () => {
+  const [focused, setFocused] = useState('')
+  const [email, setEmail] = useState('')
   return (
     <View style={styles.modalData}>
 
@@ -13,10 +16,12 @@ export default inviteCompanion = () => {
       </View>
       <View >
         <TextInput
-          style={styles.modalInput}
+          style={focused === "email" ? styles.modalInputOnFocus : styles.modalInput}
           keyboardType='email-address'
           placeholder='Email / Username'
           onFocus={() => setFocused('email')}
+          value={email}
+          onChangeText={setEmail}
         />
       </View>
       <View style={
