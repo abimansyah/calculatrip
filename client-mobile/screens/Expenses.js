@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Dimensions } from 'react-native'
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -148,10 +148,10 @@ export default function Expenses() {
   }
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <BottomSheet
         ref={bs}
-        snapPoints={[450, 0]}
+        snapPoints={[550, 0]}
         renderContent={() => { return (<ExpenseCategoryModal/>) }}
         renderHeader={headerModal}
         initialSnap={1}
@@ -203,7 +203,7 @@ const expensesStyle = StyleSheet.create({
     top: 0
   },
   headerView: {
-    width: "100%",
+    width: Dimensions.get('window').width,
     height: 170,
     backgroundColor: "#72c1f2"
   },
