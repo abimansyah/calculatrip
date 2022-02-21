@@ -24,6 +24,7 @@
     "react-native-date-picker": "^4.1.5",
     "react-native-datefield": "^0.3.5",
     "react-native-gesture-handler": "^2.2.0",
+    "react-native-image-picker": "^4.7.3",
     "react-native-input-style": "^1.0.2",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-modalize": "^2.0.13",
