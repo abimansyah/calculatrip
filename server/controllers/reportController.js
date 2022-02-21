@@ -11,30 +11,30 @@ const {
 let pdf = require("pdf-creator-node");
 let fs = require("fs");
 
-let html = fs.readFileSync("./db/report.html", "utf8");
-
 class reportController {
   static async getReport(req, res, next) {
     try {
+      let html = fs.readFileSync("./db/report.html", "utf8");
+
       let options = {
         format: "A3",
         orientation: "portrait",
         border: "10mm",
-        header: {
-          height: "45mm",
-          contents:
-            '<div style="text-align: center;">Author: Shyam Hajare</div>',
-        },
-        footer: {
-          height: "28mm",
-          contents: {
-            first: "Cover page",
-            2: "Second page", // Any page number is working. 1-based index
-            default:
-              '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
-            last: "Last Page",
-          },
-        },
+        // header: {
+        //   height: "45mm",
+        //   // contents:
+        //   //   '<div style="text-align: center;">Author: Shyam Hajare</div>',
+        // },
+        // footer: {
+        //   height: "28mm",
+        //   contents: {
+        //     first: "1",
+        //     2: "2", // Any page number is working. 1-based index
+        //     default:
+        //       '<span style="color: #444;">{{page}}</span>/<span>{{pages}}</span>', // fallback value
+        //     last: "Last Page",
+        //   },
+        // },
       };
 
       let users = [
@@ -57,34 +57,88 @@ class reportController {
         {
           name: "Ab2i",
           age: "26",
-        }
+        },
       ];
 
       const { tripId } = req.params;
-      const trip= await Trip.findByPk(tripId, {
-        include: [{
-          model: User,
-          attributes: {
-            exclude: ["createdAt", "updatedAt", "password"],
+      let trip = await Trip.findByPk(tripId, {
+        include: [
+          {
+            model: User,
+            attributes: {
+              exclude: ["createdAt", "updatedAt", "password"],
+            },
           },
-        },{model:Expense}, {model:Saving}
-      ],
+          { model: Expense, include: [{ model: User },{model:ExpenseCategory},{model:PaymentMethod}] },
+          { model: Saving, include: [{ model: User }] },
+        ],
       });
       // console.log(typeof trip.dataValues)
-      console.log(trip);
-      
+      // console.log(trip);
+      // console.log(trip.dataValues.Users,"<<<<<<<<<<<<<<<");
+
+      // console.log(trip.dataValues.Savings,"<<<<<<<<<<<<<<");
+      let index = 0
+
+      let savings = trip.dataValues.Savings.map((e,index)=>{
+        let saving = e
+        
+        
+        saving.dataValues.savingDate = new Date(saving.dataValues.savingDate).toISOString().split('T')[0]
+        saving.dataValues.id = index+1
+        return saving
+      })
+
+      let expenses = trip.dataValues.Expenses.map((e,index)=> {
+        let expense = e
+        expense.dataValues.expenseDate = new Date(expense.dataValues.expenseDate).toISOString().split('T')[0]
+        expense.dataValues.id = index+1
+        return expense
+      })
+
+
+
+
+      trip.dataValues.startDate = new Date(trip.dataValues.startDate).toISOString().split('T')[0]
+
+      trip.dataValues.endDate = new Date(trip.dataValues.endDate).toISOString().split('T')[0]
+
+      let savingsAmount= trip.dataValues.Savings.map(e=>{
+        return e.amount
+      })
+      let expensesAmount= trip.dataValues.Expenses.map(e=>{
+        return e.amount
+      })
+
+      let totalSavings= 0
+      for (let i = 0; i < savingsAmount.length; i++) {
+        totalSavings += savingsAmount[i]
+      }
+
+      let totalExpenses= 0
+      for (let i = 0; i < expensesAmount.length; i++) {
+        totalExpenses += expensesAmount[i]
+      }
+
+
+
       let document = {
         html: html,
         data: {
           users: users,
-          trip: trip.dataValues
+          trip: trip.dataValues,
+          companions: trip.dataValues.Users,
+          savings: savings,
+          expenses: expenses,
+          totalSavings:totalSavings,
+          totalExpenses:totalExpenses
         },
         path: "./trip-report.pdf",
         type: "",
       };
 
-      await pdf.create(document, options)
-       
+      await pdf.create(document, options);
+
       // res.status(200).json({
       //   message: "Your trip report has been created",
       // });
