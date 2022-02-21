@@ -44,6 +44,7 @@ export default function Register({ navigation }) {
       }
     } catch (err) {
       console.log(err);
+      alert(err.response.data.message)
     }
   }
 
@@ -188,19 +189,18 @@ export default function Register({ navigation }) {
               <View style={
                 {
                   padding: 10,
+                  flexDirection: "row",
+                  justifyContent: "center",
                   alignItems: 'center',
                   height: 40
-
                 }
               }>
-                <Text>
-                  Already Registered?
-                  <TouchableOpacity
-                    onPress={() => navigation.navigate('Login')}
-                  >
-                    <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign In Here</Text>
-                  </TouchableOpacity>
-                </Text>
+                <Text>Already Registered?</Text>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Login')}
+                >
+                  <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign In Here</Text>
+                </TouchableOpacity>
               </View>
             </View>
           </View>
