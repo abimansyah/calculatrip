@@ -45,11 +45,10 @@ export default function Home({ navigation }) {
         }
       })
         .then(res => {
-          const response = res.data.Trips.map(el => {
-            el.UserTrips = el.UserTrips.length
+          const response = res.data.map(el => {
+            el.UserTrips = el.Trip.Users.length
             return el
           })
-
           setTrips(response)
           setLoading(false)
         })
@@ -61,7 +60,6 @@ export default function Home({ navigation }) {
 
   useEffect(() => {
     loginCheck()
-
   }, [])
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -90,7 +88,9 @@ export default function Home({ navigation }) {
           </>
         )}
         <View style={homeStyle.addContainer}>
-          <TouchableOpacity style={{ alignSelf: 'flex-start' }}>
+          <TouchableOpacity style={{ alignSelf: 'flex-start' }}
+          onPress={() => navigation.navigate('AddTrip')}
+          >
             <Text style={homeStyle.addButton}>+</Text>
           </TouchableOpacity>
         </View>
