@@ -16,6 +16,5 @@ userRouter.get('/', authentication, UserController.getUsers)
 userRouter.get('/profile', authentication, UserController.getUserProfile)
 userRouter.get('/profile/:input', authentication, UserController.getUserByInput)
 userRouter.put('/:id', authentication, userAuthorization, UserController.editUser)
-userRouter.get('/invitation',authentication,UserController.getInvitation)
 
 module.exports = userRouter
