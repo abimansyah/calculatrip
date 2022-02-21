@@ -435,6 +435,6 @@ _Response (500 - Internal Server Error)_
 
 ```json
 {
-  "message": "Internal server error"
+  "message": "Internal Server Error"
 }
 ```
