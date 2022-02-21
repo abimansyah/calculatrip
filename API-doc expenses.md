@@ -271,14 +271,6 @@ _Response (200 - OK)_
 }
 ```
 
-Response (403 - Forbidden)_
-
-```json
-{
-  "message": "Forbidden to access"
-}
-```
-
 _Response (404 - Not found)_
 
 ```json
@@ -292,11 +284,77 @@ _Response (404 - Not found)_
 
 ## 5. POST /:expenseId/image
 
+Description:
+
+- Upload image to expense
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params: 
+
+```json
+{
+  "expenseId": "integer"
+}
+```
+
+- body: 
+
+```json
+{
+  "imageFile": "image.jpg(upload image)"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Image has been added to expense!"
+}
+```
+
+_Response (400 - Bad Request)_
+
+```json
+{
+  "message": "Invalid Image Format"
+}
+OR
+{
+  "message": "Image size can't exceed 5MB"
+}
+OR
+{
+  "message": "Can't read file image file"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "Image not found"
+}
+```
+
+&nbsp;
+
 ## 6. DELETE /:expenseId/image/:imageId
 
 Description:
 
-- Delete one Image from by a Expense
+
+- Delete image from expense
+
 
 Request:
 
@@ -313,7 +371,9 @@ Request:
 ```json
 {
   "expenseId": "integer",
-  "imageId": "integer",
+
+  "imageId":"integer"
+
 }
 ```
 
@@ -324,6 +384,7 @@ _Response (200 - OK)_
   "message": "Image has been removed"
 }
 ```
+
 
 Response (403 - Forbidden)_
 
