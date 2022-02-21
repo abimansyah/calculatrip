@@ -294,6 +294,61 @@ _Response (404 - Not found)_
 
 ## 6. DELETE /:expenseId/image/:imageId
 
+Description:
+
+- Delete one Image from by a Expense
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params: 
+
+```json
+{
+  "expenseId": "integer",
+  "imageId": "integer",
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Image has been removed"
+}
+```
+
+Response (403 - Forbidden)_
+
+```json
+{
+  "message": "Forbidden to access"
+}
+```
+
+_Response (404 - Not found)_
+
+```json
+{
+  "message":  "Image not found"
+}
+OR
+{
+  "message": "Expense not found"
+}
+
+```
+
+&nbsp;
+
+
 ## Global Error
 
 _Response (401 - Unauthorized)_

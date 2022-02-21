@@ -37,6 +37,12 @@ const tripAuthorization = async (req, res, next) => {
       },
     });
 
+    if (!userTrip) {
+      throw {
+        name: "UserTripNotFound"
+      };
+    }
+
     if (userTrip.role === "owner") {
       next();
     } else {
