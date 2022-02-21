@@ -21,7 +21,7 @@ export default function App() {
   return (
     <SafeAreaProvider style={styles.mainContainer}>
       <View style={styles.screenSize}>
-        <Editrip />
+        <EditProfile />
         <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>
