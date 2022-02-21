@@ -602,10 +602,11 @@ describe("DELETE /expenses/:expenseId - delete one expense from a trip", () => {
   test("GET /trips error (500) - should handle error with status (500)", async () => {
     jest.spyOn(Expense, 'destroy').mockRejectedValue('Error')
     return request(app)
-      .delete("/expenses/1")
+      .delete("/expenses/2")
       .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
+        console.log(result,"<<<<<<<<<<<<<<<<");
         expect(resp.status).toBe(500);
         expect(result).toHaveProperty("message", "Internal Server Error");
       })
