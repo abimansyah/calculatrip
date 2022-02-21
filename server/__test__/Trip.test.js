@@ -696,7 +696,7 @@ describe("PUT /trips/:id - edit trip", () => {
   });
   test("PUT /trips/:id error status (403) - should return error when user is unauthorized", (done) => {
     request(app)
-      .put("/trips/2")
+      .put("/trips/1")
       .set("access_token", tokenUserTwo)
       .send({
         name: "jalan jalan ke bandung edited by user Two",

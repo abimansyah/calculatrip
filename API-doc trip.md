@@ -7,6 +7,8 @@ List of available endpoints for Trips:
 - `GET /trips/:id`
 - `DELETE /trips/:id`
 - `PUT /trips/:id`
+- `POST /trips/:id`
+- `PATCH /trips/:userTripId`
 
 &nbsp;
 
@@ -102,76 +104,68 @@ _Response (200 - OK)_
 ```json
 [
   {
-    "id": 1,
-    "email": "string",
-    "password": "string",
-    "username": "string",
-    "avatar": "string",
-    "phoneNumber": "string",
-    "birthDate": "date",
-    "createdAt": "date",
-    "updatedAt": "date",
-    "Trips": [
-        {
-            "id": 1,
-            "name": "string",
-            "startDate": "date",
-            "endDate": "date",
-            "homeCurrency": "string",
-            "tripImageUrl": "string",
-            "targetBudget": "integer",
-            "UserTrip": {
-                "UserId": 1,
-                "TripId": 1,
-                "status": "string",
-                "role": "string"
-            },
-            "UserTrips": [
-                {
-                    "UserId": 1,
-                    "TripId": 1,
-                    "status": "string",
-                    "role": "string"
-                }
-                ...
-            ]
-        },
-        {
-    "id": 2,
-    "email": "string",
-    "password": "string",
-    "username": "string",
-    "avatar": "string",
-    "phoneNumber": "string",
-    "birthDate": "date",
-    "createdAt": "date",
-    "updatedAt": "date",
-    "Trips": [
-        {
+        "id": 4,
+        "UserId": 1,
+        "TripId": 3,
+        "status": "accept",
+        "role": "owner",
+        "Trip": {
             "id": 3,
-            "name": "string",
-            "startDate": "date",
-            "endDate": "date",
-            "homeCurrency": "string",
-            "tripImageUrl": "string",
-            "targetBudget": "integer",
-            "UserTrip": {
-                "UserId": 2,
-                "TripId": 3,
-                "status": "string",
-                "role": "string"
-            },
-            "UserTrips": [
+            "name": "non mi",
+            "startDate": "2022-02-01T00:00:00.000Z",
+            "endDate": "2022-02-02T00:00:00.000Z",
+            "homeCurrency": "usd",
+            "tripImageUrl": "http://dummyimage.com/149x100.png/dddddd/000000",
+            "targetBudget": 8212147,
+            "Users": [
                 {
-                    "UserId": 2,
-                    "TripId": 3,
-                    "status": "string",
-                    "role": "string"
+                    "id": 1,
+                    "email": "user@gmail.com",
+                    "username": "user",
+                    "avatar": "https://robohash.org/dolordistinctioneque.png?size=100x100&set=set1",
+                    "phoneNumber": "769-270-1300",
+                    "birthDate": "1998-06-09T22:34:42.000Z",
+                    "UserTrip": {
+                        "id": 4,
+                        "UserId": 1,
+                        "TripId": 3,
+                        "status": "accept",
+                        "role": "owner"
+                    }
+                },
+                {
+                    "id": 5,
+                    "email": "depinay4@feedburner.com",
+                    "username": "srawsthorne4",
+                    "avatar": "https://robohash.org/ducimusrationeomnis.png?size=100x100&set=set1",
+                    "phoneNumber": "700-230-7960",
+                    "birthDate": "1999-09-11T07:45:06.000Z",
+                    "UserTrip": {
+                        "id": 5,
+                        "UserId": 5,
+                        "TripId": 3,
+                        "status": "owner",
+                        "role": "companion"
+                    }
+                },
+                {
+                    "id": 2,
+                    "email": "oskatcher1@ow.ly",
+                    "username": "wshitliffe1",
+                    "avatar": "https://robohash.org/fugailloatque.png?size=100x100&set=set1",
+                    "phoneNumber": "822-961-1072",
+                    "birthDate": "1990-04-21T07:54:56.000Z",
+                    "UserTrip": {
+                        "id": 37,
+                        "UserId": 2,
+                        "TripId": 3,
+                        "status": "pending",
+                        "role": "companion"
+                    }
                 }
-                ...
-        ]
-    },
-  ...,
+            ]
+        }
+    },...
 ]
 ```
 
@@ -377,6 +371,110 @@ OR
 OR
 {
   "message": "Saving not found"
+}
+```
+
+&nbsp;
+
+## 6. POST /trips/:id
+
+Description:
+
+- Create invitation to another user
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+  "id":"integer"
+}
+```
+
+- body:
+
+```json
+{
+  "input":"string"
+}
+```
+
+_Response (201 - Created)_
+
+```json
+{
+  "message": "Invitation sent to ${findUser.username}"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "User not found"
+}
+
+```
+
+&nbsp;
+
+
+
+
+## 7. PATCH /trips/:userTripId
+
+Description:
+
+- Accept or decline invitation from another user
+
+Request:
+
+- headers:
+
+```json
+{
+  "access_token": "string"
+}
+```
+
+- params:
+
+```json
+{
+  "userTripId":"integer"
+}
+```
+
+- body:
+
+```json
+{
+  "status":"accept/reject"
+}
+```
+
+_Response (201 - Created)_
+
+```json
+{
+  "message": "You ${status} the invitation"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "User Trip not found"
 }
 ```
 

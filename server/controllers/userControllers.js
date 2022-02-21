@@ -1,5 +1,5 @@
 const {
-    User
+    User,UserTrip
 } = require('../models/index')
 const {
     comparePassword
@@ -16,7 +16,7 @@ class UserController {
                 email: req.body.email,
                 password: req.body.password,
                 phoneNumber: req.body.phoneNumber,
-                avatar: req.body.avatar,
+                avatar: "airplane",
                 birthDate: req.body.birthDate
             }
             const user = await User.create(input);
@@ -177,6 +177,22 @@ class UserController {
             next(err)
         }
     }
+
+    static async getInvitation(req,res,next) {
+        try {
+            const findUserTrip = await UserTrip.findAll({
+                where:{
+                    UserId:req.user.id,
+                    status:"pending"
+                }
+            })
+            res.status(200).json(findUserTrip)
+        } catch (err) {
+            next(err)
+        }
+    }
+
+
 }
 
 module.exports = UserController

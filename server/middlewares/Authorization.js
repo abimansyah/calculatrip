@@ -37,77 +37,43 @@ const tripAuthorization = async (req, res, next) => {
       },
     });
 
-    if (!userTrip) {
-      throw { name: "Unauthorize" };
-    }
-
     if (userTrip.role === "owner") {
       next();
     } else {
-      throw { name: "Unauthorize" };
+      throw {
+        name: "Unauthorize"
+      };
     }
   } catch (err) {
     next(err);
   }
 };
 const expenseAuthorization = async (req, res, next) => {
-  /* 
-  if => 
-  1. cari expense bersadarkan id yang ada di params
-  2. ambil tripId dari hasil response expense
-  3. cari UserTrip where (UserId = req.user.id) dan (UserTrip.TripId = expense.tripId)
-
-  4. if !UserTrip maka throw error => Forbidden Access
-
-  5. if UserTrip.role == "owner" maka next()
-  ===
-  6.else 
-
-  cari Expense yang punya userId = req.user.id dan expense id ke yang di update/edit
-  Bila ketemu si expense nya maka diijinkan untuk delete/edit
-
-*/
   try {
     const {
-      id
+      expenseId
     } = req.params;
-
     const expense = await Expense.findOne({
       where: {
-        id: id,
+        id: expenseId,
       },
-    });
-
-    // if (!expense) {
-    //   throw {
-    //     name: "ExpenseNotFound"
-    //   };
-    // }
-
+    })
+    if (!expense) {
+      throw {
+        name: 'Expense not found',
+      }
+    }
     const trip = await Trip.findOne({
       where: {
         id: expense.tripId,
       },
-    });
-    if (!trip) {
-      throw {
-        name: "TripNotFound"
-      };
-    }
-
+    })
     const userTrip = await UserTrip.findOne({
       where: {
         UserId: req.user.id,
         TripId: trip.id,
       },
-    });
-
-    if (!userTrip) {
-      throw {
-        name: "UserTripNotFound"
-      };
-    }
-
+    })
     if (userTrip.role === "owner") {
       next();
     } else if (userTrip.role !== "owner") {
@@ -115,7 +81,9 @@ const expenseAuthorization = async (req, res, next) => {
         next();
       }
     } else {
-      throw { name: "Unauthorize" };
+      throw {
+        name: "Unauthorize"
+      };
     }
   } catch (err) {
     next();
@@ -139,7 +107,9 @@ const savingAuthorization = async (req, res, next) => {
 
 */
   try {
-    const { savingId } = req.params;
+    const {
+      savingId
+    } = req.params;
     const saving = await Saving.findOne({
       where: {
         id: savingId,
@@ -156,18 +126,22 @@ const savingAuthorization = async (req, res, next) => {
       },
     });
     if (!trip) {
-      throw { name: "Unauthorize" };
+      throw {
+        name: "Unauthorize"
+      };
     }
-    
+
     const userTrip = await UserTrip.findOne({
       where: {
         UserId: req.user.id,
         TripId: trip.id,
       },
     });
-    
+
     if (!userTrip) {
-      throw { name: "Unauthorize" };
+      throw {
+        name: "Unauthorize"
+      };
     }
 
     if (userTrip.role === "owner") {
@@ -177,7 +151,9 @@ const savingAuthorization = async (req, res, next) => {
         next();
       }
     } else {
-      throw { name: "Unauthorize" };
+      throw {
+        name: "Unauthorize"
+      };
     }
   } catch (err) {
     next(err);

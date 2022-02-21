@@ -6,6 +6,8 @@ List of available endpoints for Expenses:
 - `GET /expenses/:tripId`
 - `GET /expenses/trip/:expenseId`
 - `DELETE / expenses/:expenseId`
+- `POST /:expenseId/image`
+- `DELETE /:expenseId/image/:imageId`
 
 &nbsp;
 
@@ -286,6 +288,11 @@ _Response (404 - Not found)_
 ```
 
 &nbsp;
+
+
+## 5. POST /:expenseId/image
+
+## 6. DELETE /:expenseId/image/:imageId
 
 ## Global Error
 

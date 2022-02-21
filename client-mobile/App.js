@@ -14,7 +14,13 @@ import Trip from './screens/Trip';
 import Saving from './screens/Saving';
 import Expenses from './screens/Expenses';
 import Companion from './screens/Companion';
+
 import HomeCard from './components/HomeCard';
+
+import EditProfile from './screens/EditProfile';
+import AddTrip from './screens/AddTrip';
+import Editrip from './screens/EditTrip';
+
 
 
 const Stack = createNativeStackNavigator();
