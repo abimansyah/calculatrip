@@ -3,13 +3,24 @@ import { Text, TouchableOpacity, View, StyleSheet, TextInput, ImageBackground, P
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateField from 'react-native-datefield';
+import * as ImagePicker from 'expo-image-picker';
+import axios from 'axios';
 
 export default function TripForm({ type }) {
+  const [randomPhotos] = useState([
+    "https://images.unsplash.com/photo-1642287458180-449fad5abc2f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80",
+    "https://images.unsplash.com/photo-1462400362591-9ca55235346a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2032&q=80",
+    "https://images.unsplash.com/photo-1510908072721-6fbd31199630?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+    "https://images.unsplash.com/photo-1535747790212-30c585ab4867?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2025&q=80",
+    "https://images.unsplash.com/photo-1465256410760-10640339c72c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
+    "https://images.unsplash.com/photo-1488441770602-aed21fc49bd5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80"
+  ])
   const [name, setName] = useState("")
   const [targetBudget, setTargetBudget] = useState("")
   const [homeCurrency, setHomeCurrency] = useState("idr")
   const [startDate, setStartDate] = useState("12/25/2021")
   const [endDate, setEndDate] = useState("12/25/2021")
+  const [tripImage, setTripImage] = useState(null);
   const [focused, setFocused] = useState('')
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
 
@@ -23,10 +34,54 @@ export default function TripForm({ type }) {
     newDate = newDate.join('-')
     type === "startDate" ? setStartDate(newDate) : setEndDate(newDate)
   }
+    const pickImage = async () => {
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      console.log(result);
+
+      if (!result.cancelled) {
+        setTripImage(result.uri);
+      }
+    };
+
+    const randomizeImage = async () => {
+      let randomIndex = Math.floor(Math.random() * (5 + 1))
+      setTripImage(randomPhotos[randomIndex])
+    }
+
+    const submitTrip = async () => {
+      try {
+        let input = new FormData();
+        input.append('imageFile', tripImage)
+        const response = await axios({
+          method: 'post',
+          url:'http://localhost:3000/trips',
+          headers: {
+            access_token: 'access_token'
+          },
+          data: {
+            name,
+            targetBudget,
+            homeCurrency,
+            startDate,
+            endDate,
+            input
+          }
+        })
+        console.log(response.data)
+      } catch (error) {
+        console.log(error);
+      }
+    }
 
   return(
     <View style={{ position: 'relative', height: '100%' }}>
-      <ImageBackground style={editProfileStyle.imageContainer} source={{ uri: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8cG9ydHJhaXR8ZW58MHx8MHx8&w=1000&q=80" }}>
+      <ImageBackground style={editProfileStyle.imageContainer} source={{ uri: tripImage ? tripImage : "https://images.unsplash.com/photo-1642287458180-449fad5abc2f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80" }}>
         <LinearGradient style={editProfileStyle.imageGradientContainer} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{x:0.5, y:0}} end={{x:0.5, y:0.5}}>
           <View style={editProfileStyle.iconContainer}>
             <TouchableOpacity style={editProfileStyle.iconButton}>
@@ -35,10 +90,10 @@ export default function TripForm({ type }) {
           </View>
         </LinearGradient>
         <View style={editProfileStyle.imageButtonContainer}>
-          <TouchableOpacity style={editProfileStyle.imageButton}>
+          <TouchableOpacity onPress={()=>pickImage()} style={editProfileStyle.imageButton}>
             <Text style={editProfileStyle.imageButtonText}>Upload{'\n'}Photo</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={editProfileStyle.imageButton}>
+          <TouchableOpacity onPress={()=>randomizeImage()} style={editProfileStyle.imageButton}>
             <Text style={editProfileStyle.imageButtonText}>Random{'\n'}Photo</Text>
           </TouchableOpacity>
         </View>
@@ -46,7 +101,7 @@ export default function TripForm({ type }) {
       <View style={{width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 25, paddingBottom: 10}}>
         <Text style={{fontSize: 18, fontWeight: "bold"}}>{`${type} Trip`}</Text>
       </View>
-      <View style={{marginHorizontal: 40, marginVertical: 10}}>
+      <View style={{marginHorizontal: 40, marginTop: 10, marginBottom: 100}}>
         <Text>Trip Name</Text>
         <TextInput
           style={focused === 'name' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
@@ -96,7 +151,7 @@ export default function TripForm({ type }) {
         </View>
       </View>
       <View style={editProfileStyle.checkContainer}>
-        <TouchableOpacity style={{ alignSelf: 'flex-start' }}>
+        <TouchableOpacity onPress={()=>submitTrip()} style={{ alignSelf: 'flex-start' }}>
           <Ionicons name="checkmark" size={24} color="#0378a6" style={editProfileStyle.checkButton} />
         </TouchableOpacity>
       </View>
