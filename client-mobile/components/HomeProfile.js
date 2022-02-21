@@ -32,8 +32,9 @@ export default function HomeProfile() {
 
     <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-between", marginVertical: 5, marginHorizontal: 10, padding: 15, borderRadius: 10, backgroundColor: '#0378a6' }}>
       <View style={{ flexDirection: "row", alignItems: 'center' }}>
-        <Image source={logo} style={{ height: 70, width: 70, backgroundColor: "#fff", borderRadius: 30 }} />
-
+        <View style={{height: 70, width: 70, justifyContent: 'center', alignItems: "center", backgroundColor: "#fff", borderRadius: 30}}>
+          <Ionicons name="airplane" size={48} color="#0378a6" />
+        </View>
         <View style={{ marginLeft: 15 }}>
           <Text style={{ fontSize: 21, fontWeight: "bold", color: "#fff" }}>dyahachwatiningrum</Text>
           <Text style={{ paddingBottom: 10, color: "#fff" }}>dyahachwatiningrum@gmail.com</Text>
@@ -46,11 +47,10 @@ export default function HomeProfile() {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{ flexDirection: "column", alignItems: "center" }}>
+      {/* <View style={{flexDirection: "column", alignItems:"center"}}>
         <Ionicons name="star-outline" size={32} color="white" />
-        <Text style={{ paddingTop: 10, color: "#fff", fontWeight: "bold" }}>Regular</Text>
-        
-      </View>
+        <Text style={{paddingTop: 10, color: "#fff", fontWeight: "bold"}}>Regular</Text>
+      </View> */}
     </View>
   )
 }

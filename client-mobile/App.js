@@ -20,6 +20,7 @@ import HomeCard from './components/HomeCard';
 import EditProfile from './screens/EditProfile';
 import AddTrip from './screens/AddTrip';
 import Editrip from './screens/EditTrip';
+import AddExpenses from './screens/AddExpenses';
 
 
 
