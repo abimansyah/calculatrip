@@ -15,13 +15,14 @@ import Companion from './screens/Companion';
 import EditProfile from './screens/EditProfile';
 import AddTrip from './screens/AddTrip';
 import Editrip from './screens/EditTrip';
+import AddExpenses from './screens/AddExpenses';
 
 
 export default function App() {
   return (
     <SafeAreaProvider style={styles.mainContainer}>
       <View style={styles.screenSize}>
-        <EditProfile />
+        <AddExpenses />
         <StatusBar style="auto" />
       </View>
     </SafeAreaProvider>
