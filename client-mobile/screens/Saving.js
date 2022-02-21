@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles"
 import AddSavingModal from '../components/AddSavingModal';
 import SavingCard from '../components/SavingCard';
+import BottomTab from '../components/BottomTabs';
 
 export default function Saving() {
   const [saving, setSaving] = useState([
@@ -136,6 +137,7 @@ export default function Saving() {
             </View>
           )}
         </View>
+        <BottomTab />
       </Animated.View>
     </SafeAreaView>
   )
