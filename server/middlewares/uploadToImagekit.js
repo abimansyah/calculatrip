@@ -34,7 +34,6 @@ const uploadToImagekit = async (req, res, next) => {
           name: "Error Create Data",
         };
       }
-
       req.uploadUrl = response.data.url;
 
       next();
