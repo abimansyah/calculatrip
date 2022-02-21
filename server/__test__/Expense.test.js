@@ -642,11 +642,6 @@ describe("DELETE /expenses/:expenseId - delete one expense from a trip", () => {
       .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
-
-
-
-        // console.log(result);
-
         expect(resp.status).toBe(500);
         expect(result).toHaveProperty("message", "Internal Server Error");
       })
