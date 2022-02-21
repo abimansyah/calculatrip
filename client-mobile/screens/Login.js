@@ -14,6 +14,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import Load from "react-native-loading-gif";
 import { styles } from '../styles';
 import logo from '../assets/logo.png'
 
@@ -27,15 +28,18 @@ export default function Login({ navigation }) {
   // send data to server
   const doLogin = async (req, res) => {
     try {
-      const resp = await axios.post('https://07df-118-137-91-83.ngrok.io/users/login', {
+      const resp = await axios.post('http://d65d-103-78-115-90.ngrok.io/users/login', {
         loginInput: emailUsername,
         password: password
       })
       console.log(resp.data);
+      setEmailUsername("")
+      setPassword("")
       await AsyncStorage.setItem('access_token', resp.data.access_token)
       navigation.navigate('Home')
     } catch (err) {
       console.log(err);
+      alert(err.response.data.message)
     }
   }
 
@@ -55,7 +59,6 @@ export default function Login({ navigation }) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer}>
         <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}>
-
           <View style={
             {
               height: '55%'
@@ -138,17 +141,19 @@ export default function Login({ navigation }) {
             {
               flex: 1,
               paddingTop: 20,
+              flexDirection: "row",
+              justifyContent: "center",
               alignItems: 'center'
             }
           }>
             <Text>
               Don't have an account?
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Register')}
-              >
-                <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign Up Here</Text>
-              </TouchableOpacity>
             </Text>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Register')}
+            >
+              <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign Up Here</Text>
+            </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>

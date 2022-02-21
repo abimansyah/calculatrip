@@ -38,13 +38,14 @@ export default function HomeProfile() {
         <View style={{ marginLeft: 15 }}>
           <Text style={{ fontSize: 21, fontWeight: "bold", color: "#fff" }}>dyahachwatiningrum</Text>
           <Text style={{ paddingBottom: 10, color: "#fff" }}>dyahachwatiningrum@gmail.com</Text>
-          <TouchableOpacity style={{ padding: 10, alignSelf: 'flex-start', backgroundColor: "#fff", borderRadius: 10 }}>
-            <Text style={{ color: '#0378a6', fontWeight: 'bold' }}>Edit Profile</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={{ padding: 10, alignSelf: 'flex-start', backgroundColor: "#fff", borderRadius: 10 }} onPress={doLogout}>
-            <Text style={{ color: '#0378a6', fontWeight: 'bold' }}>Logout</Text>
-          </TouchableOpacity>
+          <View style={{ flexDirection: "row" }}>
+            <TouchableOpacity style={{ padding: 10, alignSelf: 'flex-start', backgroundColor: "#fff", borderRadius: 10 }}>
+              <Text style={{ color: '#0378a6', fontWeight: 'bold' }}>Edit Profile</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={{ marginHorizontal: 10, padding: 10, alignSelf: 'flex-start', backgroundColor: "#fff", borderRadius: 10 }} onPress={doLogout}>
+              <Text style={{ color: '#0378a6', fontWeight: 'bold' }}>Logout</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
       {/* <View style={{flexDirection: "column", alignItems:"center"}}>

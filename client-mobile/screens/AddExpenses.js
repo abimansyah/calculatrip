@@ -85,7 +85,12 @@ export default function AddExpenses() {
               <Picker.Item label="Credit" value="credit" />
             </Picker>
           </View>
-          <Text>Expenses Description</Text>
+          <View style={editProfileStyle.descriptionContainer}>
+            <Text>Expenses Description</Text>
+            <TouchableOpacity style={editProfileStyle.receiptButton}>
+              <Text style={editProfileStyle.receiptText}>Upload Receipt</Text>
+            </TouchableOpacity>
+          </View>
           <TextInput
             multiline = {true}
             numberOfLines = {4}
@@ -151,6 +156,21 @@ const editProfileStyle = StyleSheet.create({
     borderBottomColor: "#72c1f2",
     borderBottomWidth: 3,
     marginVertical: 10
+  },
+  descriptionContainer: {
+    flexDirection:"row",
+    alignItems: "center"
+  },
+  receiptButton: {
+    marginLeft: 10,
+    padding: 10,
+    alignSelf: 'flex-start',
+    backgroundColor: "#0378a6",
+    borderRadius: 10 
+  },
+  receiptText: {
+    color: '#fff',
+    fontWeight: 'bold'
   },
   textArea: {
     borderWidth: 1,
