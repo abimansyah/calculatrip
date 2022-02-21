@@ -10,11 +10,11 @@ const {
 
 let pdf = require("pdf-creator-node");
 let fs = require("fs");
+let html = fs.readFileSync("./db/report.html", "utf8");
 
 class reportController {
   static async getReport(req, res, next) {
     try {
-      let html = fs.readFileSync("./db/report.html", "utf8");
 
       let options = {
         format: "A3",
@@ -38,12 +38,6 @@ class reportController {
       };
 
       const { tripId } = req.params;
-
-      let findTrip = await Trip.findByPk(tripId)
-
-      if(!findTrip){
-        throw {name:"TripNotFound"}
-      }
 
       let trip = await Trip.findByPk(tripId, {
         include: [

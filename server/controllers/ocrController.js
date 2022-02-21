@@ -6,6 +6,7 @@ let form = new FormData();
 class OcrController {
   static async postOcr(req, res, next) {
       try {
+        console.log(req.file,"<<<<<<<<<<<<<<");
         if(!req.file){
           throw{name:"Can't read file image file"}
         }
