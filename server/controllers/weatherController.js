@@ -15,10 +15,13 @@ class weatherController {
           name: "Longitude is required"
       }
 
-      const result = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}&units=metric`)
-      
+      const result = await axios.get(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${WEATHER_API_KEY}`)
+      // console.log(result);
+
       res.status(200).json(result.data)
-    } catch (err) { 
+
+    } catch (err) {
+      
       next(err)
     }
   }
@@ -32,10 +35,11 @@ class weatherController {
       if (!city) throw {
         name: "city is required"
       }
-      const result = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_API_KEY}&units=metric`)
+      const result = await axios.get(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${WEATHER_API_KEY}`)
       res.status(200).json(result.data)
 
     } catch (err) {
+      
       next(err)
     }
   }

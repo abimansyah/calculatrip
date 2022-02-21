@@ -14,7 +14,4 @@ tripRouter.get('/:id', authentication, TripController.getTripById)
 tripRouter.delete('/:id', authentication, tripAuthorization, TripController.deleteTrip)
 tripRouter.put('/:id', authentication, tripAuthorization, TripController.editTrip)
 
-tripRouter.post('/:id', authentication,tripAuthorization, TripController.addCompanion)
-tripRouter.patch('/:userTripId', authentication,TripController.acceptInvitation)
-
 module.exports = tripRouter

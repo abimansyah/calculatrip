@@ -1,6 +1,5 @@
 const request = require('supertest');
 const app = require("../app")
-const axios = require('axios');
 
 const {
     User
@@ -84,21 +83,6 @@ describe('GET /exchangerate - Get Symbols money from 3rd party currency', () => 
                 console.log(err)
             })
     })
-
-    test("GET /exchangerate error (500) - should handle error with status (500)", async () => {
-        jest.spyOn(axios, 'get').mockRejectedValue('Error')
-        return request(app)
-            .get("/exchangerate")
-            .set("access_token", token)
-            .then((resp) => {
-                const result = resp.body;
-                expect(resp.status).toBe(500);
-                expect(result).toHaveProperty("message", "Internal Server Error");
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    });
 })
 
 describe('POST /exchangerate - Convert money with symbols money ', () => {
@@ -202,18 +186,4 @@ describe('GET /exchangerate/:base - Get latest rate Convert money with symbols m
                 console.log(err)
             })
     })
-    test("GET /exchangerate/:base error (500) - should handle error with status (500)", async () => {
-        jest.spyOn(axios, 'get').mockRejectedValue('Error')
-        return request(app)
-            .get("/exchangerate/IDR")
-            .set("access_token", token)
-            .then((resp) => {
-                const result = resp.body;
-                expect(resp.status).toBe(500);
-                expect(result).toHaveProperty("message", "Internal Server Error");
-            })
-            .catch((err) => {
-                console.log(err);
-            });
-    });
 })
