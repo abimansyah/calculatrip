@@ -1,30 +1,30 @@
 [
   {
-    "name": "tempor convallis nulla",
+    "name": "Trip to Bandung",
     "startDate": "02-01-2022",
     "endDate": "02-02-2022",
-    "homeCurrency": "idr",
+    "homeCurrency": "IDR",
     "tripImageUrl": "http://dummyimage.com/208x100.png/cc0000/ffffff",
     "targetBudget": 9810055 
   },
   {
-    "name": "enim sit",
+    "name": "Trip to Medan",
     "startDate": "02-01-2022",
     "endDate": "02-02-2022",
-    "homeCurrency": "idr",
+    "homeCurrency": "IDR",
     "tripImageUrl": "http://dummyimage.com/106x100.png/5fa2dd/ffffff",
     "targetBudget": 2614270
   },
   {
-    "name": "non mi",
+    "name": "Trip to Japan",
     "startDate": "02-01-2022",
     "endDate": "02-02-2022",
-    "homeCurrency": "usd",
+    "homeCurrency": "JPY",
     "tripImageUrl": "http://dummyimage.com/149x100.png/dddddd/000000",
     "targetBudget": 8212147
   },
   {
-    "name": "vel lectus in",
+    "name": "Trip to Semarang",
     "startDate": "02-01-2022",
     "endDate": "02-02-2022",
     "homeCurrency": "usd",
@@ -32,91 +32,11 @@
     "targetBudget": 4865134
   },
   {
-    "name": "at feugiat non",
+    "name": "Trip to USA",
     "startDate": "02-01-2022",
     "endDate": "02-02-2022",
-    "homeCurrency": "idr",
+    "homeCurrency": "USD",
     "tripImageUrl": "http://dummyimage.com/184x100.png/ff4444/ffffff",
     "targetBudget": 8476497
-  },
-  {
-    "name": "in congue",
-    "startDate": "02-01-2022",
-    "endDate": "02-02-2022",
-    "homeCurrency": "idr",
-    "tripImageUrl": "http://dummyimage.com/113x100.png/ff4444/ffffff",
-    "targetBudget": 9484310
-  },
-  {
-    "name": "tempus semper est",
-    "startDate": "02-01-2022",
-    "endDate": "02-02-2022",
-    "homeCurrency": "idr",
-    "tripImageUrl": "http://dummyimage.com/236x100.png/5fa2dd/ffffff",
-    "targetBudget": 3582468
-  },
-  {
-    "name": "vestibulum velit id",
-    "startDate": "02-01-2022",
-    "endDate": "02-02-2022",
-    "homeCurrency": "idr",
-    "tripImageUrl": "http://dummyimage.com/144x100.png/cc0000/ffffff",
-    "targetBudget": 1162895
-  },
-  {
-    "name": "praesent id massa",
-    "startDate": "02-01-2022",
-    "endDate": "02-02-2022",
-    "homeCurrency": "usd",
-    "tripImageUrl": "http://dummyimage.com/243x100.png/5fa2dd/ffffff",
-    "targetBudget": 3084402
-  },
-  {
-    "name": "iaculis congue vivamus",
-    "startDate": "02-01-2022",
-    "endDate": "02-02-2022",
-    "homeCurrency": "usd",
-    "tripImageUrl": "http://dummyimage.com/193x100.png/cc0000/ffffff",
-    "targetBudget": 2650659
-  },
-  {
-    "name": "lobortis vel dapibus",
-    "startDate": "02-01-2022",
-    "endDate": "02-02-2022",
-    "homeCurrency": "usd",
-    "tripImageUrl": "http://dummyimage.com/151x100.png/cc0000/ffffff",
-    "targetBudget": 3517704
-  },
-  {
-    "name": "sed tincidunt",
-    "startDate": "02-01-2022",
-    "endDate": "02-02-2022",
-    "homeCurrency": "usd",
-    "tripImageUrl": "http://dummyimage.com/221x100.png/dddddd/000000",
-    "targetBudget": 3666211
-  },
-  {
-    "name": "nec dui luctus",
-    "startDate": "02-01-2022",
-    "endDate": "02-02-2022",
-    "homeCurrency": "idr",
-    "tripImageUrl": "http://dummyimage.com/135x100.png/dddddd/000000",
-    "targetBudget": 7842383
-  },
-  {
-    "name": "vulputate justo in",
-    "startDate": "02-01-2022",
-    "endDate": "02-02-2022",
-    "homeCurrency": "idr",
-    "tripImageUrl": "http://dummyimage.com/151x100.png/dddddd/000000",
-    "targetBudget": 4259697
-  },
-  {
-    "name": "suspendisse potenti",
-    "startDate": "02-01-2022",
-    "endDate": "02-02-2022",
-    "homeCurrency": "usd",
-    "tripImageUrl": "http://dummyimage.com/203x100.png/cc0000/ffffff",
-    "targetBudget": 6267390
   }
 ]
