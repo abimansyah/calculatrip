@@ -73,13 +73,14 @@ const errorHandler = (err, req, res, next) => {
     } else if (err.name === "city is required") {
         status = 400
         message = "City is required"
-    } else if (err.response.data && err.response.data.message === "wrong latitude") {
+    } 
+    else if (err.response && err.response.data.message === "wrong latitude") {
         status = 400
         message = "Wrong Latitude"
-    } else if (err.response.data && err.response.data.message === "wrong longitude") {
+    } else if (err.response && err.response.data.message === "wrong longitude") {
         status = 400
         message = "Wrong Longitude"
-    } else if (err.response.data && err.response.data.message === 'city not found') {
+    } else if (err.response && err.response.data.message === 'city not found') {
         status = 404
         message = 'City not found'
     }
