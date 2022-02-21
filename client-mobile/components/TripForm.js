@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, TextInput, ImageBackground, Picker } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { Text, TouchableOpacity, View, StyleSheet, TextInput, ImageBackground, Picker, ScrollView } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateField from 'react-native-datefield';
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 export default function TripForm({ type }) {
   const [randomPhotos] = useState([
@@ -23,6 +24,9 @@ export default function TripForm({ type }) {
   const [tripImage, setTripImage] = useState(null);
   const [focused, setFocused] = useState('')
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
+  const [token, setToken] = useState('')
+  const navigation = useNavigation()
+  const [isFile, setIsFile] = useState(false)
 
   function formatDate(value, type) {
     let newDate = []
@@ -34,127 +38,164 @@ export default function TripForm({ type }) {
     newDate = newDate.join('-')
     type === "startDate" ? setStartDate(newDate) : setEndDate(newDate)
   }
-    const pickImage = async () => {
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.All,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-      console.log(result);
+    console.log(result);
 
-      if (!result.cancelled) {
-        setTripImage(result.uri);
-      }
-    };
-
-    const randomizeImage = async () => {
-      let randomIndex = Math.floor(Math.random() * (5 + 1))
-      setTripImage(randomPhotos[randomIndex])
+    if (!result.cancelled) {
+      setIsFile(true)
+      setTripImage(result.uri);
     }
+  };
 
-    const submitTrip = async () => {
-      try {
-        let input = new FormData();
-        input.append('imageFile', tripImage)
-        const response = await axios({
-          method: 'post',
-          url:'http://localhost:3000/trips',
-          headers: {
-            access_token: 'access_token'
-          },
-          data: {
-            name,
-            targetBudget,
-            homeCurrency,
-            startDate,
-            endDate,
-            input
-          }
-        })
-        console.log(response.data)
-      } catch (error) {
-        console.log(error);
+  const randomizeImage = async () => {
+    let randomIndex = Math.floor(Math.random() * (5 + 1))
+    setIsFile(false)
+    setTripImage(randomPhotos[randomIndex])
+  }
+
+  const submitTrip = async () => {
+    try {
+      let formDataBody = new FormData();
+      let localUri = tripImage;
+      let filename = localUri.split('/').pop();
+
+      // Infer the type of the image
+      if(isFile) {
+        let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      formDataBody.append('imageFile', { uri: tripImage, name: filename, type });
+      } else {
+        formDataBody.append('tripImageUrl', tripImage)
       }
-    }
+      
+      formDataBody.append('name', name)
+      formDataBody.append('targetBudget', targetBudget)
+      formDataBody.append('homeCurrency', homeCurrency)
+      formDataBody.append('startDate', startDate)
+      formDataBody.append('endDate', endDate)
 
-  return(
+      const response = await fetch('https://07df-118-137-91-83.ngrok.io/trips', {
+      method: 'post',
+      headers: {
+        'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
+        access_token: token,
+      },
+      body: formDataBody,
+    })
+      setName("")
+      setTargetBudget("")
+      console.log("Trip has been added");
+      navigation.navigate('Home')
+    } catch (error) {
+      console.log(error, "<<<<<<<<<<<<<");
+    }
+  }
+
+  const loginCheck = async () => {
+    try {
+      const getAccessToken = await AsyncStorage.getItem('access_token')
+      if (getAccessToken !== null) {
+        setToken(getAccessToken);
+
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    randomizeImage()
+    loginCheck()
+  }, [])
+
+  return (
     <View style={{ position: 'relative', height: '100%' }}>
-      <ImageBackground style={editProfileStyle.imageContainer} source={{ uri: tripImage ? tripImage : "https://images.unsplash.com/photo-1642287458180-449fad5abc2f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80" }}>
-        <LinearGradient style={editProfileStyle.imageGradientContainer} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{x:0.5, y:0}} end={{x:0.5, y:0.5}}>
+      <ImageBackground style={editProfileStyle.imageContainer} source={{ uri: tripImage }}>
+        <LinearGradient style={editProfileStyle.imageGradientContainer} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.5 }}>
           <View style={editProfileStyle.iconContainer}>
-            <TouchableOpacity style={editProfileStyle.iconButton}>
+            <TouchableOpacity style={editProfileStyle.iconButton}
+              onPress={() => navigation.navigate('Home')}>
               <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
           </View>
         </LinearGradient>
         <View style={editProfileStyle.imageButtonContainer}>
-          <TouchableOpacity onPress={()=>pickImage()} style={editProfileStyle.imageButton}>
+          <TouchableOpacity onPress={() => pickImage()} style={editProfileStyle.imageButton}>
             <Text style={editProfileStyle.imageButtonText}>Upload{'\n'}Photo</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={()=>randomizeImage()} style={editProfileStyle.imageButton}>
+          <TouchableOpacity onPress={() => randomizeImage()} style={editProfileStyle.imageButton}>
             <Text style={editProfileStyle.imageButtonText}>Random{'\n'}Photo</Text>
           </TouchableOpacity>
         </View>
       </ImageBackground>
-      <View style={{width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 25, paddingBottom: 10}}>
-        <Text style={{fontSize: 18, fontWeight: "bold"}}>{`${type} Trip`}</Text>
+      <View style={{ width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 25, paddingBottom: 10 }}>
+        <Text style={{ fontSize: 18, fontWeight: "bold" }}>{`${type} Trip`}</Text>
       </View>
-      <View style={{marginHorizontal: 40, marginTop: 10, marginBottom: 100}}>
-        <Text>Trip Name</Text>
-        <TextInput
-          style={focused === 'name' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
-          placeholder='Trip Name'
-          onFocus={() => setFocused('name')}
-          value={name}
-          onChangeText={setName}
-        />
-        <Text>Trip Budget Target</Text>
-        <TextInput
-          keyboardType={phoneInput}
-          style={focused === 'targetBudget' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
-          placeholder='Trip Budget Target'
-          onFocus={() => setFocused('targetBudget')}
-          value={targetBudget}
-          onChangeText={setTargetBudget}
-        />
-        <Text>Currency</Text>
-        <View style={editProfileStyle.inputDate}>
-          <Picker
-            selectedValue={homeCurrency}
-            onValueChange={itemValue => setHomeCurrency(itemValue)}
-          >
-            <Picker.Item label="IDR" value="idr" />
-            <Picker.Item label="USD" value="usd" />
-          </Picker>
-        </View>
-        <Text>Start Date</Text>
-        <View style={editProfileStyle.inputDate}>
-          <DateField
-            labelDate="Start date"
-            labelMonth="Start month"
-            labelYear="Start year"
-            onSubmit={(value) => formatDate(value, "startDate")}
-            defaultValue={new Date(startDate)}
+
+      <ScrollView>
+        <View style={{ marginHorizontal: 40, marginTop: 10, marginBottom: 100 }}>
+          <Text>Trip Name</Text>
+          <TextInput
+            style={focused === 'name' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
+            placeholder='Trip Name'
+            onFocus={() => setFocused('name')}
+            value={name}
+            onChangeText={setName}
           />
-        </View>
+          <Text>Trip Budget Target</Text>
+          <TextInput
+            keyboardType={phoneInput}
+            style={focused === 'targetBudget' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
+            placeholder='Trip Budget Target'
+            onFocus={() => setFocused('targetBudget')}
+            value={targetBudget}
+            onChangeText={setTargetBudget}
+          />
+          <Text>Currency</Text>
+          <View style={editProfileStyle.inputDate}>
+            <Picker
+              selectedValue={homeCurrency}
+              onValueChange={itemValue => setHomeCurrency(itemValue)}
+            >
+              <Picker.Item label="IDR" value="idr" />
+              <Picker.Item label="USD" value="usd" />
+            </Picker>
+          </View>
+          <Text>Start Date</Text>
+          <View style={editProfileStyle.inputDate}>
+            <DateField
+              labelDate="Start date"
+              labelMonth="Start month"
+              labelYear="Start year"
+              onSubmit={(value) => formatDate(value, "startDate")}
+              defaultValue={new Date(startDate)}
+            />
+          </View>
           <Text>End Date</Text>
-        <View style={editProfileStyle.inputDate}>
-          <DateField
-            labelDate="End date"
-            labelMonth="End month"
-            labelYear="End year"
-            onSubmit={(value) => formatDate(value, "endDate")}
-            defaultValue={new Date(endDate)}
-          />
+          <View style={editProfileStyle.inputDate}>
+            <DateField
+              labelDate="End date"
+              labelMonth="End month"
+              labelYear="End year"
+              onSubmit={(value) => formatDate(value, "endDate")}
+              defaultValue={new Date(endDate)}
+            />
+          </View>
+          <TouchableOpacity style={{ padding: 10, alignSelf: 'flex-end', backgroundColor: "#0378a6", borderRadius: 50}}
+          onPress={() => submitTrip()}
+          >
+          <Ionicons name="checkmark" size={1} color="#0378a6" style={editProfileStyle.checkButton} />
+          </TouchableOpacity>
         </View>
-      </View>
-      <View style={editProfileStyle.checkContainer}>
-        <TouchableOpacity onPress={()=>submitTrip()} style={{ alignSelf: 'flex-start' }}>
-          <Ionicons name="checkmark" size={24} color="#0378a6" style={editProfileStyle.checkButton} />
-        </TouchableOpacity>
-      </View>
+      </ScrollView>
     </View>
   )
 }
@@ -233,15 +274,15 @@ const editProfileStyle = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "flex-end",
-    position: 'absolute',
     bottom: 40,
+    position: 'absolute',
     paddingRight: 40
   },
   checkButton: {
-    fontSize: 32,
+    fontSize: 20,
     backgroundColor: "#0378a6",
     color: '#fff',
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     paddingVertical: 10,
     borderRadius: 50
   }

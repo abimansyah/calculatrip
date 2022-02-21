@@ -32,7 +32,7 @@ export default function TripImage({ data }) {
 
 const styles = StyleSheet.create({
   imageDetail: {
-    height: 230,
+    height: 200,
     position: 'relative',
   },
   iconContainer: {

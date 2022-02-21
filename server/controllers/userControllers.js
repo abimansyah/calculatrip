@@ -1,5 +1,6 @@
 const {
-    User,UserTrip
+    User,
+    UserTrip
 } = require('../models/index')
 const {
     comparePassword
@@ -160,9 +161,9 @@ class UserController {
                 birthDate: req.body.birthDate
             }
             const userFound = await User.findByPk(idUser)
-            if (!userFound) throw {
-                name: "User not found"
-            }
+            // if (!userFound) throw {
+            //     name: "User not found"
+            // }
             const user = await User.update(input, {
                 where: {
                     id: idUser
@@ -178,12 +179,12 @@ class UserController {
         }
     }
 
-    static async getInvitation(req,res,next) {
+    static async getInvitation(req, res, next) {
         try {
             const findUserTrip = await UserTrip.findAll({
-                where:{
-                    UserId:req.user.id,
-                    status:"pending"
+                where: {
+                    UserId: req.user.id,
+                    status: "pending"
                 }
             })
             res.status(200).json(findUserTrip)

@@ -25,11 +25,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import moment from 'moment'
 
 
+
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { styles } from '../styles/index'
+import { backgroundColor, styles } from '../styles/index'
 import TripImage from '../components/TripImage';
 import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import BottomTab from '../components/BottomTabs';
+
 
 
 const screenWidth = Dimensions.get("window").width;
@@ -68,7 +72,14 @@ const data = [
     color: "#0487D9",
     legendFontColor: "#7F7F7F",
     legendFontSize: 15
-  }
+  },
+  {
+    name: "mantapi",
+    amount: 12000,
+    color: "#0487D9",
+    legendFontColor: "#7F7F7F",
+    legendFontSize: 15
+  },
 ];
 
 const chartConfig = {
@@ -104,7 +115,7 @@ export default function Trip({ route }) {
 
   useEffect(() => {
     if (token) {
-      axios.get(`https://efdf-125-165-106-74.ngrok.io/trips/${tripId}`, {
+      axios.get(`https://07df-118-137-91-83.ngrok.io/trips/${tripId}`, {
         headers: {
           access_token: token
         }
@@ -122,7 +133,7 @@ export default function Trip({ route }) {
   useEffect(() => {
     if (token) {
       console.log(trip.id);
-      axios.get(`https://efdf-125-165-106-74.ngrok.io/savings/trip/${trip.id}`, {
+      axios.get(`https://07df-118-137-91-83.ngrok.io/savings/trip/${trip.id}`, {
         headers: {
           access_token: token
         }
@@ -140,7 +151,7 @@ export default function Trip({ route }) {
   useEffect(() => {
     if (token) {
       console.log(trip.id);
-      axios.get(`https://efdf-125-165-106-74.ngrok.io/expenses/trip/${trip.id}`, {
+      axios.get(`https://07df-118-137-91-83.ngrok.io/expenses/trip/${trip.id}`, {
         headers: {
           access_token: token
         }
@@ -164,81 +175,62 @@ export default function Trip({ route }) {
   const totalExpenses = expense.length > 0 ? `Rp. ${expense.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "Rp 0"
 
   return (
-    <ScrollView>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SafeAreaView style={styles.mainContainer, { height: "100%" }}>
-          <TripImage data={trip.tripImageUrl} />
-          <View style={tripStyle.titleContainer}>
-            <Text style={tripStyle.titleText}>{trip.name}</Text>
-            <Text>{`${moment(new Date(trip.startDate)).format('DD MMMM YYYY')} - ${moment(new Date(trip.endDate)).format('DD MMMM YYYY')}`}</Text>
-          </View>
-          <View style={tripStyle.darkCardContainer}>
-            <View style={tripStyle.innerCardContainer}>
-              <View style={tripStyle.innerCardView}>
-                <Text style={tripStyle.innerCardBudget}>Budget Target</Text>
+    <>
+      <ScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <SafeAreaView style={styles.mainContainer, { height: "100%" }}>
+            <TripImage data={trip.tripImageUrl} />
+            <View style={tripStyle.titleContainer}>
+              <Text style={tripStyle.titleText}>{trip.name}</Text>
+              <Text>{`${moment(new Date(trip.startDate)).format('DD MMMM YYYY')} - ${moment(new Date(trip.endDate)).format('DD MMMM YYYY')}`}</Text>
+            </View>
+            <View style={tripStyle.darkCardContainer}>
+              <View style={tripStyle.innerCardContainer}>
+                <View style={tripStyle.innerCardView}>
+                  <Text style={tripStyle.innerCardBudget}>Budget Target</Text>
+                </View>
+                <View style={tripStyle.innerCardView}>
+                  <Text style={tripStyle.innerCardNumber}>Rp {trip.targetBudget}</Text>
+                </View>
               </View>
-              <View style={tripStyle.innerCardView}>
-                <Text style={tripStyle.innerCardNumber}>Rp {trip.targetBudget}</Text>
+              <View style={tripStyle.blueCardContainer}>
+                <View style={tripStyle.blueCardView}>
+                  <Text style={tripStyle.blueCardNumber}>{totalSaving}</Text>
+                  <Text style={tripStyle.blueCardDesc}>Saving</Text>
+                </View>
+                <View style={tripStyle.cardSeparator} />
+                <View style={tripStyle.blueCardView}>
+                  <Text style={tripStyle.blueCardNumber}>{totalExpenses}</Text>
+                  <Text style={tripStyle.blueCardDesc}>Expenses</Text>
+                </View>
               </View>
             </View>
-            <View style={tripStyle.blueCardContainer}>
-              <View style={tripStyle.blueCardView}>
-                <Text style={tripStyle.blueCardNumber}>{totalSaving}</Text>
-                <Text style={tripStyle.blueCardDesc}>Saving</Text>
-              </View>
-              <View style={tripStyle.cardSeparator} />
-              <View style={tripStyle.blueCardView}>
-                <Text style={tripStyle.blueCardNumber}>{totalExpenses}</Text>
-                <Text style={tripStyle.blueCardDesc}>Expenses</Text>
-              </View>
-            </View>
-          </View>
 
 
-          {/* <View style={tripStyle.emptyContainer}>
+            {/* <View style={tripStyle.emptyContainer}>
           <Text style={{textAlign: "center"}}>Add your expenses to see{"\n"}the summary of trip expenses</Text>
         </View> */}
 
-          <View style={{ flex: 1, marginTop: 5 }}>
-            <View style={{ alignItems: 'center' }}>
-              <PieChart
-                data={data}
-                width={screenWidth}
-                height={200}
-                chartConfig={chartConfig}
-                accessor={"amount"}
-                backgroundColor={"transparent"}
-                paddingLeft={"15"}
-                center={[10, 10]}
-                absolute
-              />
+            <View style={{ flex: 1, marginTop: 5 }}>
+              <View style={{ alignItems: 'center' }}>
+                <PieChart
+                  data={data}
+                  width={screenWidth}
+                  height={200}
+                  chartConfig={chartConfig}
+                  accessor={"amount"}
+                  backgroundColor={"transparent"}
+                  paddingLeft={"15"}
+                  center={[10, 10]}
+                  absolute
+                />
+              </View>
             </View>
-          </View>
-
-          <View>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Saving')}
-            >
-              <View>
-                <Text>
-                  Saving Detail
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Expenses')}
-            >
-              <View>
-                <Text>
-                  Expense Detail
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-        </SafeAreaView>
-      </TouchableWithoutFeedback>
-    </ScrollView >
+          </SafeAreaView>
+        </TouchableWithoutFeedback>
+      </ScrollView >
+        <BottomTab data={{data: trip.id}}/>
+    </>
   );
 }
 
