@@ -23,13 +23,15 @@ class TripController {
         targetBudget,
       } = req.body;
 
+      console.log(req.body);
+
       const newTrip = await Trip.create(
         {
           name,
           startDate,
           endDate,
           homeCurrency,
-          tripImageUrl: tripImageUrl || defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
+          tripImageUrl: req.uploadUrl,
           targetBudget: targetBudget || 0,
         },
         { transaction: t }

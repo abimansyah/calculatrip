@@ -115,7 +115,7 @@ export default function Trip({ route }) {
 
   useEffect(() => {
     if (token) {
-      axios.get(`https://efdf-125-165-106-74.ngrok.io/trips/${tripId}`, {
+      axios.get(`https://07df-118-137-91-83.ngrok.io/trips/${tripId}`, {
         headers: {
           access_token: token
         }
@@ -133,7 +133,7 @@ export default function Trip({ route }) {
   useEffect(() => {
     if (token) {
       console.log(trip.id);
-      axios.get(`https://efdf-125-165-106-74.ngrok.io/savings/trip/${trip.id}`, {
+      axios.get(`https://07df-118-137-91-83.ngrok.io/savings/trip/${trip.id}`, {
         headers: {
           access_token: token
         }
@@ -151,7 +151,7 @@ export default function Trip({ route }) {
   useEffect(() => {
     if (token) {
       console.log(trip.id);
-      axios.get(`https://efdf-125-165-106-74.ngrok.io/expenses/trip/${trip.id}`, {
+      axios.get(`https://07df-118-137-91-83.ngrok.io/expenses/trip/${trip.id}`, {
         headers: {
           access_token: token
         }
