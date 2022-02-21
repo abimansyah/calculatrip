@@ -4,6 +4,7 @@ import {
   View,
   TouchableOpacity
 } from 'react-native';
+
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import logo from '../assets/logo.png'
@@ -28,9 +29,11 @@ export default function HomeProfile() {
 
 
   return (
+
     <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-between", marginVertical: 5, marginHorizontal: 10, padding: 15, borderRadius: 10, backgroundColor: '#0378a6' }}>
       <View style={{ flexDirection: "row", alignItems: 'center' }}>
         <Image source={logo} style={{ height: 70, width: 70, backgroundColor: "#fff", borderRadius: 30 }} />
+
         <View style={{ marginLeft: 15 }}>
           <Text style={{ fontSize: 21, fontWeight: "bold", color: "#fff" }}>dyahachwatiningrum</Text>
           <Text style={{ paddingBottom: 10, color: "#fff" }}>dyahachwatiningrum@gmail.com</Text>

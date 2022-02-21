@@ -15,6 +15,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   UserTrip.init({
+    id: {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+      allowNull: false
+    },
     UserId: DataTypes.INTEGER,
     TripId: DataTypes.INTEGER,
     status: DataTypes.STRING,
