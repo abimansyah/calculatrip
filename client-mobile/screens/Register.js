@@ -16,6 +16,7 @@ import DateField from 'react-native-datefield';
 import { styles, mainColor } from '../styles';
 import logo from '../assets/logo.png'
 import axios from 'axios';
+import { server } from '../globalvar';
 
 
 export default function Register({ navigation }) {
@@ -32,7 +33,7 @@ export default function Register({ navigation }) {
 
   const doRegister = async (req, res) => {
     try {
-      const resp = await axios.post('http://d65d-103-78-115-90.ngrok.io/users/register', {
+      const resp = await axios.post(`${server}/users/register`, {
         email: email,
         password: password,
         username: username,

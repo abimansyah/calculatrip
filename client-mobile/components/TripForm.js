@@ -6,6 +6,7 @@ import DateField from 'react-native-datefield';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import { server } from '../globalvar';
 
 export default function TripForm({ type }) {
   const [randomPhotos] = useState([
@@ -81,7 +82,7 @@ export default function TripForm({ type }) {
       formDataBody.append('startDate', startDate)
       formDataBody.append('endDate', endDate)
 
-      const response = await fetch('https://07df-118-137-91-83.ngrok.io/trips', {
+      const response = await fetch(`${server}/trips`, {
       method: 'post',
       headers: {
         'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
