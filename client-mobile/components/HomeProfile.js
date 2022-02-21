@@ -22,10 +22,10 @@ export default function HomeProfile() {
           </TouchableOpacity>
         </View>
       </View>
-      <View style={{flexDirection: "column", alignItems:"center"}}>
+      {/* <View style={{flexDirection: "column", alignItems:"center"}}>
         <Ionicons name="star-outline" size={32} color="white" />
         <Text style={{paddingTop: 10, color: "#fff", fontWeight: "bold"}}>Regular</Text>
-      </View>
+      </View> */}
     </View>
   )
 }
