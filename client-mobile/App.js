@@ -14,9 +14,7 @@ import Trip from './screens/Trip';
 import Saving from './screens/Saving';
 import Expenses from './screens/Expenses';
 import Companion from './screens/Companion';
-
 import HomeCard from './components/HomeCard';
-
 import EditProfile from './screens/EditProfile';
 import AddTrip from './screens/AddTrip';
 import Editrip from './screens/EditTrip';
@@ -42,6 +40,7 @@ export default function App() {
             <Stack.Screen name='Saving' component={ Saving } />
             <Stack.Screen name='Expenses' component={ Expenses } />
             <Stack.Screen name='AddTrip' component={ AddTrip } />
+            <Stack.Screen name='Companion' component={ Companion } />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </View>

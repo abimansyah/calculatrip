@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, FlatList, Dimensions } from 'react-native'
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -8,79 +8,55 @@ import { styles } from "../styles"
 import AddSavingModal from '../components/AddSavingModal';
 import SavingCard from '../components/SavingCard';
 import BottomTab from '../components/BottomTabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-export default function Saving() {
-  const [saving, setSaving] = useState([
-    {
-      "id": 1,
-      "name": "saving name",
-      "amount": 10000,
-      "userId": 1,
-      "tripId": 1,
-      "savingDate": "02-01-2022"
-    },
-    {
-      "id": 2,
-      "name": "saving name",
-      "amount": 10000,
-      "userId": 1,
-      "tripId": 2,
-      "savingDate": "02-01-2022"
-    },
-    {
-      "id": 3,
-      "name": "saving name",
-      "amount": 10000,
-      "userId": 1,
-      "tripId": 3,
-      "savingDate": "02-01-2022"
-    },
-    {
-      "id": 4,
-      "name": "saving name",
-      "amount": 10000,
-      "userId": 1,
-      "tripId": 4,
-      "savingDate": "02-01-2022"
-    },
-    {
-      "id": 5,
-      "name": "saving name",
-      "amount": 10000,
-      "userId": 2,
-      "tripId": 1,
-      "savingDate": "02-01-2022"
-    },
-    {
-      "id": 6,
-      "name": "saving name",
-      "amount": 10000,
-      "userId": 2,
-      "tripId": 2,
-      "savingDate": "02-01-2022"
-    },
-    {
-      "id": 7,
-      "name": "saving name",
-      "amount": 10000,
-      "userId": 2,
-      "tripId": 3,
-      "savingDate": "02-01-2022"
-    },
-    {
-      "id": 8,
-      "name": "saving name",
-      "amount": 10000,
-      "userId": 2,
-      "tripId": 4,
-      "savingDate": "02-01-2022"
-    }
-  ])
+export default function Saving({ route }) {
+  const { tripId } = route.params
+  const [saving, setSaving] = useState([])
   const [loading, setLoading] = useState(false)
+  const [token, setToken] = useState('')
+
 
   const bs = React.createRef();
   const fall = new Animated.Value(1);
   const totalSaving = saving.length > 0 ? saving.map(el => el.amount).reduce((prev, cur) => prev + cur) : "Rp 0"
+  
+  console.log(tripId, 'saving ------------------');
+  // fetch data
+  const loginCheck = async () => {
+    try {
+      const getAccessToken = await AsyncStorage.getItem('access_token')
+      if (getAccessToken !== null) {
+        setToken(getAccessToken);
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    if (token) {
+      axios.get(`https://efdf-125-165-106-74.ngrok.io/savings/trip/${tripId}`, {
+        headers: {
+          access_token: token
+        }
+      })
+        .then(res => {
+          console.log(res.data);
+          setSaving(res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }, [token])
+
+  useEffect(() => {
+    loginCheck()
+  }, [])
+  // end of fetch data
 
   const headerModal = () => {
     return (
@@ -137,7 +113,7 @@ export default function Saving() {
             </View>
           )}
         </View>
-        <BottomTab />
+        <BottomTab data={tripId} />
       </Animated.View>
     </SafeAreaView>
   )

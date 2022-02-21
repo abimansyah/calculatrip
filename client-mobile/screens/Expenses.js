@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, FlatList, Dimensions } from 'react-native'
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -7,131 +7,17 @@ import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles"
 import ExpensesCard from '../components/ExpensesCard';
 import ExpenseCategoryModal from '../components/ExpenseCategoryModal';
+import BottomTab from '../components/BottomTabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
-export default function Expenses() {
-  const [expenses, setExpenses] = useState([
-    {
-      "id": 1,
-      "name": "expense trip one",
-      "userId": 1,
-      "tripId": 1,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 2,
-      "name": "expense trip one",
-      "userId": 1,
-      "tripId": 2,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 3,
-      "name": "expense trip one",
-      "userId": 1,
-      "tripId": 3,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 4,
-      "name": "expense trip one",
-      "userId": 1,
-      "tripId": 4,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 5,
-      "name": "expense trip ",
-      "userId": 2,
-      "tripId": 1,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 6,
-      "name": "expense trip ",
-      "userId": 2,
-      "tripId": 2,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 7,
-      "name": "expense trip",
-      "userId": 2,
-      "tripId": 3,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 8,
-      "name": "expense trip",
-      "userId": 2,
-      "tripId": 4,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 9,
-      "name": "expense trip ",
-      "userId": 3,
-      "tripId": 1,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 10,
-      "name": "expense trip ",
-      "userId": 3,
-      "tripId": 2,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    }
-  ])
+
+export default function Expenses({ route }) {
+    const { tripId } = route.params
+  const [expenses, setExpenses] = useState([])
   const [loading, setLoading] = useState(false)
+  const [token, setToken] = useState('')
+console.log(tripId, 'expense-----------');
 
   const bs = React.createRef();
   const fall = new Animated.Value(1);
@@ -146,6 +32,38 @@ export default function Expenses() {
       </View>
     )
   }
+
+  const loginCheck = async () => {
+    try {
+      const getAccessToken = await AsyncStorage.getItem('access_token')
+      if (getAccessToken !== null) {
+        setToken(getAccessToken);
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    if (token) {
+      axios.get(`https://efdf-125-165-106-74.ngrok.io/expenses/trip/${tripId}`, {
+        headers: {
+          access_token: token
+        }
+      })
+        .then(res => {
+          setExpenses(res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }, [token])
+
+  useEffect(() => {
+    loginCheck()
+  }, [])
 
   return (
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -192,6 +110,7 @@ export default function Expenses() {
             </View>
           ) }
         </View>
+        <BottomTab data={tripId} />
       </Animated.View>
     </SafeAreaView>
   )
