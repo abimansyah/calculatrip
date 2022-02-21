@@ -229,7 +229,7 @@ export default function Trip({ route }) {
           </SafeAreaView>
         </TouchableWithoutFeedback>
       </ScrollView >
-        <BottomTab data={{data: trip.id}}/>
+        <BottomTab data={trip.id}/>
     </>
   );
 }
