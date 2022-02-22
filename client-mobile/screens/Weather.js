@@ -2,13 +2,21 @@ import { StyleSheet, Text, View, Picker, Image, Modal, TouchableOpacity, TextInp
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather, FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons';
 import { styles } from '../styles/index'
+
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { server } from '../globalvar';
 
-export default function Weather() {
 
+
+
+
+import BottomTab from "../components/BottomTabs";
+
+export default function Weather({ route }) {
+  const { tripId } = route.params
+  
   const [city, setCity] = useState("Jakarta")
   const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = useState("");
@@ -148,6 +156,7 @@ export default function Weather() {
             <Text style={weatherStyle.detailText}>33°C</Text>
           </View>
         </View>
+      <BottomTab data={tripId} />
       </View>
     </SafeAreaView>
   )

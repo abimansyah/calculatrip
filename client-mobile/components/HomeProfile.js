@@ -49,7 +49,7 @@ export default function HomeProfile({ isFocused }) {
           <Text style={{ fontSize: 21, fontWeight: "bold", color: "#fff" }}>{user.username}</Text>
           <Text style={{ paddingBottom: 10, color: "#fff" }}>{user.email}</Text>
           <View style={{ flexDirection: "row" }}>
-            <TouchableOpacity style={{ padding: 10, alignSelf: 'flex-start', backgroundColor: "#fff", borderRadius: 10 }} >
+            <TouchableOpacity style={{ padding: 10, alignSelf: 'flex-start', backgroundColor: "#fff", borderRadius: 10 }} onPress={() => navigation.navigate('EditProfile')}>
               <Text style={{ color: '#0378a6', fontWeight: 'bold' }}>Edit Profile</Text>
             </TouchableOpacity>
             <TouchableOpacity style={{ marginHorizontal: 10, padding: 10, alignSelf: 'flex-start', backgroundColor: "#d0312d", borderRadius: 10 }} onPress={doLogout}>

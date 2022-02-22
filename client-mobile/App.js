@@ -38,6 +38,8 @@ export default function App() {
             <Stack.Screen name='Login' component={ Login } />
             <Stack.Screen name='Register' component={ Register } />
             <Stack.Screen name='Home' component={ Home } />
+            <Stack.Screen name='Notification' component={ Notification } />
+            <Stack.Screen name='EditProfile' component={ EditProfile } />
             <Stack.Screen name='Trip' component={ Trip } />
             <Stack.Screen name='HomeCard' component={ HomeCard } />
             <Stack.Screen name='Saving' component={ Saving } />
@@ -47,6 +49,7 @@ export default function App() {
             <Stack.Screen name='Companion' component={ Companion } />
             <Stack.Screen name='AddExpenses' component={ AddExpenses } />
             <Stack.Screen name='DetailExpenses' component={ DetailExpenses } />
+            <Stack.Screen name='Weather' component={ Weather } />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </View>

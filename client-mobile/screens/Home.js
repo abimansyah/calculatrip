@@ -14,19 +14,19 @@ import logo from '../assets/logo.png'
 import { styles } from '../styles/index'
 import HomeProfile from '../components/HomeProfile';
 import HomeCard from '../components/HomeCard';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from "@react-navigation/native";
+import { useFocusEffect } from '@react-navigation/native';
 import { server } from '../globalvar';
 
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, route }) {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true)
   const [notif, setNotif] = useState(false)
-  const isFocused = useIsFocused();
-  useEffect(async() => {
+  const tripId = route.params?.tripId
+  const fetchData = async () => {
     try {
       const token = await AsyncStorage.getItem('access_token')
       const res = await axios.get(`${server}/trips`, {
@@ -35,7 +35,7 @@ export default function Home({ navigation }) {
         }
       })
       const response = res.data.map(el => {
-        el.UserTrips = el.Trip.Users.length
+        el.UserTrips = el.Trip.Users.length - 1
         return el
       })
       setTrips(response)
@@ -47,6 +47,8 @@ export default function Home({ navigation }) {
       })
       if(invite.data.length > 0) {
         setNotif(true)
+      } else {
+        setNotif(false)
       }
     } catch(err) {
       console.log(err)
@@ -54,7 +56,11 @@ export default function Home({ navigation }) {
         alert(err.response.data.message)
       }
     }
-  }, [isFocused])
+  }
+  useFocusEffect(useCallback(() => {
+    fetchData()
+    return () => true
+  }, [tripId]))
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
@@ -64,10 +70,10 @@ export default function Home({ navigation }) {
             <Text style={homeStyle.headerText}>Calculatrip</Text>
           </View>
           {/* <Text>{JSON.stringify(trips)}</Text> */}
-          <TouchableOpacity style={{position: "absolute", top: 0, right: 0, padding: 10, margin: 8}}>
+          <TouchableOpacity style={homeStyle.notifContainer} onPress={() => navigation.navigate('Notification')}>
             <View style={{position: "relative"}}>
               <Ionicons name="notifications" size={32} color="#0378a6" />
-              { notif ? ( <Text style={{position: "absolute", right: 2, top: -2, fontSize: 15, color: "red"}}>⬤</Text> ) : undefined}
+              { notif ? ( <Text style={homeStyle.notifCheck}>⬤</Text> ) : undefined}
             </View>
           </TouchableOpacity>
         </View>
@@ -78,7 +84,7 @@ export default function Home({ navigation }) {
               data={trips}
               renderItem={({ item }) => (<HomeCard data={item} />)}
               keyExtractor={(item) => `Trips${item.id}`}
-              ListHeaderComponent={<HomeProfile isFocused={isFocused} />}
+              ListHeaderComponent={<HomeProfile />}
               contentContainerStyle={{ paddingBottom: 170 }}
             />
           </View>
@@ -122,6 +128,20 @@ const homeStyle = StyleSheet.create({
     fontSize: 21,
     color: "#0378a6",
     paddingLeft: 5
+  },
+  notifContainer: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    padding: 10,
+    margin: 8
+  },
+  notifCheck: {
+    position: "absolute",
+    right: 2,
+    top: -2,
+    fontSize: 15,
+    color: "red"
   },
   emptyContainer: {
     flex: 1,
