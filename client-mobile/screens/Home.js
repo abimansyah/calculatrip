@@ -35,7 +35,7 @@ export default function Home({ navigation, route }) {
         }
       })
       const response = res.data.map(el => {
-        el.UserTrips = el.Trip.Users.length
+        el.UserTrips = el.Trip.Users.length - 1
         return el
       })
       setTrips(response)
@@ -47,6 +47,8 @@ export default function Home({ navigation, route }) {
       })
       if(invite.data.length > 0) {
         setNotif(true)
+      } else {
+        setNotif(false)
       }
     } catch(err) {
       console.log(err)
