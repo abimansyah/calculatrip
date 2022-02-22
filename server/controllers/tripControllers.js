@@ -165,7 +165,7 @@ class TripController {
         startDate,
         endDate,
         homeCurrency,
-        tripImageUrl: tripImageUrl ||
+        tripImageUrl: req.uploadUrl ||
           defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
         targetBudget,
       }, {

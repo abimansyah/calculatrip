@@ -45,6 +45,7 @@ export default function App() {
             <Stack.Screen name='AddTrip' component={ AddTrip } />
             <Stack.Screen name='EditTrip' component={ EditTrip } />
             <Stack.Screen name='Companion' component={ Companion } />
+            <Stack.Screen name='AddExpenses' component={ AddExpenses } />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </View>
