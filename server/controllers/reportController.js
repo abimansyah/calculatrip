@@ -10,21 +10,21 @@ const {
 
 let pdf = require("pdf-creator-node");
 let fs = require("fs");
-let html = fs.readFileSync("./db/report.html", "utf8");
 
 class reportController {
   static async getReport(req, res, next) {
     try {
+      let html = fs.readFileSync("./db/report.html", "utf8");
 
       let options = {
-        format: "A3",
-        orientation: "portrait",
-        border: "10mm",
-        // header: {
-        //   height: "45mm",
-        //   // contents:
-        //   //   '<div style="text-align: center;">Author: Shyam Hajare</div>',
-        // },
+        format: "A4",
+        orientation: "landscape",
+        border: "5mm",
+        header: {
+          height: "0mm",
+          // contents:
+          //   '<div style="text-align: center;">Author: Shyam Hajare</div>',
+        },
         // footer: {
         //   height: "28mm",
         //   contents: {
@@ -68,6 +68,12 @@ class reportController {
         return expense
       })
 
+      let companions = trip.dataValues.Users.map((e,index)=> {
+        let companion = e
+        companion.dataValues.id = index+1
+        return companion
+      })
+
       trip.dataValues.startDate = new Date(trip.dataValues.startDate).toISOString().split('T')[0]
 
       trip.dataValues.endDate = new Date(trip.dataValues.endDate).toISOString().split('T')[0]
@@ -89,17 +95,21 @@ class reportController {
         totalExpenses += expensesAmount[i]
       }
 
+      let remainingSavings = totalSavings - totalExpenses
+
+
       let tripNameUrl = trip.name.toLowerCase().split(" ").join("-")
 
       let document = {
         html: html,
         data: {
           trip: trip.dataValues,
-          companions: trip.dataValues.Users,
+          companions: companions,
           savings: savings,
           expenses: expenses,
           totalSavings:totalSavings,
-          totalExpenses:totalExpenses
+          totalExpenses:totalExpenses,
+          remainingSavings:remainingSavings
         },
 
         //kasih id trip di trip
@@ -112,7 +122,8 @@ class reportController {
       let baseUrl = "http://localhost:3000"
       res.status(200).json({
         message: "Your trip report has been created",
-        url:`${baseUrl}/${tripNameUrl}-trip-report-${trip.id}.pdf`
+        url:`${baseUrl}/${tripNameUrl}-trip-report-${trip.id}.pdf`,
+        trip
       });
     } catch (err) {
       next(err)
