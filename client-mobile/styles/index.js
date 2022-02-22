@@ -99,7 +99,7 @@ export const styles = StyleSheet.create({
     backgroundColor: backgroundColor,
     color: '#fff',
     alignItems: 'center',
-    height: '90%',
+    height: '95%',
     paddingTop: 30
 
   },
@@ -136,14 +136,18 @@ export const styles = StyleSheet.create({
 
   expenseIcon: {
     backgroundColor: mainColor,
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: 50,
     marginTop: 5,
     marginHorizontal: 5,
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+
+  icontText: {
+    fontSize: 13
   }
 });
 
