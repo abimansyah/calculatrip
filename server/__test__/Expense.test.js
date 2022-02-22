@@ -121,15 +121,22 @@ beforeAll(async () => {
     await UserTrip.create({
       UserId: 1,
       TripId: 1,
-      status: "active",
+      status: "accept",
       role: "owner",
     });
 
     await UserTrip.create({
-      UserId: 1,
+      UserId: 2,
       TripId: 2,
-      status: "active",
+      status: "accept",
       role: "owner",
+    });
+
+    await UserTrip.create({
+      UserId: 2,
+      TripId: 1,
+      status: "accept",
+      role: "companion",
     });
 
     await Saving.create({
@@ -142,7 +149,7 @@ beforeAll(async () => {
     await Saving.create({
       name: "saving trip one kedua",
       amount: 10000,
-      userId: 1,
+      userId: 2,
       tripId: 1,
       savingDate: "01-02-2022",
     });
@@ -157,7 +164,7 @@ beforeAll(async () => {
     await Saving.create({
       name: "saving trip two kedua",
       amount: 5000,
-      userId: 2,
+      userId: 1,
       tripId: 2,
       savingDate: "03-02-2022",
     });
@@ -185,7 +192,7 @@ beforeAll(async () => {
 
     await Expense.create({
       name: "expense trip one",
-      userId: 1,
+      userId: 2,
       tripId: 1,
       amount: 10000,
       expenseCategoryId: 1,
@@ -617,70 +624,6 @@ describe("POST /:expenseId/image - upload image to expense", () => {
   });
 });
 
-
-describe("DELETE /expenses/:expenseId - delete one expense from a trip", () => {
-  test("DELETE /expenses/:expenseId success status (200) - should delete one expense from a trip", (done) => {
-    request(app)
-      .delete("/expenses/1")
-      .set("access_token", token)
-      .then((resp) => {
-        const result = resp.body;
-        expect(resp.status).toBe(200);
-        expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message", "Expense has been deleted!");
-        done();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  })
-  test("DELETE /expenses/:expenseId error status (404) - should return error with status (404) when expense is not found", (done) => {
-    request(app)
-      .delete("/expenses/6")
-      .set("access_token", token)
-      .then((resp) => {
-        const result = resp.body;
-        expect(resp.status).toBe(404);
-        expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message", "Expense not found");
-        done();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  })
-  test("DELETE /expenses/:expenseId error status (401) - should return error with status (401) when token is invalid", (done) => {
-    request(app)
-      .delete("/expenses/1")
-      .set("access_token", wrongToken)
-      .then((resp) => {
-        const result = resp.body;
-        expect(resp.status).toBe(401);
-        expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message", "Forbiden to Access");
-        done();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  })
-  test("GET /trips error (500) - should handle error with status (500)", async () => {
-    jest.spyOn(Expense, 'destroy').mockRejectedValue('Error')
-    return request(app)
-      .delete("/expenses/2")
-      .set("access_token", token)
-      .then((resp) => {
-        const result = resp.body;
-        expect(resp.status).toBe(500);
-        expect(result).toHaveProperty("message", "Internal Server Error");
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  });
-
-})
-
 describe("DELETE /expenses/:expenseId/image/:imageId - delete image from expense", () => {
   test("DELETE /expenses/:expenseId/image/:imageId - should delete one image from expense", (done) => {
     request(app)
@@ -728,3 +671,83 @@ describe("DELETE /expenses/:expenseId/image/:imageId - delete image from expense
       });
   });
 });
+
+
+describe("DELETE /expenses/:expenseId - delete one expense from a trip", () => {
+  test("DELETE /expenses/:expenseId success status (200) - should delete one expense from a trip", (done) => {
+    request(app)
+      .delete("/expenses/1")
+      .set("access_token", token)
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(200);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty("message", "Expense has been deleted!");
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
+  test("DELETE /expenses/:expenseId error status (404) - should return error with status (404) when expense is not found", (done) => {
+    request(app)
+      .delete("/expenses/6")
+      .set("access_token", token)
+      .then((resp) => {
+        const result = resp.body;
+
+        expect(resp.status).toBe(404);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty("message", "Expense not found");
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
+  test("DELETE /expenses/:expenseId error status (404) - should success when user as companion", (done) => {
+    request(app)
+      .delete("/expenses/2")
+      .set("access_token", tokenUserTwo)
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(200);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty("message", "Expense has been deleted!");
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
+  test("DELETE /expenses/:expenseId error status (401) - should return error with status (401) when token is invalid", (done) => {
+    request(app)
+      .delete("/expenses/1")
+      .set("access_token", wrongToken)
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(401);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty("message", "Forbiden to Access");
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  })
+  test("GET /trips error (500) - should handle error with status (500)", async () => {
+    jest.spyOn(Expense, 'destroy').mockRejectedValue('Error')
+    return request(app)
+      .delete("/expenses/4")
+      .set("access_token", token)
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(500);
+        expect(result).toHaveProperty("message", "Internal Server Error");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+})

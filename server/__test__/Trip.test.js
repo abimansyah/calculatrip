@@ -574,6 +574,7 @@ describe("PUT /trips/:id - edit trip", () => {
         endDate: "02-03-2021",
         homeCurrency: "USD",
         targetBudget: 50000,
+        tripImageUrl: 'tetsts url'
       })
       .then((resp) => {
         const result = resp.body;
@@ -950,8 +951,8 @@ describe("POST /trips/:id - create invitation to another user", () => {
   });
 });
 
-describe("PATCH /trips/:userTripId - create invitation to another user", () => {
-  test("PATCH /trips/:userTripId success status (200) - should return success with status (200) when invitation accepted or declined", (done) => {
+describe("PATCH /trips/:userTripId - Update invitation to companion userTrip", () => {
+  test("PATCH /trips/:userTripId success status (200) - should return success with status (200) when invitation accepted", (done) => {
     request(app)
       .patch("/trips/2")
       .set("access_token", token)
@@ -965,6 +966,28 @@ describe("PATCH /trips/:userTripId - create invitation to another user", () => {
         expect(result).toHaveProperty(
           "message",
           "You accept the invitation"
+        );
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
+  test("PATCH /trips/:userTripId success status (200) - should return success with status (200) when invitation declined", (done) => {
+    request(app)
+      .patch("/trips/2")
+      .set("access_token", token)
+      .send({
+        status: "reject"
+      })
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(200);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty(
+          "message",
+          "You reject the invitation"
         );
         done();
       })

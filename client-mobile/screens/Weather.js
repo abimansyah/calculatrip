@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, Picker, Image } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons, Feather, FontAwesome5 } from '@expo/vector-icons';
+import { Ionicons, Feather, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { styles } from '../styles/index'
 import { useState } from "react";
 
@@ -10,8 +10,11 @@ export default function Weather() {
     <SafeAreaView style={styles.mainContainer, { height: "100%" }}>
       <View style={weatherStyle.container}>
         <Text style={weatherStyle.todayText}>Today</Text>
+
+
         <View style={weatherStyle.cityContainer}>
-          <Picker
+
+          {/* <Picker
             selectedValue={city}
             onValueChange={itemValue => setCity(itemValue)}
             style={weatherStyle.cityPicker}
@@ -19,9 +22,12 @@ export default function Weather() {
           >
             <Picker.Item label="Jakarta" value="Jakarta" />
             <Picker.Item label="United State Kemana aja bo leh" value="United State Kemana aja bo leh" />
-          </Picker>
-          <Text style={weatherStyle.city}>{city} <Ionicons name="chevron-down" size={24} color="white" /></Text>
+          </Picker> */}
+          <Text style={weatherStyle.city}>{city} <Ionicons name="search" size={30} color="white" /></Text>
         </View>
+
+
+
         <Ionicons name={weatherSymbol("main")} size={150} color="white" style={{marginVertical: 30}} />
         <Text style={weatherStyle.weatherStatus}>Partly Cloudy</Text>
         <Text style={weatherStyle.weatherDegree}>32°</Text>
