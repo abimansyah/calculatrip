@@ -27,7 +27,7 @@ export default function BottomTab({ data }) {
       justifyContent: 'space-around',
       alignItems: 'center'
     }}>
-      <TouchableOpacity
+      <TouchableOpacity style={{padding: 10}}
         onPress={() => nav.navigate('Trip', {
           tripId: data
         })}
@@ -35,7 +35,7 @@ export default function BottomTab({ data }) {
         <Ionicons name={tripHome} size={21} color="white" />
       </TouchableOpacity>
 
-      <TouchableOpacity
+      <TouchableOpacity style={{padding: 10}}
         onPress={() => nav.navigate('Companion', {
           tripId: data
         })}
@@ -43,9 +43,11 @@ export default function BottomTab({ data }) {
         <Ionicons name={companion} size={21} color="white" />
       </TouchableOpacity>
 
-      <Ionicons name={weather} size={21} color="white" />
+      <TouchableOpacity style={{padding: 10}}>
+        <Ionicons name={weather} size={21} color="white" />
+      </TouchableOpacity>
 
-      <TouchableOpacity
+      <TouchableOpacity style={{padding: 10}}
         onPress={() => nav.navigate('Saving', {
           tripId: data
         })}
@@ -53,7 +55,7 @@ export default function BottomTab({ data }) {
         <Ionicons name={saving} size={21} color="white" />
       </TouchableOpacity>
 
-      <TouchableOpacity
+      <TouchableOpacity style={{padding: 10}}
         onPress={() => nav.navigate('Expenses', {
           tripId: data
         })}

@@ -3,7 +3,7 @@
     "email": "user@gmail.com",
     "password": "1234567",
     "username": "userone",
-    "avatar": "https://robohash.org/dolordistinctioneque.png?size=150x100&set=set1",
+    "avatar": "airplane",
     "phoneNumber": "7692701300",
     "birthDate": "01-01-2001"
   },
@@ -11,7 +11,7 @@
     "email": "usertwo@gmail.com",
     "password": "1234567",
     "username": "userTwo",
-    "avatar": "https://robohash.org/fugailloatque.png?size=120x100&set=set1",
+    "avatar": "airplane",
     "phoneNumber": "8229611072",
     "birthDate": "01-01-2001"
   },
@@ -19,7 +19,7 @@
     "email": "userthree@gmail.com",
     "password": "1234567",
     "username": "userThree",
-    "avatar": "https://robohash.org/quorerumnemo.png?size=110x100&set=set1",
+    "avatar": "airplane",
     "phoneNumber": "8657249517",
     "birthDate": "01-01-2001"
   },
@@ -27,7 +27,7 @@
     "email": "userfour@gmail.com",
     "password": "1234567",
     "username": "userFour",
-    "avatar": "https://robohash.org/quorerumnemo.png?size=160x100&set=set1",
+    "avatar": "airplane",
     "phoneNumber": "8657249580",
     "birthDate": "01-01-2001"
   },
@@ -35,7 +35,7 @@
     "email": "userfive@slashdot.org",
     "password": "1234567",
     "username": "userFive",
-    "avatar": "https://robohash.org/quorerumnemo.png?size=170x100&set=set1",
+    "avatar": "airplane",
     "phoneNumber": "8657249540",
     "birthDate": "01-01-2001"
   }
