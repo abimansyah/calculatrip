@@ -15,11 +15,46 @@ import { server } from '../globalvar';
 import BottomTab from "../components/BottomTabs";
 
 export default function Weather({ route }) {
-  const { tripId } = route.params
+  const  tripId  = route.params?.tripId
   
-  const [city, setCity] = useState("Jakarta")
+  const [city, setCity] = useState({
+    "weather": [
+      {
+        "id": 804,
+        "main": "Clouds",
+        "description": "overcast clouds",
+        "icon": "04n"
+      }
+    ],
+
+    "main": {
+      "temp": 27.08,
+      "feels_like": 30.02,
+      "temp_min": 24.13,
+      "temp_max": 27.27,
+      "pressure": 1011,
+      "humidity": 81,
+      "sea_level": 1011,
+      "grnd_level": 1009
+    },
+
+    "wind": {
+      "speed": 2.27,
+      "deg": 220,
+      "gust": 3.73
+    },
+    "sys": {
+      "type": 2,
+      "id": 2033644,
+      "country": "ID",
+      "sunrise": 1645570706,
+      "sunset": 1645614839
+    },
+    "name": "Jakarta",
+  }
+  )
   const [modalVisible, setModalVisible] = useState(false);
-  const [text, setText] = useState("");
+  const [text, setText] = useState("Jakarta");
   const [token, setToken] = useState('')
 
   const loginCheck = async () => {
@@ -42,6 +77,7 @@ export default function Weather({ route }) {
           access_token: token
         }, 
       })
+      setCity(response.data)
       setText('')
       console.log(response.data);
     } catch (err) {
@@ -53,13 +89,18 @@ export default function Weather({ route }) {
     loginCheck()
   }, [])
 
+  useEffect(() => {
+    searchCity()
+  }, [token])
+
   return(
     <SafeAreaView style={styles.mainContainer, { height: "100%" }}>
       <View style={weatherStyle.container}>
         <Text style={weatherStyle.todayText}>Today</Text>
 
-
-        <View style={weatherStyle.cityContainer}>
+        <TouchableOpacity 
+        onPress={() => setModalVisible(!modalVisible)} 
+        style={weatherStyle.cityContainer}>
 
           {/* <Picker
             selectedValue={city}
@@ -70,15 +111,15 @@ export default function Weather({ route }) {
             <Picker.Item label="Jakarta" value="Jakarta" />
             <Picker.Item label="United State Kemana aja bo leh" value="United State Kemana aja bo leh" />
           </Picker> */}
-          <Text style={weatherStyle.city}>{city} 
+          <Text style={weatherStyle.city}>{city.name}, {city.sys.country} &nbsp; 
             <Ionicons 
               name="search" 
               size={30} 
               color="white"
-              onPress={() => setModalVisible(!modalVisible)} 
+              
             />
           </Text>
-        </View>
+        </TouchableOpacity>
 
 
         {/* MODAL */}
@@ -136,24 +177,24 @@ export default function Weather({ route }) {
 
 
 
-        <Ionicons name={weatherSymbol("main")} size={150} color="white" style={{marginVertical: 30}} />
-        <Text style={weatherStyle.weatherStatus}>Partly Cloudy</Text>
-        <Text style={weatherStyle.weatherDegree}>32°</Text>
+        <Ionicons name={weatherSymbol(city?.weather[0].main)} size={150} color="white" style={{marginVertical: 30}} />
+        <Text style={weatherStyle.weatherStatus}>{city?.weather[0].description}</Text>
+        <Text style={weatherStyle.weatherDegree}>{city.main.temp}°</Text>
         <View style={weatherStyle.detailContainer}>
           <View style={{alignItems: "center"}}>
             <Text style={{color: "white"}}>Wind</Text>
             <Feather name="wind" size={24} color="white" style={{marginVertical: 10}} />
-            <Text style={weatherStyle.detailText}>3.1 mph</Text>
+            <Text style={weatherStyle.detailText}>{city.wind.speed} mph</Text>
           </View>
           <View style={{alignItems: "center"}}>
             <Text style={{color: "white"}}>Humidity</Text>
             <Ionicons name="water" size={24} color="#72c1f2" style={{marginVertical: 10}} />
-            <Text style={weatherStyle.detailText}>70%</Text>
+            <Text style={weatherStyle.detailText}>{city.main.humidity}%</Text>
           </View>
           <View style={{alignItems: "center"}}>
             <Text style={{color: "white"}}>Feeling</Text>
             <FontAwesome5 name="temperature-low" size={24} color="white" style={{marginVertical: 10}} />
-            <Text style={weatherStyle.detailText}>33°C</Text>
+            <Text style={weatherStyle.detailText}>{city.main.feels_like}°C</Text>
           </View>
         </View>
       <BottomTab data={tripId} />
