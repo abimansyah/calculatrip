@@ -14,7 +14,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
-import Load from "react-native-loading-gif";
+// import Load from "react-native-loading-gif";
 import { styles } from '../styles';
 import logo from '../assets/logo.png'
 

@@ -40,7 +40,7 @@ export default function Home({ navigation }) {
 
   useEffect(() => {
     if (token) {
-      axios.get('http://d65d-103-78-115-90.ngrok.io/trips', {
+      axios.get('https://efdf-125-165-106-74.ngrok.io/trips', {
         headers: {
           access_token: token
         }
