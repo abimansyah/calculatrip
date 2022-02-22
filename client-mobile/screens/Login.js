@@ -14,9 +14,12 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+
 // import Load from "react-native-loading-gif";
+
 import { styles } from '../styles';
 import logo from '../assets/logo.png'
+import { server } from '../globalvar';
 
 
 export default function Login({ navigation }) {
@@ -28,7 +31,7 @@ export default function Login({ navigation }) {
   // send data to server
   const doLogin = async (req, res) => {
     try {
-      const resp = await axios.post('http://d65d-103-78-115-90.ngrok.io/users/login', {
+      const resp = await axios.post(`${server}/users/login`, {
         loginInput: emailUsername,
         password: password
       })

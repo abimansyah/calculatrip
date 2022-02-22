@@ -10,11 +10,11 @@ const {
 
 let pdf = require("pdf-creator-node");
 let fs = require("fs");
+let html = fs.readFileSync("./db/report.html", "utf8");
 
 class reportController {
   static async getReport(req, res, next) {
     try {
-      let html = fs.readFileSync("./db/report.html", "utf8");
 
       let options = {
         format: "A3",
@@ -39,12 +39,6 @@ class reportController {
 
       const { tripId } = req.params;
 
-      let findTrip = await Trip.findByPk(tripId)
-
-      if(!findTrip){
-        throw {name:"TripNotFound"}
-      }
-
       let trip = await Trip.findByPk(tripId, {
         include: [
           {
@@ -62,8 +56,6 @@ class reportController {
 
       let savings = trip.dataValues.Savings.map((e,index)=>{
         let saving = e
-        
-        
         saving.dataValues.savingDate = new Date(saving.dataValues.savingDate).toISOString().split('T')[0]
         saving.dataValues.id = index+1
         return saving
@@ -97,7 +89,7 @@ class reportController {
         totalExpenses += expensesAmount[i]
       }
 
-
+      let tripNameUrl = trip.name.toLowerCase().split(" ").join("-")
 
       let document = {
         html: html,
@@ -109,17 +101,20 @@ class reportController {
           totalSavings:totalSavings,
           totalExpenses:totalExpenses
         },
-        path: "./trip-report.pdf",
+
+        //kasih id trip di trip
+        path: `./reportPdf/${tripNameUrl}-trip-report-${trip.id}.pdf`,
         type: "",
       };
 
       await pdf.create(document, options);
 
+      let baseUrl = "http://localhost:3000"
       res.status(200).json({
-        message: "Your trip report has been created"
+        message: "Your trip report has been created",
+        url:`${baseUrl}/${tripNameUrl}-trip-report-${trip.id}.pdf`
       });
     } catch (err) {
-      // console.log(err);
       next(err)
     }
   }

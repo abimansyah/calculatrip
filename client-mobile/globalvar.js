@@ -1,0 +1,1 @@
+export const server = "http://f408-103-78-115-90.ngrok.io"

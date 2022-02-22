@@ -33,6 +33,7 @@ import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import BottomTab from '../components/BottomTabs';
+import { server } from '../globalvar';
 
 
 
@@ -117,7 +118,9 @@ export default function Trip({ route }) {
 
   useEffect(() => {
     if (token) {
-      axios.get(`${url}/trips/${tripId}`, {
+
+      axios.get(`${server}/trips/${tripId}`, {
+
         headers: {
           access_token: token
         }
@@ -135,7 +138,9 @@ export default function Trip({ route }) {
   useEffect(() => {
     if (token) {
       console.log(trip.id);
-      axios.get(`${url}/savings/trip/${trip.id}`, {
+
+      axios.get(`${server}/savings/trip/${trip.id}`, {
+
         headers: {
           access_token: token
         }
@@ -153,7 +158,9 @@ export default function Trip({ route }) {
   useEffect(() => {
     if (token) {
       console.log(trip.id);
-      axios.get(`${url}/expenses/trip/${trip.id}`, {
+
+      axios.get(`${server}/expenses/trip/${trip.id}`, {
+
         headers: {
           access_token: token
         }
