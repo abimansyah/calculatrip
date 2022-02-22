@@ -340,17 +340,7 @@ export default expenseCategory = ({ data }) => {
           </TouchableOpacity>
         </View>
         {/* row5 */}
-
-
-
-
       </View>
-
-
-
-
-
-
     </View>
   )
 }
