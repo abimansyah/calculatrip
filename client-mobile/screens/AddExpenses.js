@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, TextInput, Image, Picker, KeyboardAvoidingView, ScrollView } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from '@expo/vector-icons';
 import DateField from 'react-native-datefield';
 import { styles } from "../styles"
 import logo from '../assets/logo.png'
+import axios from 'axios';
+import { server } from '../globalvar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function AddExpenses({ route }) {
+  const nav = useNavigation()
   const { categoryId, tripId } = route.params
   const [amount, setAmount] = useState("0")
   const [name, setName] = useState("")
   const [expenseDate, setExpenseDate] = useState("12/25/2021")
   const [description, setDescription] = useState("")
-  const [paymentMethodId, setPaymentMethodId] = useState("")
+  const [paymentMethodId, setPaymentMethodId] = useState(1)
   const [focused, setFocused] = useState('')
+  const [tripImage, setTripImage] = useState(null);
+  const [isFile, setIsFile] = useState(false)
+
+
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   function formatDate(value) {
     let newDate = []
@@ -26,7 +36,68 @@ export default function AddExpenses({ route }) {
     setExpenseDate(newDate)
   }
 
-  console.log(amount, name, expenseDate, paymentMethodId, description, categoryId, tripId);
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setIsFile(true)
+      setTripImage(result.uri);
+    }
+  };
+
+  useEffect(async () => {
+    try {
+      const token = await AsyncStorage.getItem('access_token')
+      console.log(tripImage, '---------');
+      const resp = await axios.post(`${server}/ocr`, {
+        imageFile: tripImage
+      }, {
+        headers: {
+          access_token: token
+        }
+      })
+      console.log(resp.data, '=======');
+    } catch (err) {
+      console.log(err);
+    }
+  }, [tripImage])
+
+  const value = {
+    name: name,
+    amount: amount,
+    expenseCategoryId: categoryId,
+    paymentMethodId: paymentMethodId,
+    expenseDate: expenseDate,
+    description: description
+  }
+
+  const addNewExpense = async () => {
+    try {
+      const token = await AsyncStorage.getItem('access_token')
+      const resp = await axios.post(`${server}/expenses/${tripId}`, value, {
+        headers: {
+          access_token: token
+        }
+      })
+      console.log(typeof resp.data);
+      if (typeof resp.data === 'object') {
+        nav.navigate('Expenses', {
+          tripId: tripId
+        })
+      };
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  console.log(paymentMethodId);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -83,15 +154,17 @@ export default function AddExpenses({ route }) {
               <View style={editProfileStyle.inputDate}>
                 <Picker
                   selectedValue={paymentMethodId}
-                  onValueChange={itemValue => setPaymentMethodId(itemValue)}
+                  onValueChange={(itemValue) => setPaymentMethodId(itemValue)}
                 >
-                  <Picker.Item label="Cash" value="cash" />
-                  <Picker.Item label="Credit" value="credit" />
+                  <Picker.Item label="Cash" value={1} />
+                  <Picker.Item label="Credit" value={2} />
                 </Picker>
               </View>
               <View style={editProfileStyle.descriptionContainer}>
                 <Text>Expenses Description</Text>
-                <TouchableOpacity style={editProfileStyle.receiptButton}>
+                <TouchableOpacity style={editProfileStyle.receiptButton}
+                onPress={() => pickImage()}
+                >
                   <Text style={editProfileStyle.receiptText}>Upload Receipt</Text>
                 </TouchableOpacity>
               </View>
@@ -105,7 +178,9 @@ export default function AddExpenses({ route }) {
                 onChangeText={setDescription}
               />
               <View style={editProfileStyle.checkContainer}>
-                <TouchableOpacity style={{ alignSelf: 'flex-start' }}>
+                <TouchableOpacity style={{ alignSelf: 'flex-start' }}
+                  onPress={() => addNewExpense()}
+                >
                   <Ionicons name="checkmark" size={24} color="#0378a6" style={editProfileStyle.checkButton} />
                 </TouchableOpacity>
               </View>
