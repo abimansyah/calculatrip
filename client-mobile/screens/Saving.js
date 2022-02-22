@@ -11,6 +11,7 @@ import BottomTab from '../components/BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
+import moment from 'moment'
 
 export default function Saving({ route }) {
   const { tripId } = route.params
