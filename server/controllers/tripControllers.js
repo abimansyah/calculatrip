@@ -44,7 +44,7 @@ class TripController {
       await UserTrip.create({
         UserId: req.user.id,
         TripId: newTrip.id,
-        status: "active",
+        status: "accept",
         role: "owner",
       }, {
         transaction: t

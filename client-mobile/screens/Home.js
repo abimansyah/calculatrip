@@ -14,10 +14,10 @@ import logo from '../assets/logo.png'
 import { styles } from '../styles/index'
 import HomeProfile from '../components/HomeProfile';
 import HomeCard from '../components/HomeCard';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useIsFocused } from "@react-navigation/native";
+import { useFocusEffect } from '@react-navigation/native';
 import { server } from '../globalvar';
 
 
@@ -25,8 +25,7 @@ export default function Home({ navigation }) {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true)
   const [notif, setNotif] = useState(false)
-  const isFocused = useIsFocused();
-  useEffect(async() => {
+  const fetchData = async () => {
     try {
       const token = await AsyncStorage.getItem('access_token')
       const res = await axios.get(`${server}/trips`, {
@@ -54,7 +53,11 @@ export default function Home({ navigation }) {
         alert(err.response.data.message)
       }
     }
-  }, [isFocused])
+  }
+  useFocusEffect(useCallback(() => {
+    fetchData()
+    return () => true
+  }, []))
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
@@ -78,7 +81,7 @@ export default function Home({ navigation }) {
               data={trips}
               renderItem={({ item }) => (<HomeCard data={item} />)}
               keyExtractor={(item) => `Trips${item.id}`}
-              ListHeaderComponent={<HomeProfile isFocused={isFocused} />}
+              ListHeaderComponent={<HomeProfile />}
               contentContainerStyle={{ paddingBottom: 170 }}
             />
           </View>
