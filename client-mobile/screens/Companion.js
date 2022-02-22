@@ -79,7 +79,7 @@ export default function Companion({ route }) {
       <BottomSheet
         ref={bs}
         snapPoints={[320, 0]}
-        renderContent={() => { return (<InviteCompanionModal />) }}
+        renderContent={() => { return (<InviteCompanionModal data={tripId}/>) }}
         renderHeader={headerModal}
         initialSnap={1}
         callbackNode={fall}
