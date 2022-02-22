@@ -1,6 +1,7 @@
 const {
     User,
-    UserTrip
+    UserTrip,
+    Trip
 } = require('../models/index')
 const {
     comparePassword
@@ -185,6 +186,30 @@ class UserController {
                 where: {
                     UserId: req.user.id,
                     status: "pending"
+                },
+                include: [{
+                    model: Trip,
+                    include: [{
+                        model: UserTrip,
+                        where: {
+                            role: "owner"
+                        },
+                        include: [{
+                            model: User,
+                            attributes: {
+                                exclude: ["createdAt", "updatedAt", "password"]
+                            }
+                        }],
+                        attributes: {
+                            exclude: ["createdAt", "updatedAt", "UserId", "TripId"]
+                        }
+                    }],
+                    attributes: {
+                        exclude: ["createdAt", "updatedAt", "UserId", "TripId"]
+                    }
+                }],
+                attributes: {
+                    exclude: ["createdAt", "updatedAt", "UserId", "TripId"]
                 }
             })
             res.status(200).json(findUserTrip)
