@@ -1,10 +1,14 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ImageBackground, StyleSheet, TouchableOpacity, View, Modal, } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function TripImage({ data }) {
   const navigation = useNavigation();
+
+
   return (
     <ImageBackground style={styles.imageDetail} source={{
       uri: data,
@@ -21,7 +25,9 @@ export default function TripImage({ data }) {
             }}>
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity style={styles.iconButton}
+ 
+          >
             <Ionicons name="ellipsis-vertical" size={24} color="white" />
           </TouchableOpacity>
         </View>
