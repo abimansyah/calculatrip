@@ -10,6 +10,7 @@ import SavingCard from '../components/SavingCard';
 import BottomTab from '../components/BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { server } from '../globalvar';
 
 export default function Saving({ route }) {
   const { tripId } = route.params
@@ -38,7 +39,7 @@ export default function Saving({ route }) {
 
   useEffect(() => {
     if (token) {
-      axios.get(`https://efdf-125-165-106-74.ngrok.io/savings/trip/${tripId}`, {
+      axios.get(`${server}/savings/trip/${tripId}`, {
         headers: {
           access_token: token
         }

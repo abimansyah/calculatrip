@@ -17,6 +17,7 @@ import HomeCard from '../components/HomeCard';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { server } from '../globalvar';
 
 
 export default function Home({ navigation }) {
@@ -40,7 +41,7 @@ export default function Home({ navigation }) {
 
   useEffect(() => {
     if (token) {
-      axios.get('http://d65d-103-78-115-90.ngrok.io/trips', {
+      axios.get(`${server}/trips`, {
         headers: {
           access_token: token
         }

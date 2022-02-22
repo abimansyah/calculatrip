@@ -10,6 +10,7 @@ import CompanionCard from '../components/CompanionCard';
 import BottomTab from '../components/BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { server } from '../globalvar';
 
 export default function Companion({ route }) {
   const { tripId } = route.params;
@@ -51,7 +52,7 @@ export default function Companion({ route }) {
 
   useEffect(() => {
     if (token) {
-      axios.get(`https://efdf-125-165-106-74.ngrok.io/trips/${tripId}`, {
+      axios.get(`${server}/trips/${tripId}`, {
         headers: {
           access_token: token
         }
