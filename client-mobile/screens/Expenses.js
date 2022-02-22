@@ -70,8 +70,8 @@ console.log(tripId, 'expense-----------');
     <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <BottomSheet
         ref={bs}
-        snapPoints={[550, 0]}
-        renderContent={() => { return (<ExpenseCategoryModal/>) }}
+        snapPoints={[680, 0]}
+        renderContent={() => { return (<ExpenseCategoryModal data={tripId}/>) }}
         renderHeader={headerModal}
         initialSnap={1}
         callbackNode={fall}
