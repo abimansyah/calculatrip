@@ -1,11 +1,50 @@
-import { StyleSheet, Text, View, Picker, Image } from "react-native";
+import { StyleSheet, Text, View, Picker, Image, Modal, TouchableOpacity, TextInput } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Ionicons, Feather, FontAwesome5, FontAwesome } from '@expo/vector-icons';
+import { Ionicons, Feather, FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons';
 import { styles } from '../styles/index'
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { server } from '../globalvar';
 
 export default function Weather() {
+
   const [city, setCity] = useState("Jakarta")
+  const [modalVisible, setModalVisible] = useState(false);
+  const [text, setText] = useState("");
+  const [token, setToken] = useState('')
+
+  const loginCheck = async () => {
+    try {
+      const getAccessToken = await AsyncStorage.getItem('access_token')
+      if (getAccessToken !== null) {
+        setToken(getAccessToken);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+
+  const searchCity = async () => {
+    try {
+      let response = await axios.post(`${server}/weather/city`, {        
+        city:text},{  
+        headers: {
+          access_token: token
+        }, 
+      })
+      setText('')
+      console.log(response.data);
+    } catch (err) {
+      console.log(err.message);
+    }
+  }
+
+  useEffect(() => {
+    loginCheck()
+  }, [])
+
   return(
     <SafeAreaView style={styles.mainContainer, { height: "100%" }}>
       <View style={weatherStyle.container}>
@@ -23,8 +62,69 @@ export default function Weather() {
             <Picker.Item label="Jakarta" value="Jakarta" />
             <Picker.Item label="United State Kemana aja bo leh" value="United State Kemana aja bo leh" />
           </Picker> */}
-          <Text style={weatherStyle.city}>{city} <Ionicons name="search" size={30} color="white" /></Text>
+          <Text style={weatherStyle.city}>{city} 
+            <Ionicons 
+              name="search" 
+              size={30} 
+              color="white"
+              onPress={() => setModalVisible(!modalVisible)} 
+            />
+          </Text>
         </View>
+
+
+        {/* MODAL */}
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={weatherStyle.centeredView}>
+            <View style={weatherStyle.modalView}>
+
+              {/* text input */}
+              <TextInput
+                placeholder="Search city"
+                style={weatherStyle.inputBar}
+                onChangeText={setText}
+                value={text}
+              />
+
+              {/* search city */}
+              <TouchableOpacity
+              onPress={() => {
+                setModalVisible(!modalVisible)
+                searchCity()
+              }}
+                style={weatherStyle.modalContainer}>
+                <View style={{ paddingHorizontal: 10 }}>
+                  <Ionicons name="search" size={24} color='#0487d9' />
+                </View>
+                <View style={{ paddingHorizontal: 10 }}>
+                  <Text style={weatherStyle.modalText}>Search</Text>
+                </View>
+              </TouchableOpacity>
+
+              {/* close */}
+              <TouchableOpacity 
+                style={weatherStyle.modalContainer}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <View style={{ paddingHorizontal: 10 }}>
+                  <Ionicons name="close" size={24} color="red" />
+                </View>
+                <View style={{ paddingHorizontal: 10 }}>
+                  <Text style={weatherStyle.modalText}>Cancel</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
+        {/* MODAL */}
 
 
 
@@ -54,6 +154,56 @@ export default function Weather() {
 }
 
 const weatherStyle = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor:'rgba(0,0,0,0.5)'
+  },
+  modalView: {
+    margin: 0,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5
+  },
+  modalContainer: {
+    // backgroundColor: "orange", 
+    width: 300, 
+    height: 50, 
+    display: "flex", 
+    flexDirection: "row", 
+    alignItems: "center"
+  },
+  modalText: {
+    marginLeft: 40, 
+    fontSize: 15
+  },
+  inputBar: {
+    height: 40,
+    margin: 12,
+    borderWidth: 1,
+    paddingHorizontal: 130,
+    width: "100%",
+    borderRadius: 6,
+    backgroundColor: "white",
+    borderColor: "#E6E6E6",
+  },
+
+
+
+
+
+
+
   container: {
     width: "100%",
     height: "100%",
