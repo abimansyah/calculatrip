@@ -203,3 +203,25 @@ _Response (404 - Not Found)_
 ```
 
 
+
+## Global Error
+
+_Response (401 - Unauthorized)_
+
+```json
+{
+  "message": "Invalid token"
+}
+OR
+{
+  "message": "Forbiden to Access" 
+}
+```
+
+_Response (500 - Internal Server Error)_
+
+```json
+{
+  "message": "Internal server error"
+}
+```
