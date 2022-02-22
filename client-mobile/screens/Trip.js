@@ -37,23 +37,22 @@ import { useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Feather } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';  
+import { AntDesign } from '@expo/vector-icons';
 import BottomTab from '../components/BottomTabs';
 import { server } from '../globalvar';
-
 
 
 const screenWidth = Dimensions.get("window").width;
 const data = [
   {
-    name: "trans",
+    name: "sama",
     amount: 12000,
     color: "#023859",
     legendFontColor: "#7F7F7F",
     legendFontSize: 15
   },
   {
-    name: "trans",
+    name: "sama",
     amount: 32000,
     color: "#036099",
     legendFontColor: "#7F7F7F",
@@ -112,7 +111,66 @@ export default function Trip({ route }) {
   const [expense, setExpense] = useState('')
   const [expenseData, setExpenseData] = useState([])
   const [trip, setTrip] = useState({})
+  const [cartData, setCartData] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
+
+
+  const newCartData = (newData) => {
+    const temp = []
+    newData.forEach(el => {
+      if (temp.length === 0) {
+        temp.push({
+          name: el.ExpenseCategory.name,
+          amount: el.amount
+        })
+      } else {
+        // if (temp.length <= 5) {
+        //   const findone = temp.findIndex(elm => elm.name === el.ExpenseCategory.name);
+        //   if (findone >= 0) {
+        //     temp[findone].amount += el.amount
+        //   } else {
+        //     temp.push({
+        //       name: el.ExpenseCategory.name,
+        //       amount: el.amount
+        //     })
+        //   }
+        // } else {
+        //   if (!temp[5]) {
+        //     temp.push({
+        //       name: 'others',
+        //       amount: el.amount
+        //     })
+        //   } else {
+        //     temp[5].amount += el.amount
+        //   }
+        // }
+        const findone = temp.findIndex(elm => elm.name === el.ExpenseCategory.name);
+        if (findone >= 0) {
+          temp[findone].amount += el.amount
+        } else {
+          if (temp.length <= 5) {
+            temp.push({
+              name: el.ExpenseCategory.name,
+              amount: el.amount
+            })
+          } else {
+            if (!temp[5]) {
+              temp.push({
+                name: 'others',
+                amount: el.amount
+              })
+            } else {
+              temp[5].amount += el.amount
+            }
+          }
+        }
+      }
+      console.log(temp, '-----------------------');
+    });
+    setCartData(temp)
+    //handlechart
+  }
+
 
   const loginCheck = async () => {
     try {
@@ -173,7 +231,7 @@ export default function Trip({ route }) {
   // saving
   useEffect(() => {
     if (token) {
-      console.log(trip.id);
+
 
       axios.get(`${server}/savings/trip/${trip.id}`, {
 
@@ -193,7 +251,6 @@ export default function Trip({ route }) {
   // expense
   useEffect(() => {
     if (token) {
-      console.log(trip.id);
 
       axios.get(`${server}/expenses/trip/${trip.id}`, {
 
@@ -202,8 +259,8 @@ export default function Trip({ route }) {
         }
       })
         .then(res => {
-          // console.log(res.data);
           setExpense(res.data)
+          newCartData(res.data)
         })
         .catch(err => {
           console.log(err)
@@ -216,10 +273,12 @@ export default function Trip({ route }) {
   }, [])
 
 
+
   const totalSaving = saving.length > 0 ? `Rp. ${saving.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "Rp 0"
 
   const totalExpenses = expense.length > 0 ? `Rp. ${expense.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "Rp 0"
 
+  console.log(cartData);
   return (
     <>
       <ScrollView>
@@ -236,9 +295,9 @@ export default function Trip({ route }) {
                     }}>
                     <Ionicons name="arrow-back" size={24} color="white" />
                   </TouchableOpacity>
-                  <TouchableOpacity 
-                  onPress={() => setModalVisible(!modalVisible)}
-                  style={tripStyle.iconButton}>
+                  <TouchableOpacity
+                    onPress={() => setModalVisible(!modalVisible)}
+                    style={tripStyle.iconButton}>
                     <Ionicons name="ellipsis-vertical" size={24} color="white" />
                   </TouchableOpacity>
                 </View>
@@ -268,7 +327,7 @@ export default function Trip({ route }) {
                       navigation.navigate('EditTrip', {
                         tripId: trip.id
                       })
-                      
+
                     }}
                     style={tripStyle.modalContainer}>
                     <View style={{ paddingHorizontal: 10 }}>
@@ -280,12 +339,12 @@ export default function Trip({ route }) {
                   </TouchableOpacity>
 
                   {/* download report */}
-                  <TouchableOpacity 
-                  onPress={() => {
-                    setModalVisible(!modalVisible)
-                    downloadReport()
-                  }}
-                  style={tripStyle.modalContainer}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(!modalVisible)
+                      downloadReport()
+                    }}
+                    style={tripStyle.modalContainer}>
                     <View style={{ paddingHorizontal: 10 }}>
                       <Feather name="download" size={24} color='#0487d9' />
                     </View>
@@ -302,7 +361,7 @@ export default function Trip({ route }) {
                     }}
                   >
                     <View style={{ paddingHorizontal: 10 }}>
-                    <AntDesign name="delete" size={24} color="black" />
+                      <AntDesign name="delete" size={24} color="black" />
                     </View>
                     <View style={{ paddingHorizontal: 10 }}>
                       <Text style={tripStyle.modalText}>Delete</Text>
@@ -329,7 +388,7 @@ export default function Trip({ route }) {
 
 
             <View style={tripStyle.titleContainer}>
-              
+
               <Text style={tripStyle.titleText}>{trip.name}</Text>
               <Text>{`${moment(new Date(trip.startDate)).format('DD MMMM YYYY')} - ${moment(new Date(trip.endDate)).format('DD MMMM YYYY')}`}</Text>
             </View>
@@ -388,7 +447,7 @@ const tripStyle = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor:'rgba(0,0,0,0.5)'
+    backgroundColor: 'rgba(0,0,0,0.5)'
   },
   modalView: {
     margin: 0,
@@ -407,14 +466,14 @@ const tripStyle = StyleSheet.create({
   },
   modalContainer: {
     // backgroundColor: "orange", 
-    width: 300, 
-    height: 50, 
-    display: "flex", 
-    flexDirection: "row", 
+    width: 300,
+    height: 50,
+    display: "flex",
+    flexDirection: "row",
     alignItems: "center"
   },
   modalText: {
-    marginLeft: 40, 
+    marginLeft: 40,
     fontSize: 15
   },
 

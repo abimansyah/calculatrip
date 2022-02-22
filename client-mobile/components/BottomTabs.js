@@ -43,7 +43,11 @@ export default function BottomTab({ data }) {
         <Ionicons name={companion} size={21} color="white" />
       </TouchableOpacity>
 
-      <TouchableOpacity style={{padding: 10}}>
+      <TouchableOpacity style={{padding: 10}}
+      onPress={() => nav.navigate('Weather', {
+          tripId: data
+        })}
+      >
         <Ionicons name={weather} size={21} color="white" />
       </TouchableOpacity>
 
