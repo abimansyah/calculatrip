@@ -40,14 +40,14 @@ import { server } from '../globalvar';
 const screenWidth = Dimensions.get("window").width;
 const data = [
   {
-    name: "Seoul",
+    name: "trans",
     amount: 12000,
     color: "#023859",
     legendFontColor: "#7F7F7F",
     legendFontSize: 15
   },
   {
-    name: "Toronto",
+    name: "trans",
     amount: 32000,
     color: "#036099",
     legendFontColor: "#7F7F7F",
@@ -76,9 +76,9 @@ const data = [
   },
   {
     name: "mantapi",
-    amount: 12000,
-    color: "#0487D9",
-    legendFontColor: "#7F7F7F",
+    amount: 120000,
+    color: "#0417D9",
+    legendFontColor: "#743F2F",
     legendFontSize: 15
   },
 ];
@@ -95,11 +95,13 @@ const chartConfig = {
 };
 
 export default function Trip({ route }) {
+  const url = 'https://efdf-125-165-106-74.ngrok.io'
   const navigation = useNavigation()
   const { tripId } = route.params
   const [token, setToken] = useState('')
   const [saving, setSaving] = useState('')
   const [expense, setExpense] = useState('')
+  const [expenseData, setExpenseData] = useState([])
   const [trip, setTrip] = useState({})
 
   const loginCheck = async () => {
@@ -116,7 +118,9 @@ export default function Trip({ route }) {
 
   useEffect(() => {
     if (token) {
+
       axios.get(`${server}/trips/${tripId}`, {
+
         headers: {
           access_token: token
         }
@@ -134,7 +138,9 @@ export default function Trip({ route }) {
   useEffect(() => {
     if (token) {
       console.log(trip.id);
+
       axios.get(`${server}/savings/trip/${trip.id}`, {
+
         headers: {
           access_token: token
         }
@@ -152,7 +158,9 @@ export default function Trip({ route }) {
   useEffect(() => {
     if (token) {
       console.log(trip.id);
+
       axios.get(`${server}/expenses/trip/${trip.id}`, {
+
         headers: {
           access_token: token
         }
@@ -170,6 +178,8 @@ export default function Trip({ route }) {
   useEffect(() => {
     loginCheck()
   }, [])
+
+  
 
   const totalSaving = saving.length > 0 ? `Rp. ${saving.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "Rp 0"
 
