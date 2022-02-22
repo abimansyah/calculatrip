@@ -8,15 +8,16 @@ import BottomTab from "../components/BottomTabs";
 export default function Weather({ route }) {
   const { tripId } = route.params
   const [city, setCity] = useState("Jakarta")
-  return(
-    <SafeAreaView style={styles.mainContainer, { height: "100%" }}>
-      <View style={weatherStyle.container}>
-        <Text style={weatherStyle.todayText}>Today</Text>
+  return (
+    <SafeAreaView style={styles.screenSize}>
+      <View style={styles.mainContainer, { height: "100%" }}>
+        <View style={weatherStyle.container}>
+          <Text style={weatherStyle.todayText}>Today</Text>
 
 
-        <View style={weatherStyle.cityContainer}>
+          <View style={weatherStyle.cityContainer}>
 
-          {/* <Picker
+            {/* <Picker
             selectedValue={city}
             onValueChange={itemValue => setCity(itemValue)}
             style={weatherStyle.cityPicker}
@@ -25,32 +26,33 @@ export default function Weather({ route }) {
             <Picker.Item label="Jakarta" value="Jakarta" />
             <Picker.Item label="United State Kemana aja bo leh" value="United State Kemana aja bo leh" />
           </Picker> */}
-          <Text style={weatherStyle.city}>{city} <Ionicons name="search" size={30} color="white" /></Text>
+            <Text style={weatherStyle.city}>{city} <Ionicons name="search" size={30} color="white" /></Text>
+          </View>
+
+
+
+          <Ionicons name={weatherSymbol("main")} size={150} color="white" style={{ marginVertical: 30 }} />
+          <Text style={weatherStyle.weatherStatus}>Partly Cloudy</Text>
+          <Text style={weatherStyle.weatherDegree}>32°</Text>
+          <View style={weatherStyle.detailContainer}>
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color: "white" }}>Wind</Text>
+              <Feather name="wind" size={24} color="white" style={{ marginVertical: 10 }} />
+              <Text style={weatherStyle.detailText}>3.1 mph</Text>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color: "white" }}>Humidity</Text>
+              <Ionicons name="water" size={24} color="#72c1f2" style={{ marginVertical: 10 }} />
+              <Text style={weatherStyle.detailText}>70%</Text>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color: "white" }}>Feeling</Text>
+              <FontAwesome5 name="temperature-low" size={24} color="white" style={{ marginVertical: 10 }} />
+              <Text style={weatherStyle.detailText}>33°C</Text>
+            </View>
+          </View>
+          <BottomTab data={tripId} />
         </View>
-
-
-
-        <Ionicons name={weatherSymbol("main")} size={150} color="white" style={{marginVertical: 30}} />
-        <Text style={weatherStyle.weatherStatus}>Partly Cloudy</Text>
-        <Text style={weatherStyle.weatherDegree}>32°</Text>
-        <View style={weatherStyle.detailContainer}>
-          <View style={{alignItems: "center"}}>
-            <Text style={{color: "white"}}>Wind</Text>
-            <Feather name="wind" size={24} color="white" style={{marginVertical: 10}} />
-            <Text style={weatherStyle.detailText}>3.1 mph</Text>
-          </View>
-          <View style={{alignItems: "center"}}>
-            <Text style={{color: "white"}}>Humidity</Text>
-            <Ionicons name="water" size={24} color="#72c1f2" style={{marginVertical: 10}} />
-            <Text style={weatherStyle.detailText}>70%</Text>
-          </View>
-          <View style={{alignItems: "center"}}>
-            <Text style={{color: "white"}}>Feeling</Text>
-            <FontAwesome5 name="temperature-low" size={24} color="white" style={{marginVertical: 10}} />
-            <Text style={weatherStyle.detailText}>33°C</Text>
-          </View>
-        </View>
-      <BottomTab data={tripId} />
       </View>
     </SafeAreaView>
   )

@@ -26,7 +26,7 @@ export default function Home({ navigation }) {
   const [loading, setLoading] = useState(true)
   const [notif, setNotif] = useState(false)
   const isFocused = useIsFocused();
-  useEffect(async() => {
+  useEffect(async () => {
     try {
       const token = await AsyncStorage.getItem('access_token')
       const res = await axios.get(`${server}/trips`, {
@@ -45,57 +45,59 @@ export default function Home({ navigation }) {
           access_token: token
         }
       })
-      if(invite.data.length > 0) {
+      if (invite.data.length > 0) {
         setNotif(true)
       }
-    } catch(err) {
+    } catch (err) {
       console.log(err)
-      if(typeof err === "object" && err.response.data.message) {
+      if (typeof err === "object" && err.response.data.message) {
         alert(err.response.data.message)
       }
     }
   }, [isFocused])
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
-        <View style={{position: "relative"}}>
-          <View style={homeStyle.headerContainer}>
-            <Image source={logo} style={homeStyle.headerImage} />
-            <Text style={homeStyle.headerText}>Calculatrip</Text>
-          </View>
-          {/* <Text>{JSON.stringify(trips)}</Text> */}
-          <TouchableOpacity style={{position: "absolute", top: 0, right: 0, padding: 10, margin: 8}}>
-            <View style={{position: "relative"}}>
-              <Ionicons name="notifications" size={32} color="#0378a6" />
-              { notif ? ( <Text style={{position: "absolute", right: 2, top: -2, fontSize: 15, color: "red"}}>⬤</Text> ) : undefined}
+      <SafeAreaView style={styles.screenSize}>
+        <View style={styles.mainContainer}>
+          <View style={{ position: "relative" }}>
+            <View style={homeStyle.headerContainer}>
+              <Image source={logo} style={homeStyle.headerImage} />
+              <Text style={homeStyle.headerText}>Calculatrip</Text>
             </View>
-          </TouchableOpacity>
-        </View>
-        {!loading && trips?.length > 0 ? (
-          <View>
-            <FlatList
-              nestedScrollEnabled={true}
-              data={trips}
-              renderItem={({ item }) => (<HomeCard data={item} />)}
-              keyExtractor={(item) => `Trips${item.id}`}
-              ListHeaderComponent={<HomeProfile isFocused={isFocused} />}
-              contentContainerStyle={{ paddingBottom: 170 }}
-            />
+            {/* <Text>{JSON.stringify(trips)}</Text> */}
+            <TouchableOpacity style={{ position: "absolute", top: 0, right: 0, padding: 10, margin: 8 }}>
+              <View style={{ position: "relative" }}>
+                <Ionicons name="notifications" size={32} color="#0378a6" />
+                {notif ? (<Text style={{ position: "absolute", right: 2, top: -2, fontSize: 15, color: "red" }}>⬤</Text>) : undefined}
+              </View>
+            </TouchableOpacity>
           </View>
-        ) : (
-          <>
-            <HomeProfile />
-            <View style={homeStyle.emptyContainer}>
-              <Text style={{ textAlign: "center" }}>Add your trip to see{"\n"}all of trips data</Text>
+          {!loading && trips?.length > 0 ? (
+            <View>
+              <FlatList
+                nestedScrollEnabled={true}
+                data={trips}
+                renderItem={({ item }) => (<HomeCard data={item} />)}
+                keyExtractor={(item) => `Trips${item.id}`}
+                ListHeaderComponent={<HomeProfile isFocused={isFocused} />}
+                contentContainerStyle={{ paddingBottom: 170 }}
+              />
             </View>
-          </>
-        )}
-        <View style={homeStyle.addContainer}>
-          <TouchableOpacity style={{ alignSelf: 'flex-start' }}
-          onPress={() => navigation.navigate('AddTrip')}
-          >
-            <Text style={homeStyle.addButton}>+</Text>
-          </TouchableOpacity>
+          ) : (
+            <>
+              <HomeProfile />
+              <View style={homeStyle.emptyContainer}>
+                <Text style={{ textAlign: "center" }}>Add your trip to see{"\n"}all of trips data</Text>
+              </View>
+            </>
+          )}
+          <View style={homeStyle.addContainer}>
+            <TouchableOpacity style={{ alignSelf: 'flex-start' }}
+              onPress={() => navigation.navigate('AddTrip')}
+            >
+              <Text style={homeStyle.addButton}>+</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
