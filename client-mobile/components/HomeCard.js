@@ -7,6 +7,7 @@ import {
 import moment from 'moment'
 import { useNavigation } from '@react-navigation/native'; 
 
+
 export default function HomeCard({ data }) {
   const navigation = useNavigation() 
   return (

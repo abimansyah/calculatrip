@@ -1,10 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles"
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { server } from '../globalvar';
+import { useNavigation } from '@react-navigation/native';
 
-export default function DetailExpenses() {
+export default function DetailExpenses({ route }) {
+  const expenseId = route.params.data
+  const tripId = route.params.tripId
+  const nav = useNavigation();
   const [amount, setAmount] = useState("Rp 100.000.000")
   const [name, setName] = useState("Test Expenses Name")
   const [expenseDate, setExpenseDate] = useState("25 December 2021")
@@ -12,11 +19,32 @@ export default function DetailExpenses() {
   const [paymentMethodId, setPaymentMethodId] = useState("Test payment Method id")
   const [imageFile, setImageFile] = useState("https://djuragan.sgp1.digitaloceanspaces.com/djurkam/production/images/lodgings/5c53b6ccd8ae3.png")
 
+  useEffect( async () => {
+    try {
+      const token = await AsyncStorage.getItem('access_token')
+      const resp = await axios.get(`${server}/expenses/${expenseId}`, {
+        headers: {
+          access_token: token
+        }
+      })
+      console.log(resp.data);
+      setName(resp.data.name);
+      setAmount(resp.data.amount);
+      setExpenseDate(resp.data.expenseDate);
+      setDescription(resp.data.description)
+    } catch (err) {
+      console.log(err);
+    }
+
+  }, [])
+
   return(
     <SafeAreaView style={styles.mainContainer}>
       <View style={{ position: 'relative', height: '100%' }}>
         <View style={detailExpensesStyle.headerView}>
-          <TouchableOpacity style={{padding: 15}} >
+          <TouchableOpacity style={{padding: 15}} onPress={() => nav.navigate('Expenses', {
+            tripId
+          })} >
             <Ionicons name="arrow-back" size={30} color="white" />
           </TouchableOpacity>
           <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 40}}>
