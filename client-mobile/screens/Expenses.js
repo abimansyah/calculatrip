@@ -10,6 +10,7 @@ import ExpenseCategoryModal from '../components/ExpenseCategoryModal';
 import BottomTab from '../components/BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { server } from '../globalvar';
 
 
 export default function Expenses({ route }) {
@@ -47,7 +48,7 @@ console.log(tripId, 'expense-----------');
 
   useEffect(() => {
     if (token) {
-      axios.get(`https://efdf-125-165-106-74.ngrok.io/expenses/trip/${tripId}`, {
+      axios.get(`${server}/expenses/trip/${tripId}`, {
         headers: {
           access_token: token
         }
