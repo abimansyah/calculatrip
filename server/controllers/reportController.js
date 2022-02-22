@@ -123,7 +123,6 @@ class reportController {
       res.status(200).json({
         message: "Your trip report has been created",
         url:`${baseUrl}/${tripNameUrl}-trip-report-${trip.id}.pdf`,
-        trip
       });
     } catch (err) {
       next(err)
