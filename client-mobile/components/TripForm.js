@@ -100,7 +100,11 @@ export default function TripForm({ type }) {
       setName("")
       setTargetBudget("")
       console.log("Trip has been added");
-      navigation.navigate('Home')
+      if(type === "Add") {
+        navigation.navigate('Home', {tripId})
+      } else {
+        navigation.navigate('Trip', {tripId})
+      }
     } catch (error) {
       console.log(error, "<<<<<<<<<<<<<");
     }
@@ -152,7 +156,13 @@ export default function TripForm({ type }) {
         <LinearGradient style={editProfileStyle.imageGradientContainer} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.5 }}>
           <View style={editProfileStyle.iconContainer}>
             <TouchableOpacity style={editProfileStyle.iconButton}
-              onPress={() => navigation.navigate('Home')}>
+              onPress={() => {
+                if(type === "Add") {
+                  navigation.navigate('Home')
+                } else {
+                  navigation.navigate('Trip', {tripId})
+                }
+              }}>
               <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
           </View>

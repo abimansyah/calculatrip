@@ -51,7 +51,7 @@ export default function Notification({ navigation, route }) {
             <Image source={logo} style={notifStyle.headerImage} />
             <Text style={notifStyle.headerText}>Calculatrip</Text>
           </View>
-          <TouchableOpacity style={{ padding: 20, position: "absolute" }} onPress={() => navigation.navigate('Home')}>
+          <TouchableOpacity style={{ padding: 20, position: "absolute" }} onPress={() => navigation.navigate('Home', {tripId: 0})}>
             <Ionicons name="arrow-back" size={30} color="#0378a6" />
           </TouchableOpacity>
         </View>

@@ -21,10 +21,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import { server } from '../globalvar';
 
 
-export default function Home({ navigation }) {
+export default function Home({ navigation, route }) {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true)
   const [notif, setNotif] = useState(false)
+  const tripId = route.params?.tripId
   const fetchData = async () => {
     try {
       const token = await AsyncStorage.getItem('access_token')
@@ -57,7 +58,7 @@ export default function Home({ navigation }) {
   useFocusEffect(useCallback(() => {
     fetchData()
     return () => true
-  }, []))
+  }, [tripId]))
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
