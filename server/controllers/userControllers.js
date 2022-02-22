@@ -1,6 +1,15 @@
-const { User, UserTrip, Trip } = require("../models/index");
-const { comparePassword } = require("../helpers/bcrypt");
-const { createToken } = require("../helpers/jwt");
+const {
+  User,
+  UserTrip,
+  Trip
+} = require('../models/index')
+const {
+  comparePassword
+} = require("../helpers/bcrypt");
+const {
+  createToken
+} = require('../helpers/jwt')
+
 
 class UserController {
   static async registerUser(req, res, next) {
@@ -82,7 +91,9 @@ class UserController {
         attributes: {
           exclude: ["createdAt", "updatedAt", "password"],
         },
-        order: [["id", "ASC"]],
+        order: [
+          ["id", "ASC"]
+        ],
       });
       res.status(200).json(users);
     } catch (err) {
@@ -92,7 +103,9 @@ class UserController {
 
   static async getUserByInput(req, res, next) {
     try {
-      const { input } = req.params;
+      const {
+        input
+      } = req.params;
       let user = await User.findOne({
         where: {
           email: input,
@@ -173,13 +186,36 @@ class UserController {
       const findUserTrip = await UserTrip.findAll({
         where: {
           UserId: req.user.id,
-          status: "pending",
+          status: "pending"
+        },
+        include: [{
+          model: Trip,
+          include: [{
+            model: UserTrip,
+            where: {
+              role: "owner"
+            },
+            include: [{
+              model: User,
+              attributes: {
+                exclude: ["createdAt", "updatedAt", "password"]
+              }
+            }],
+            attributes: {
+              exclude: ["createdAt", "updatedAt", "UserId", "TripId"]
+            }
+          }],
+          attributes: {
+            exclude: ["createdAt", "updatedAt", "UserId", "TripId"]
+          }
+        }],
+        attributes: {
+          exclude: ["createdAt", "updatedAt", "UserId", "TripId"]
         }
-      });
-      res.status(200).json(findUserTrip);
+      })
+      res.status(200).json(findUserTrip)
     } catch (err) {
-      console.log(err);
-      next(err);
+      next(err)
     }
   }
 }
