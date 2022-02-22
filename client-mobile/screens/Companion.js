@@ -75,7 +75,8 @@ export default function Companion({ route }) {
   }, [companion])
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
+    <SafeAreaView style={styles.screenSize}>
+      <View style={styles.mainContainer}>
       <BottomSheet
         ref={bs}
         snapPoints={[320, 0]}
@@ -121,6 +122,7 @@ export default function Companion({ route }) {
         </View>
         <BottomTab data={tripId} />
       </Animated.View>
+      </View>
     </SafeAreaView>
   )
 }

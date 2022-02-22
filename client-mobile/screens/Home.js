@@ -25,6 +25,9 @@ export default function Home({ navigation, route }) {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true)
   const [notif, setNotif] = useState(false)
+
+  const isFocused = useIsFocused();
+  useEffect(async () => {
   const tripId = route.params?.tripId
   const fetchData = async () => {
     try {
@@ -45,14 +48,14 @@ export default function Home({ navigation, route }) {
           access_token: token
         }
       })
-      if(invite.data.length > 0) {
+      if (invite.data.length > 0) {
         setNotif(true)
       } else {
         setNotif(false)
       }
-    } catch(err) {
+    } catch (err) {
       console.log(err)
-      if(typeof err === "object" && err.response.data.message) {
+      if (typeof err === "object" && err.response.data.message) {
         alert(err.response.data.message)
       }
     }
@@ -63,6 +66,7 @@ export default function Home({ navigation, route }) {
   }, [tripId]))
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+
       <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
         <View style={{position: "relative"}}>
           <View style={homeStyle.headerContainer}>
@@ -88,20 +92,32 @@ export default function Home({ navigation, route }) {
               contentContainerStyle={{ paddingBottom: 170 }}
             />
           </View>
-        ) : (
-          <>
-            <HomeProfile />
-            <View style={homeStyle.emptyContainer}>
-              <Text style={{ textAlign: "center" }}>Add your trip to see{"\n"}all of trips data</Text>
+          {!loading && trips?.length > 0 ? (
+            <View>
+              <FlatList
+                nestedScrollEnabled={true}
+                data={trips}
+                renderItem={({ item }) => (<HomeCard data={item} />)}
+                keyExtractor={(item) => `Trips${item.id}`}
+                ListHeaderComponent={<HomeProfile isFocused={isFocused} />}
+                contentContainerStyle={{ paddingBottom: 170 }}
+              />
             </View>
-          </>
-        )}
-        <View style={homeStyle.addContainer}>
-          <TouchableOpacity style={{ alignSelf: 'flex-start' }}
-          onPress={() => navigation.navigate('AddTrip')}
-          >
-            <Text style={homeStyle.addButton}>+</Text>
-          </TouchableOpacity>
+          ) : (
+            <>
+              <HomeProfile />
+              <View style={homeStyle.emptyContainer}>
+                <Text style={{ textAlign: "center" }}>Add your trip to see{"\n"}all of trips data</Text>
+              </View>
+            </>
+          )}
+          <View style={homeStyle.addContainer}>
+            <TouchableOpacity style={{ alignSelf: 'flex-start' }}
+              onPress={() => navigation.navigate('AddTrip')}
+            >
+              <Text style={homeStyle.addButton}>+</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
