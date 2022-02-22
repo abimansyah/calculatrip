@@ -5,33 +5,55 @@ import {
   Image,
   View,
   FlatList,
-  StyleSheet
+  StyleSheet,
+  TouchableOpacity
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import logo from '../assets/logo.png'
 import { styles } from '../styles/index'
-import { useEffect, useState } from 'react';
+import { useState, useCallback } from 'react';
 import axios from 'axios';
+import { Ionicons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { server } from '../globalvar';
 import InvitationCard from '../components/InvitationCard';
 
-
-export default function Notification({ navigation }) {
-  const [notif, setNotif] = useState([
-    { id: 1 },
-    { id: 2 },
-    { id: 3 },
-    { id: 4 },
-    { id: 5 },
-  ]);
-  const [loading, setLoading] = useState(false)
+export default function Notification({ navigation, route }) {
+  const [notif, setNotif] = useState([]);
+  const [loading, setLoading] = useState(true)
+  const fetchData = () => {
+    AsyncStorage.getItem('access_token')
+      .then(token => {
+        return axios.get(`${server}/users/invitation`, {
+          headers: {
+            access_token: token
+          }
+        })
+      })
+      .then(res => {
+        setNotif(res.data)
+        setLoading(false)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+  useFocusEffect(useCallback(() => {
+    fetchData()
+    return () => true
+  }, [route.params?.userId]))
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer, notifStyle.homeContainer}>
-        <View style={notifStyle.headerContainer}>
-          <Image source={logo} style={notifStyle.headerImage} />
-          <Text style={notifStyle.headerText}>Calculatrip</Text>
+        <View style={{position: "relative"}}>
+          <View style={notifStyle.headerContainer}>
+            <Image source={logo} style={notifStyle.headerImage} />
+            <Text style={notifStyle.headerText}>Calculatrip</Text>
+          </View>
+          <TouchableOpacity style={{ padding: 20, position: "absolute" }} onPress={() => navigation.navigate('Home')}>
+            <Ionicons name="arrow-back" size={30} color="#0378a6" />
+          </TouchableOpacity>
         </View>
         <Text style={notifStyle.title}>Trip Invitation</Text>
         {!loading && notif.length > 0 ? (

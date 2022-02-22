@@ -38,6 +38,7 @@ export default function App() {
             <Stack.Screen name='Login' component={ Login } />
             <Stack.Screen name='Register' component={ Register } />
             <Stack.Screen name='Home' component={ Home } />
+            <Stack.Screen name='Notification' component={ Notification } />
             <Stack.Screen name='Trip' component={ Trip } />
             <Stack.Screen name='HomeCard' component={ HomeCard } />
             <Stack.Screen name='Saving' component={ Saving } />

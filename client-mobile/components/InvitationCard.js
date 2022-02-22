@@ -1,17 +1,41 @@
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { server } from '../globalvar';
+import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 export default function InvitationCard({data}) {
+  const navigation = useNavigation();
+  const buttonClick = (response) => {
+    AsyncStorage.getItem('access_token')
+      .then(token => {
+        return axios({
+          method: "patch",
+          url: `${server}/trips/${data.id}`,
+          headers: {
+            access_token: token
+          },
+          data: {
+            status: response
+          }
+        })
+      })
+      .then(res => {
+        navigation.navigate('Notification', {userId: data.id})
+        alert(res.data.message)
+      })
+  }
   return (
     <View style={companionCardStyle.containter}>
       <View>
-        <Text>Invitation from username</Text>
-        <Text style={{fontWeight: "bold"}}>Trip Name</Text>
+        <Text>Invitation from {data.Trip.UserTrips[0].User.username}</Text>
+        <Text style={{fontWeight: "bold"}}>{data.Trip.name}</Text>
       </View>
       <View style={{flexDirection: "row"}}>
-        <TouchableOpacity style={companionCardStyle.acceptButton}>
+        <TouchableOpacity style={companionCardStyle.acceptButton} onPress={() => buttonClick("accept")}>
           <Text style={companionCardStyle.buttonText}>Accept</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={companionCardStyle.rejectButton}>
+        <TouchableOpacity style={companionCardStyle.rejectButton} onPress={() => buttonClick("reject")}>
           <Text style={companionCardStyle.buttonText}>Reject</Text>
         </TouchableOpacity>
       </View>
