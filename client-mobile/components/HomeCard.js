@@ -13,7 +13,7 @@ export default function HomeCard({ data }) {
     <TouchableOpacity style={{marginHorizontal: 10, marginVertical: 15}}
     onPress={() => {
       navigation.navigate('Trip', {
-        tripId: data.id
+        tripId: data.Trip.id
       })
     }}
     >
