@@ -4,12 +4,12 @@ export default function CompanionCard({data}) {
   return (
     <View style={companionCardStyle.containter}>
       <View style={{width: "60%"}}>
-        <Text style={{fontWeight: "bold"}}>Username</Text>
-        <Text>Email@email.com</Text>
+        <Text style={{fontWeight: "bold"}}>{data.username}</Text>
+        <Text>{data.email}</Text>
       </View>
-      <TouchableOpacity style={companionCardStyle.button}>
-        <Text style={companionCardStyle.buttonText}>Delete Companion</Text>
-      </TouchableOpacity>
+      <View style={data.UserTrip.status=== "accept"? companionCardStyle.buttonAccept:companionCardStyle.buttonPending}>
+        <Text>{data.UserTrip.status}</Text>
+      </View>
     </View>
   )
 }
@@ -28,10 +28,16 @@ const companionCardStyle = StyleSheet.create({
     fontSize: 18,
     fontWeight: "bold"
   },
-  button: {
+  buttonAccept: {
     padding: 10,
     alignSelf: 'flex-start',
-    backgroundColor: "#d0312d",
+    backgroundColor: "green",
+    borderRadius: 10
+  },
+  buttonPending: {
+    padding: 10,
+    alignSelf: 'flex-start',
+    backgroundColor: "yellow",
     borderRadius: 10
   },
   buttonText: {
