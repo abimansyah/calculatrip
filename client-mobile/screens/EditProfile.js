@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, TextInput, Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from '@expo/vector-icons';
@@ -27,6 +27,7 @@ export default function EditProfile() {
     setBirthDate(newDate);
   }
 
+  useEffect(() => {}, [])
   return(
     <SafeAreaView style={styles.mainContainer}>
       <View style={{ position: 'relative', height: '100%' }}>
