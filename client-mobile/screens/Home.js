@@ -17,52 +17,44 @@ import HomeCard from '../components/HomeCard';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from "@react-navigation/native";
 import { server } from '../globalvar';
 
 
 export default function Home({ navigation }) {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true)
-  const [token, setToken] = useState('')
-  const loginCheck = async () => {
+  const [notif, setNotif] = useState(false)
+  const isFocused = useIsFocused();
+  useEffect(async() => {
     try {
-      const getAccessToken = await AsyncStorage.getItem('access_token')
-      if (getAccessToken !== null) {
-        navigation.navigate('Home')
-        setToken(getAccessToken);
-
-      }
-
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-
-  useEffect(() => {
-    if (token) {
-      axios.get(`${server}/trips`, {
+      const token = await AsyncStorage.getItem('access_token')
+      const res = await axios.get(`${server}/trips`, {
         headers: {
           access_token: token
         }
       })
-        .then(res => {
-          const response = res.data.map(el => {
-            el.UserTrips = el.Trip.Users.length
-            return el
-          })
-          setTrips(response)
-          setLoading(false)
-        })
-        .catch(err => {
-          console.log(err)
-        })
+      const response = res.data.map(el => {
+        el.UserTrips = el.Trip.Users.length
+        return el
+      })
+      setTrips(response)
+      setLoading(false)
+      const invite = await axios.get(`${server}/users/invitation`, {
+        headers: {
+          access_token: token
+        }
+      })
+      if(invite.data.length > 0) {
+        setNotif(true)
+      }
+    } catch(err) {
+      console.log(err)
+      if(typeof err === "object" && err.response.data.message) {
+        alert(err.response.data.message)
+      }
     }
-  }, [token])
-
-  useEffect(() => {
-    loginCheck()
-  }, [])
+  }, [isFocused])
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
@@ -71,21 +63,22 @@ export default function Home({ navigation }) {
             <Image source={logo} style={homeStyle.headerImage} />
             <Text style={homeStyle.headerText}>Calculatrip</Text>
           </View>
+          {/* <Text>{JSON.stringify(trips)}</Text> */}
           <TouchableOpacity style={{position: "absolute", top: 0, right: 0, padding: 10, margin: 8}}>
             <View style={{position: "relative"}}>
               <Ionicons name="notifications" size={32} color="#0378a6" />
-              <Text style={{position: "absolute", right: 2, top: -2, fontSize: 15, color: "red"}}>⬤</Text>
+              { notif ? ( <Text style={{position: "absolute", right: 2, top: -2, fontSize: 15, color: "red"}}>⬤</Text> ) : undefined}
             </View>
           </TouchableOpacity>
         </View>
-        {!loading && trips.length > 0 ? (
+        {!loading && trips?.length > 0 ? (
           <View>
             <FlatList
               nestedScrollEnabled={true}
               data={trips}
               renderItem={({ item }) => (<HomeCard data={item} />)}
               keyExtractor={(item) => `Trips${item.id}`}
-              ListHeaderComponent={<HomeProfile />}
+              ListHeaderComponent={<HomeProfile isFocused={isFocused} />}
               contentContainerStyle={{ paddingBottom: 170 }}
             />
           </View>
