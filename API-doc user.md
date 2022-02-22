@@ -346,15 +346,65 @@ _Response (200 - OK)_
 
 ```json
 [
-    {
-        "id": 37,
-        "UserId": 2,
-        "TripId": 3,
+   {
+        "id": 5,
         "status": "pending",
         "role": "companion",
-        "createdAt": "2022-02-20T15:32:43.506Z",
-        "updatedAt": "2022-02-20T16:21:56.257Z"
-    }
+        "Trip": {
+            "id": 1,
+            "name": "Trip to Bandung",
+            "startDate": "2022-01-02T00:00:00.000Z",
+            "endDate": "2022-02-02T00:00:00.000Z",
+            "homeCurrency": "IDR",
+            "tripImageUrl": "http://dummyimage.com/208x100.png/cc0000/ffffff",
+            "targetBudget": 9810055,
+            "UserTrips": [
+                {
+                    "id": 1,
+                    "status": "accept",
+                    "role": "owner",
+                    "User": {
+                        "id": 1,
+                        "email": "user@gmail.com",
+                        "username": "userone",
+                        "avatar": "https://robohash.org/dolordistinctioneque.png?size=150x100&set=set1",
+                        "phoneNumber": "7692701300",
+                        "birthDate": "2001-01-01T00:00:00.000Z"
+                    }
+                }
+            ]
+        }
+    },
+    {
+        "id": 10,
+        "status": "pending",
+        "role": "companion",
+        "Trip": {
+            "id": 2,
+            "name": "Trip to Medan",
+            "startDate": "2022-01-02T00:00:00.000Z",
+            "endDate": "2022-02-02T00:00:00.000Z",
+            "homeCurrency": "IDR",
+            "tripImageUrl": "http://dummyimage.com/106x100.png/5fa2dd/ffffff",
+            "targetBudget": 2614270,
+            "UserTrips": [
+                {
+                    "id": 7,
+                    "status": "accept",
+                    "role": "owner",
+                    "User": {
+                        "id": 2,
+                        "email": "usertwo@gmail.com",
+                        "username": "userTwo",
+                        "avatar": "https://robohash.org/fugailloatque.png?size=120x100&set=set1",
+                        "phoneNumber": "8229611072",
+                        "birthDate": "2001-01-01T00:00:00.000Z"
+                    }
+                }
+            ]
+        }
+    },
+    ....
 ]
 ```
 
