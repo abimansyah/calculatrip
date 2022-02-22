@@ -66,7 +66,7 @@ const expenseAuthorization = async (req, res, next) => {
     })
     if (!expense) {
       throw {
-        name: 'Expense not found',
+        name: 'ExpenseNotFound',
       }
     }
     const trip = await Trip.findOne({
@@ -80,6 +80,7 @@ const expenseAuthorization = async (req, res, next) => {
         TripId: trip.id,
       },
     })
+
     if (userTrip.role === "owner") {
       next();
     } else if (userTrip.role !== "owner") {
@@ -92,26 +93,10 @@ const expenseAuthorization = async (req, res, next) => {
       };
     }
   } catch (err) {
-    next();
+    next(err);
   }
 };
 const savingAuthorization = async (req, res, next) => {
-  /* 
-  if => 
-  1. cari saving bersadarkan id yang ada di params
-  2. ambil tripId dari hasil response saving
-  3. cari UserTrip where (UserId = req.user.id) dan (UserTrip.TripId = saving.tripId)
-
-  4. if !UserTrip maka throw error => Forbidden Access
-
-  5. if UserTrip.role == "owner" maka next()
-  ===
-  6.else 
-
-  cari saving yang punya userId = req.user.id dan saving id ke yang di update/edit
-  Bila ketemu si saving nya maka diijinkan untuk delete/edit
-
-*/
   try {
     const {
       savingId
@@ -131,11 +116,6 @@ const savingAuthorization = async (req, res, next) => {
         id: saving.tripId,
       },
     });
-    if (!trip) {
-      throw {
-        name: "Unauthorize"
-      };
-    }
 
     const userTrip = await UserTrip.findOne({
       where: {
@@ -156,10 +136,6 @@ const savingAuthorization = async (req, res, next) => {
       if (saving.userId === req.user.id) {
         next();
       }
-    } else {
-      throw {
-        name: "Unauthorize"
-      };
     }
   } catch (err) {
     next(err);
@@ -188,18 +164,20 @@ const userAuthorization = async (req, res, next) => {
   }
 }
 
-const reportAuthorization = async (req,res,next) => {
+const reportAuthorization = async (req, res, next) => {
   try {
-    
+
     const userTrip = await UserTrip.findOne({
-      where:{
-        UserId:req.user.id,
-        TripId:req.params.tripId
+      where: {
+        UserId: req.user.id,
+        TripId: req.params.tripId
       }
     })
-    
-    if(!userTrip){
-      throw{name:'Unauthorize'}
+
+    if (!userTrip) {
+      throw {
+        name: 'Unauthorize'
+      }
     }
     next()
 

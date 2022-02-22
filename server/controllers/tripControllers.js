@@ -28,23 +28,22 @@ class TripController {
         targetBudget,
       } = req.body;
 
-      const newTrip = await Trip.create(
-        {
-          name,
-          startDate,
-          endDate,
-          homeCurrency,
-          tripImageUrl: req.uploadUrl,
-          targetBudget: targetBudget || 0,
-        },
-        { transaction: t }
-      );
+      const newTrip = await Trip.create({
+        name,
+        startDate,
+        endDate,
+        homeCurrency,
+        tripImageUrl: req.uploadUrl,
+        targetBudget: targetBudget || 0,
+      }, {
+        transaction: t
+      });
 
 
       await UserTrip.create({
         UserId: req.user.id,
         TripId: newTrip.id,
-        status: "active",
+        status: "accept",
         role: "owner",
       }, {
         transaction: t
@@ -165,7 +164,7 @@ class TripController {
         startDate,
         endDate,
         homeCurrency,
-        tripImageUrl: tripImageUrl ||
+        tripImageUrl: req.uploadUrl ||
           defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
         targetBudget,
       }, {
@@ -235,6 +234,19 @@ class TripController {
       const {
         status
       } = req.body;
+
+
+      if (status !== "accept") {
+        await UserTrip.destroy({
+          where: {
+            id: userTripId
+          }
+        })
+        res.status(200).json({
+          message: `You ${status} the invitation`,
+        });
+      }
+
 
       const userTrip = await UserTrip.findOne({
         where: {

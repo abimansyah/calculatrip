@@ -17,14 +17,14 @@ class reportController {
     try {
 
       let options = {
-        format: "A3",
-        orientation: "portrait",
-        border: "10mm",
-        // header: {
-        //   height: "45mm",
-        //   // contents:
-        //   //   '<div style="text-align: center;">Author: Shyam Hajare</div>',
-        // },
+        format: "A4",
+        orientation: "landscape",
+        border: "5mm",
+        header: {
+          height: "0mm",
+          // contents:
+          //   '<div style="text-align: center;">Author: Shyam Hajare</div>',
+        },
         // footer: {
         //   height: "28mm",
         //   contents: {
@@ -37,57 +37,81 @@ class reportController {
         // },
       };
 
-      const { tripId } = req.params;
+      const {
+        tripId
+      } = req.params;
 
       let trip = await Trip.findByPk(tripId, {
-        include: [
-          {
+        include: [{
             model: User,
             attributes: {
               exclude: ["createdAt", "updatedAt", "password"],
             },
           },
-          { model: Expense, include: [{ model: User },{model:ExpenseCategory},{model:PaymentMethod}] },
-          { model: Saving, include: [{ model: User }] },
+          {
+            model: Expense,
+            include: [{
+              model: User
+            }, {
+              model: ExpenseCategory
+            }, {
+              model: PaymentMethod
+            }]
+          },
+          {
+            model: Saving,
+            include: [{
+              model: User
+            }]
+          },
         ],
       });
 
       let index = 0
 
-      let savings = trip.dataValues.Savings.map((e,index)=>{
+      let savings = trip.dataValues.Savings.map((e, index) => {
         let saving = e
         saving.dataValues.savingDate = new Date(saving.dataValues.savingDate).toISOString().split('T')[0]
-        saving.dataValues.id = index+1
+        saving.dataValues.id = index + 1
         return saving
       })
 
-      let expenses = trip.dataValues.Expenses.map((e,index)=> {
+      let expenses = trip.dataValues.Expenses.map((e, index) => {
         let expense = e
         expense.dataValues.expenseDate = new Date(expense.dataValues.expenseDate).toISOString().split('T')[0]
-        expense.dataValues.id = index+1
+        expense.dataValues.id = index + 1
         return expense
+      })
+
+      let companions = trip.dataValues.Users.map((e, index) => {
+        let companion = e
+        companion.dataValues.id = index + 1
+        return companion
       })
 
       trip.dataValues.startDate = new Date(trip.dataValues.startDate).toISOString().split('T')[0]
 
       trip.dataValues.endDate = new Date(trip.dataValues.endDate).toISOString().split('T')[0]
 
-      let savingsAmount= trip.dataValues.Savings.map(e=>{
+      let savingsAmount = trip.dataValues.Savings.map(e => {
         return e.amount
       })
-      let expensesAmount= trip.dataValues.Expenses.map(e=>{
+      let expensesAmount = trip.dataValues.Expenses.map(e => {
         return e.amount
       })
 
-      let totalSavings= 0
+      let totalSavings = 0
       for (let i = 0; i < savingsAmount.length; i++) {
         totalSavings += savingsAmount[i]
       }
 
-      let totalExpenses= 0
+      let totalExpenses = 0
       for (let i = 0; i < expensesAmount.length; i++) {
         totalExpenses += expensesAmount[i]
       }
+
+      let remainingSavings = totalSavings - totalExpenses
+
 
       let tripNameUrl = trip.name.toLowerCase().split(" ").join("-")
 
@@ -95,11 +119,12 @@ class reportController {
         html: html,
         data: {
           trip: trip.dataValues,
-          companions: trip.dataValues.Users,
+          companions: companions,
           savings: savings,
           expenses: expenses,
-          totalSavings:totalSavings,
-          totalExpenses:totalExpenses
+          totalSavings: totalSavings,
+          totalExpenses: totalExpenses,
+          remainingSavings: remainingSavings
         },
 
         //kasih id trip di trip
@@ -112,7 +137,7 @@ class reportController {
       let baseUrl = "http://localhost:3000"
       res.status(200).json({
         message: "Your trip report has been created",
-        url:`${baseUrl}/${tripNameUrl}-trip-report-${trip.id}.pdf`
+        url: `${baseUrl}/${tripNameUrl}-trip-report-${trip.id}.pdf`,
       });
     } catch (err) {
       next(err)

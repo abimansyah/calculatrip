@@ -131,11 +131,6 @@ class ExpenseController {
         expenseId
       } = req.params
       const expense = await Expense.findByPk(expenseId)
-      if (!expense) {
-        throw {
-          name: "ExpenseNotFound"
-        }
-      }
       await Expense.destroy({
         where: {
           id: expenseId

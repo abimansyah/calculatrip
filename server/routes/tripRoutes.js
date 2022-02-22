@@ -16,7 +16,7 @@ tripRouter.get('/', authentication, TripController.getTrips)
 tripRouter.post('/', instanceMulter.single("imageFile"), uploadToImagekit, authentication, TripController.postTrip)
 tripRouter.get('/:id', authentication, TripController.getTripById)
 tripRouter.delete('/:id', authentication, tripAuthorization, TripController.deleteTrip)
-tripRouter.put('/:id', authentication, tripAuthorization, TripController.editTrip)
+tripRouter.put('/:id',instanceMulter.single("imageFile"), uploadToImagekit, authentication, tripAuthorization, TripController.editTrip)
 
 tripRouter.post('/:id', authentication, tripAuthorization, TripController.addCompanion)
 tripRouter.patch('/:userTripId', authentication, TripController.acceptInvitation)

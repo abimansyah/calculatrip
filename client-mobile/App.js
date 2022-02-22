@@ -51,6 +51,7 @@ export default function App() {
           <StatusBar style="auto" />
         </View>
       </NavigationContainer>
+      {/* <Weather/> */}
     </SafeAreaProvider>
   );
 }
