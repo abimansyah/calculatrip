@@ -166,7 +166,7 @@ export default function Trip({ route }) {
         }
       })
         .then(res => {
-          console.log(res.data);
+          // console.log(res.data);
           setExpense(res.data)
         })
         .catch(err => {
@@ -192,6 +192,13 @@ export default function Trip({ route }) {
           <SafeAreaView style={styles.mainContainer, { height: "100%" }}>
             <TripImage data={trip.tripImageUrl} />
             <View style={tripStyle.titleContainer}>
+              <TouchableOpacity onPress={() => {
+                navigation.navigate('EditTrip', {
+                  tripId: trip.id
+                })
+              }}>
+                <Text>Edit</Text>
+              </TouchableOpacity>
               <Text style={tripStyle.titleText}>{trip.name}</Text>
               <Text>{`${moment(new Date(trip.startDate)).format('DD MMMM YYYY')} - ${moment(new Date(trip.endDate)).format('DD MMMM YYYY')}`}</Text>
             </View>
