@@ -28,17 +28,16 @@ class TripController {
         targetBudget,
       } = req.body;
 
-      const newTrip = await Trip.create(
-        {
-          name,
-          startDate,
-          endDate,
-          homeCurrency,
-          tripImageUrl: req.uploadUrl,
-          targetBudget: targetBudget || 0,
-        },
-        { transaction: t }
-      );
+      const newTrip = await Trip.create({
+        name,
+        startDate,
+        endDate,
+        homeCurrency,
+        tripImageUrl: req.uploadUrl,
+        targetBudget: targetBudget || 0,
+      }, {
+        transaction: t
+      });
 
 
       await UserTrip.create({
@@ -235,6 +234,19 @@ class TripController {
       const {
         status
       } = req.body;
+
+
+      if (status !== "accept") {
+        await UserTrip.destroy({
+          where: {
+            id: userTripId
+          }
+        })
+        res.status(200).json({
+          message: `You ${status} the invitation`,
+        });
+      }
+
 
       const userTrip = await UserTrip.findOne({
         where: {
