@@ -110,7 +110,7 @@ export default function Companion({ route }) {
             <FlatList
               nestedScrollEnabled={true}
               data={companion}
-              renderItem={({ item }) => (<CompanionCard />)}
+              renderItem={({ item }) => (<CompanionCard data={item} />)}
               keyExtractor={(item) => `Companion${item.id}`}
               contentContainerStyle={{ paddingVertical: 10 }}
             />

@@ -8,6 +8,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { server } from '../globalvar';
 import moment from 'moment'
+import axios from 'axios'
+import { useRoute } from '@react-navigation/native';
 
 export default function TripForm({ type }) {
   const [randomPhotos] = useState([
@@ -22,16 +24,18 @@ export default function TripForm({ type }) {
   const [name, setName] = useState("")
   const [targetBudget, setTargetBudget] = useState("")
   const [homeCurrency, setHomeCurrency] = useState("idr")
-  const [startDate, setStartDate] = useState(moment(new Date()).format('MM/DD/YYYY'))
-  const [endDate, setEndDate] = useState(moment(tomorrow.setDate(tomorrow.getDate() + 1)).format('MM/DD/YYYY'))
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date(moment(tomorrow.setDate(tomorrow.getDate() + 1)).format('MM/DD/YYYY')))
   const [tripImage, setTripImage] = useState(null);
   const [focused, setFocused] = useState('')
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   const [token, setToken] = useState('')
   const navigation = useNavigation()
   const [isFile, setIsFile] = useState(false)
+  const route = useRoute();
+  const tripId = route.params?.tripId
 
-  function formatDate(value, type) {
+  function formatDate(value) {
     let newDate = []
     let formated = value.toISOString().split('T')[0];
     formated = formated.split('-')
@@ -39,7 +43,7 @@ export default function TripForm({ type }) {
     newDate.push(formated[2])
     newDate.push(formated[0])
     newDate = newDate.join('-')
-    type === "startDate" ? setStartDate(newDate) : setEndDate(newDate)
+    return newDate
   }
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -81,10 +85,12 @@ export default function TripForm({ type }) {
       formDataBody.append('name', name)
       formDataBody.append('targetBudget', targetBudget)
       formDataBody.append('homeCurrency', homeCurrency)
-      formDataBody.append('startDate', startDate)
-      formDataBody.append('endDate', endDate)
-      const response = await fetch(`${server}/trips`, {
-      method: 'post',
+      formDataBody.append('startDate', formatDate(startDate))
+      formDataBody.append('endDate', formatDate(endDate))
+      const link = type === "Add" ? `${server}/trips` : `${server}/trips/${tripId}`
+      const method = type === "Add" ? "post" : "put"
+      const response = await fetch(link, {
+      method,
       headers: {
         'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
         access_token: token,
@@ -94,7 +100,11 @@ export default function TripForm({ type }) {
       setName("")
       setTargetBudget("")
       console.log("Trip has been added");
-      navigation.navigate('Home')
+      if(type === "Add") {
+        navigation.navigate('Home', {tripId})
+      } else {
+        navigation.navigate('Trip', {tripId})
+      }
     } catch (error) {
       console.log(error, "<<<<<<<<<<<<<");
     }
@@ -106,14 +116,38 @@ export default function TripForm({ type }) {
       if (getAccessToken !== null) {
         setToken(getAccessToken);
       }
+      return getAccessToken
     } catch (err) {
       console.log(err);
     }
   }
 
   useEffect(() => {
-    randomizeImage()
     loginCheck()
+    if(type === "Add") {
+      randomizeImage()
+    } else {
+      loginCheck()
+        .then(tokenA => {
+          return axios.get(`${server}/trips/${tripId}`, {
+            headers: {
+              access_token: tokenA
+            }
+          })
+        })
+        .then(res => {
+          setName(res.data.name)
+          setTargetBudget(String(res.data.targetBudget))
+          setHomeCurrency(res.data.homeCurrency.toLowerCase())
+          setStartDate(new Date(res.data.startDate))
+          setEndDate(new Date(res.data.endDate))
+          setTripImage(res.data.tripImageUrl)
+        })
+        .catch(err => {
+          console.log(err)
+          if(err.response.data.message) alert(err.response.data.message)
+        })
+    }
   }, [])
 
   return (
@@ -122,7 +156,13 @@ export default function TripForm({ type }) {
         <LinearGradient style={editProfileStyle.imageGradientContainer} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.5 }}>
           <View style={editProfileStyle.iconContainer}>
             <TouchableOpacity style={editProfileStyle.iconButton}
-              onPress={() => navigation.navigate('Home')}>
+              onPress={() => {
+                if(type === "Add") {
+                  navigation.navigate('Home')
+                } else {
+                  navigation.navigate('Trip', {tripId})
+                }
+              }}>
               <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
           </View>
@@ -175,8 +215,9 @@ export default function TripForm({ type }) {
               labelDate="Start date"
               labelMonth="Start month"
               labelYear="Start year"
-              onSubmit={(value) => formatDate(value, "startDate")}
-              defaultValue={new Date(startDate)}
+              onSubmit={(value) => setStartDate(value)}
+              value={startDate}
+              defaultValue={startDate}
             />
           </View>
           <Text>End Date</Text>
@@ -185,8 +226,9 @@ export default function TripForm({ type }) {
               labelDate="End date"
               labelMonth="End month"
               labelYear="End year"
-              onSubmit={(value) => formatDate(value, "endDate")}
-              defaultValue={new Date(endDate)}
+              onSubmit={(value) => setEndDate(value)}
+              value={endDate}
+              defaultValue={endDate}
             />
           </View>
           <TouchableOpacity style={{marginVertical: 10, padding: 10, alignSelf: 'flex-end', backgroundColor: "#0378a6", borderRadius: 50}}
