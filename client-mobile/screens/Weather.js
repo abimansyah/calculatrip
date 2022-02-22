@@ -3,8 +3,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather, FontAwesome5, FontAwesome } from '@expo/vector-icons';
 import { styles } from '../styles/index'
 import { useState } from "react";
+import BottomTab from "../components/BottomTabs";
 
-export default function Weather() {
+export default function Weather({ route }) {
+  const { tripId } = route.params
   const [city, setCity] = useState("Jakarta")
   return(
     <SafeAreaView style={styles.mainContainer, { height: "100%" }}>
@@ -48,6 +50,7 @@ export default function Weather() {
             <Text style={weatherStyle.detailText}>33°C</Text>
           </View>
         </View>
+      <BottomTab data={tripId} />
       </View>
     </SafeAreaView>
   )
