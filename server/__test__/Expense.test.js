@@ -569,16 +569,16 @@ describe("GET /expenses/:expenseId - get one expense inside a trip", () => {
 describe("POST /:expenseId/image - upload image to expense", () => {
   test("POST /:expenseId/image success status (201) - should return success with status (201)", (done) => {
     jest.spyOn(instanceAxios, "post").mockResolvedValue({
-      data:{
-        url:"fakeurl"
+      data: {
+        url: "fakeurl"
       }
     });
-    
+
     request(app)
       .post("/expenses/1/image")
       .set("access_token", token)
       .attach("imageFile", "./__test__/Capture.JPG")
-      
+
       .then((resp) => {
         const result = resp.body;
         expect(resp.status).toBe(200);
@@ -592,20 +592,20 @@ describe("POST /:expenseId/image - upload image to expense", () => {
   });
   test("POST /:expenseId/image error status (500) - should return error with status (500) when image format is invalid", (done) => {
     jest.spyOn(instanceAxios, "post").mockResolvedValue({
-      data:{
-        url:"fakeurl"
+      data: {
+        url: "fakeurl"
       }
     });
     jest.spyOn(Images, "create").mockRejectedValue('error')
-    
+
     request(app)
       .post("/expenses/1/image")
       .set("access_token", token)
       .attach("imageFile", "./__test__/Capture.JPG")
-      
+
       .then((resp) => {
         const result = resp.body;
-        console.log(result);
+        // console.log(result);
         expect(resp.status).toBe(500);
         expect(result).toEqual(expect.any(Object));
         expect(result).toHaveProperty("message", "Internal Server Error");
@@ -728,4 +728,3 @@ describe("DELETE /expenses/:expenseId/image/:imageId - delete image from expense
       });
   });
 });
-
