@@ -280,165 +280,165 @@ export default function Trip({ route }) {
 
   console.log(cartData);
   return (
-    <>
-      <ScrollView>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <SafeAreaView style={styles.mainContainer, { height: "100%" }}>
 
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <SafeAreaView style={styles.screenSize}>
+        <View style={styles.mainContainer}>
 
-            <ImageBackground style={tripStyle.imageDetail} source={{ uri: trip.tripImageUrl }}>
-              <LinearGradient style={tripStyle.imageDetail} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.5 }}>
-                <View style={tripStyle.iconContainer}>
-                  <TouchableOpacity style={tripStyle.iconButton}
-                    onPress={() => {
-                      navigation.navigate('Home')
-                    }}>
-                    <Ionicons name="arrow-back" size={24} color="white" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => setModalVisible(!modalVisible)}
-                    style={tripStyle.iconButton}>
-                    <Ionicons name="ellipsis-vertical" size={24} color="white" />
-                  </TouchableOpacity>
-                </View>
-              </LinearGradient>
-            </ImageBackground>
-
-
-
-            {/* MODAL */}
-
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalVisible}
-              onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!modalVisible);
-              }}
-            >
-              <View style={tripStyle.centeredView}>
-                <View style={tripStyle.modalView}>
-
-                  {/* edit trip */}
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModalVisible(!modalVisible)
-                      navigation.navigate('EditTrip', {
-                        tripId: trip.id
-                      })
-
-                    }}
-                    style={tripStyle.modalContainer}>
-                    <View style={{ paddingHorizontal: 10 }}>
-                      <Feather name="edit" size={24} color="green" />
-                    </View>
-                    <View style={{ paddingHorizontal: 10 }}>
-                      <Text style={tripStyle.modalText}>Edit Trip</Text>
-                    </View>
-                  </TouchableOpacity>
-
-                  {/* download report */}
-                  <TouchableOpacity
-                    onPress={() => {
-                      setModalVisible(!modalVisible)
-                      downloadReport()
-                    }}
-                    style={tripStyle.modalContainer}>
-                    <View style={{ paddingHorizontal: 10 }}>
-                      <Feather name="download" size={24} color='#0487d9' />
-                    </View>
-                    <View style={{ paddingHorizontal: 10 }}>
-                      <Text style={tripStyle.modalText}>Download Trip Report</Text>
-                    </View>
-                  </TouchableOpacity>
-
-                  {/* delete */}
-                  <TouchableOpacity style={tripStyle.modalContainer}
-                    onPress={() => {
-                      setModalVisible(!modalVisible)
-                      deleteTrip()
-                    }}
-                  >
-                    <View style={{ paddingHorizontal: 10 }}>
-                      <AntDesign name="delete" size={24} color="black" />
-                    </View>
-                    <View style={{ paddingHorizontal: 10 }}>
-                      <Text style={tripStyle.modalText}>Delete</Text>
-                    </View>
-                  </TouchableOpacity>
-
-                  {/* close */}
-                  <TouchableOpacity style={tripStyle.modalContainer}
-                    onPress={() => setModalVisible(!modalVisible)}
-                  >
-                    <View style={{ paddingHorizontal: 10 }}>
-                      <Ionicons name="close" size={24} color="red" />
-                    </View>
-                    <View style={{ paddingHorizontal: 10 }}>
-                      <Text style={tripStyle.modalText}>Cancel</Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
+          <ImageBackground style={tripStyle.imageDetail} source={{ uri: trip.tripImageUrl }}>
+            <LinearGradient style={tripStyle.imageDetail} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.5 }}>
+              <View style={tripStyle.iconContainer}>
+                <TouchableOpacity style={tripStyle.iconButton}
+                  onPress={() => {
+                    navigation.navigate('Home')
+                  }}>
+                  <Ionicons name="arrow-back" size={24} color="white" />
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() => setModalVisible(!modalVisible)}
+                  style={tripStyle.iconButton}>
+                  <Ionicons name="ellipsis-vertical" size={24} color="white" />
+                </TouchableOpacity>
               </View>
-            </Modal>
-
-            {/* MODAL */}
-
+            </LinearGradient>
+          </ImageBackground>
 
 
-            <View style={tripStyle.titleContainer}>
 
-              <Text style={tripStyle.titleText}>{trip.name}</Text>
-              <Text>{`${moment(new Date(trip.startDate)).format('DD MMMM YYYY')} - ${moment(new Date(trip.endDate)).format('DD MMMM YYYY')}`}</Text>
-            </View>
-            <View style={tripStyle.darkCardContainer}>
-              <View style={tripStyle.innerCardContainer}>
-                <View style={tripStyle.innerCardView}>
-                  <Text style={tripStyle.innerCardBudget}>Budget Target</Text>
-                </View>
-                <View style={tripStyle.innerCardView}>
-                  <Text style={tripStyle.innerCardNumber}>Rp {trip.targetBudget}</Text>
-                </View>
-              </View>
-              <View style={tripStyle.blueCardContainer}>
-                <View style={tripStyle.blueCardView}>
-                  <Text style={tripStyle.blueCardNumber}>{totalSaving}</Text>
-                  <Text style={tripStyle.blueCardDesc}>Saving</Text>
-                </View>
-                <View style={tripStyle.cardSeparator} />
-                <View style={tripStyle.blueCardView}>
-                  <Text style={tripStyle.blueCardNumber}>{totalExpenses}</Text>
-                  <Text style={tripStyle.blueCardDesc}>Expenses</Text>
-                </View>
+          {/* MODAL */}
+
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={tripStyle.centeredView}>
+              <View style={tripStyle.modalView}>
+
+                {/* edit trip */}
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(!modalVisible)
+                    navigation.navigate('EditTrip', {
+                      tripId: trip.id
+                    })
+
+                  }}
+                  style={tripStyle.modalContainer}>
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Feather name="edit" size={24} color="green" />
+                  </View>
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Text style={tripStyle.modalText}>Edit Trip</Text>
+                  </View>
+                </TouchableOpacity>
+
+                {/* download report */}
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(!modalVisible)
+                    downloadReport()
+                  }}
+                  style={tripStyle.modalContainer}>
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Feather name="download" size={24} color='#0487d9' />
+                  </View>
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Text style={tripStyle.modalText}>Download Trip Report</Text>
+                  </View>
+                </TouchableOpacity>
+
+                {/* delete */}
+                <TouchableOpacity style={tripStyle.modalContainer}
+                  onPress={() => {
+                    setModalVisible(!modalVisible)
+                    deleteTrip()
+                  }}
+                >
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <AntDesign name="delete" size={24} color="black" />
+                  </View>
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Text style={tripStyle.modalText}>Delete</Text>
+                  </View>
+                </TouchableOpacity>
+
+                {/* close */}
+                <TouchableOpacity style={tripStyle.modalContainer}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Ionicons name="close" size={24} color="red" />
+                  </View>
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Text style={tripStyle.modalText}>Cancel</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
             </View>
+          </Modal>
+
+          {/* MODAL */}
 
 
-            {/* <View style={tripStyle.emptyContainer}>
-          <Text style={{textAlign: "center"}}>Add your expenses to see{"\n"}the summary of trip expenses</Text>
-        </View> */}
 
-            <View style={{ flex: 1, marginTop: 5 }}>
-              <View style={{ alignItems: 'center' }}>
-                <PieChart
-                  data={data}
-                  width={screenWidth}
-                  height={200}
-                  chartConfig={chartConfig}
-                  accessor={"amount"}
-                  backgroundColor={"transparent"}
-                  paddingLeft={"15"}
-                  center={[10, 10]}
-                  absolute
-                />
+          <View style={tripStyle.titleContainer}>
+
+            <Text style={tripStyle.titleText}>{trip.name}</Text>
+            <Text>{`${moment(new Date(trip.startDate)).format('DD MMMM YYYY')} - ${moment(new Date(trip.endDate)).format('DD MMMM YYYY')}`}</Text>
+          </View>
+          <View style={tripStyle.darkCardContainer}>
+            <View style={tripStyle.innerCardContainer}>
+              <View style={tripStyle.innerCardView}>
+                <Text style={tripStyle.innerCardBudget}>Budget Target</Text>
+              </View>
+              <View style={tripStyle.innerCardView}>
+                <Text style={tripStyle.innerCardNumber}>Rp {trip.targetBudget}</Text>
               </View>
             </View>
-          </SafeAreaView>
-        </TouchableWithoutFeedback>
-      </ScrollView >
-      <BottomTab data={trip.id} />
-    </>
+            <View style={tripStyle.blueCardContainer}>
+              <View style={tripStyle.blueCardView}>
+                <Text style={tripStyle.blueCardNumber}>{totalSaving}</Text>
+                <Text style={tripStyle.blueCardDesc}>Saving</Text>
+              </View>
+              <View style={tripStyle.cardSeparator} />
+              <View style={tripStyle.blueCardView}>
+                <Text style={tripStyle.blueCardNumber}>{totalExpenses}</Text>
+                <Text style={tripStyle.blueCardDesc}>Expenses</Text>
+              </View>
+            </View>
+          </View>
+
+
+          {/* <View style={tripStyle.emptyContainer}>
+              <Text style={{textAlign: "center"}}>Add your expenses to see{"\n"}the summary of trip expenses</Text>
+              </View> */}
+
+          <View style={{ flex: 1, marginTop: 5 }}>
+            <View style={{ alignItems: 'center' }}>
+              <PieChart
+                data={data}
+                width={screenWidth}
+                height={200}
+                chartConfig={chartConfig}
+                accessor={"amount"}
+                backgroundColor={"transparent"}
+                paddingLeft={"15"}
+                center={[10, 10]}
+                absolute
+              />
+            </View>
+          </View>
+        </View>
+        <BottomTab data={trip.id} />
+      </SafeAreaView>
+    </TouchableWithoutFeedback>
+
+
   );
 }
 

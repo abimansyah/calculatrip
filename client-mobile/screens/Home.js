@@ -45,14 +45,14 @@ export default function Home({ navigation, route }) {
           access_token: token
         }
       })
-      if(invite.data.length > 0) {
+      if (invite.data.length > 0) {
         setNotif(true)
       } else {
         setNotif(false)
       }
-    } catch(err) {
+    } catch (err) {
       console.log(err)
-      if(typeof err === "object" && err.response.data.message) {
+      if (typeof err === "object" && err.response.data.message) {
         alert(err.response.data.message)
       }
     }
@@ -63,45 +63,47 @@ export default function Home({ navigation, route }) {
   }, [tripId]))
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
-        <View style={{position: "relative"}}>
-          <View style={homeStyle.headerContainer}>
-            <Image source={logo} style={homeStyle.headerImage} />
-            <Text style={homeStyle.headerText}>Calculatrip</Text>
-          </View>
-          {/* <Text>{JSON.stringify(trips)}</Text> */}
-          <TouchableOpacity style={homeStyle.notifContainer} onPress={() => navigation.navigate('Notification')}>
-            <View style={{position: "relative"}}>
-              <Ionicons name="notifications" size={32} color="#0378a6" />
-              { notif ? ( <Text style={homeStyle.notifCheck}>⬤</Text> ) : undefined}
+      <SafeAreaView style={styles.screenSize}>
+        <View style={styles.mainContainer, homeStyle.homeContainer}>
+          <View style={{ position: "relative" }}>
+            <View style={homeStyle.headerContainer}>
+              <Image source={logo} style={homeStyle.headerImage} />
+              <Text style={homeStyle.headerText}>Calculatrip</Text>
             </View>
-          </TouchableOpacity>
-        </View>
-        {!loading && trips?.length > 0 ? (
-          <View>
-            <FlatList
-              nestedScrollEnabled={true}
-              data={trips}
-              renderItem={({ item }) => (<HomeCard data={item} />)}
-              keyExtractor={(item) => `Trips${item.id}`}
-              ListHeaderComponent={<HomeProfile />}
-              contentContainerStyle={{ paddingBottom: 170 }}
-            />
+            {/* <Text>{JSON.stringify(trips)}</Text> */}
+            <TouchableOpacity style={homeStyle.notifContainer} onPress={() => navigation.navigate('Notification')}>
+              <View style={{ position: "relative" }}>
+                <Ionicons name="notifications" size={32} color="#0378a6" />
+                {notif ? (<Text style={homeStyle.notifCheck}>⬤</Text>) : undefined}
+              </View>
+            </TouchableOpacity>
           </View>
-        ) : (
-          <>
-            <HomeProfile />
-            <View style={homeStyle.emptyContainer}>
-              <Text style={{ textAlign: "center" }}>Add your trip to see{"\n"}all of trips data</Text>
+          {!loading && trips?.length > 0 ? (
+            <View>
+              <FlatList
+                nestedScrollEnabled={true}
+                data={trips}
+                renderItem={({ item }) => (<HomeCard data={item} />)}
+                keyExtractor={(item) => `Trips${item.id}`}
+                ListHeaderComponent={<HomeProfile />}
+                contentContainerStyle={{ paddingBottom: 170 }}
+              />
             </View>
-          </>
-        )}
-        <View style={homeStyle.addContainer}>
-          <TouchableOpacity style={{ alignSelf: 'flex-start' }}
-          onPress={() => navigation.navigate('AddTrip')}
-          >
-            <Text style={homeStyle.addButton}>+</Text>
-          </TouchableOpacity>
+          ) : (
+            <>
+              <HomeProfile />
+              <View style={homeStyle.emptyContainer}>
+                <Text style={{ textAlign: "center" }}>Add your trip to see{"\n"}all of trips data</Text>
+              </View>
+            </>
+          )}
+          <View style={homeStyle.addContainer}>
+            <TouchableOpacity style={{ alignSelf: 'flex-start' }}
+              onPress={() => navigation.navigate('AddTrip')}
+            >
+              <Text style={homeStyle.addButton}>+</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>

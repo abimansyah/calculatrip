@@ -20,7 +20,7 @@ export default function BottomTab({ data }) {
     <View style={{
       backgroundColor: '#0487d9',
       width: '100%',
-      height: 60,
+      height: 100,
       borderTopLeftRadius: 10,
       borderTopRightRadius: 10,
       flexDirection: 'row',
@@ -32,7 +32,7 @@ export default function BottomTab({ data }) {
           tripId: data
         })}
       >
-        <Ionicons name={tripHome} size={21} color="white" />
+        <Ionicons name={tripHome} size={30} color="white" />
       </TouchableOpacity>
 
       <TouchableOpacity style={{padding: 10}}
@@ -40,7 +40,7 @@ export default function BottomTab({ data }) {
           tripId: data
         })}
       >
-        <Ionicons name={companion} size={21} color="white" />
+        <Ionicons name={companion} size={30} color="white" />
       </TouchableOpacity>
 
       <TouchableOpacity style={{padding: 10}}
@@ -48,7 +48,7 @@ export default function BottomTab({ data }) {
           tripId: data
         })}
       >
-        <Ionicons name={weather} size={21} color="white" />
+        <Ionicons name={weather} size={30} color="white" />
       </TouchableOpacity>
 
       <TouchableOpacity style={{padding: 10}}
@@ -56,7 +56,7 @@ export default function BottomTab({ data }) {
           tripId: data
         })}
       >
-        <Ionicons name={saving} size={21} color="white" />
+        <Ionicons name={saving} size={30} color="white" />
       </TouchableOpacity>
 
       <TouchableOpacity style={{padding: 10}}
@@ -64,7 +64,7 @@ export default function BottomTab({ data }) {
           tripId: data
         })}
       >
-        <Ionicons name={expense} size={21} color="white" />
+        <Ionicons name={expense} size={30} color="white" />
       </TouchableOpacity>
 
     </View>
