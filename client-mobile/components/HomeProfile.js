@@ -17,6 +17,7 @@ export default function HomeProfile({ tripId }) {
   const doLogout = async () => {
     try {
       await AsyncStorage.removeItem('access_token')
+      alert("See you again!")
       navigation.navigate('Login')
     } catch (err) {
       console.log(err);

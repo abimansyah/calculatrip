@@ -11,6 +11,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import logo from '../assets/logo.png'
+import loadingGif from '../assets/loading.gif'
 import { styles } from '../styles/index'
 import HomeProfile from '../components/HomeProfile';
 import HomeCard from '../components/HomeCard';
@@ -104,6 +105,11 @@ export default function Home({ navigation, route }) {
               <Text style={homeStyle.addButton}>+</Text>
             </TouchableOpacity>
           </View>
+          {loading ? (
+              <View style={{width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)"}}>
+                <Image source={loadingGif} />
+              </View>
+            ) : undefined}
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>

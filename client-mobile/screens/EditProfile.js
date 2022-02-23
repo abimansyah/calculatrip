@@ -7,6 +7,7 @@ import { styles } from "../styles"
 import axios from 'axios';
 import { server } from '../globalvar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import loadingGif from '../assets/loading.gif'
 
 export default function EditProfile({ navigation }) {
   const [userId, setUserId] = useState()
@@ -19,6 +20,7 @@ export default function EditProfile({ navigation }) {
   const [focused, setFocused] = useState('')
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   const [token, setToken] = useState("")
+  const [loading, setLoading] = useState(true)
 
   function formatDate(value) {
     let newDate = []
@@ -32,6 +34,7 @@ export default function EditProfile({ navigation }) {
   }
 
   const submit = () => {
+    setLoading(true)
     axios.put(`${server}/users/${userId}`, {
       email,
       username,
@@ -70,6 +73,7 @@ export default function EditProfile({ navigation }) {
         setBirthDate(new Date(res.data.birthDate))
         setPhoneNumber(res.data.phoneNumber)
         setAvatar(res.data.avatar)
+        setLoading(false)
       })
       .catch(err => {
         console.log(err)
@@ -176,6 +180,11 @@ export default function EditProfile({ navigation }) {
             <Ionicons name="checkmark" size={24} color="#0378a6" style={editProfileStyle.checkButton} />
           </TouchableOpacity>
         </View>
+        {loading ? (
+            <View style={{width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)"}}>
+              <Image source={loadingGif} />
+            </View>
+          ) : undefined}
       </View>
     </SafeAreaView>
   )
