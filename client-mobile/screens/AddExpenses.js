@@ -25,7 +25,7 @@ export default function AddExpenses({ route }) {
   const [focused, setFocused] = useState("");
   const [scanImage, setScanImage] = useState(null);
   const [token, setToken] = useState("");
-   const [tripImage, setTripImage] = useState(null);
+  const [tripImage, setTripImage] = useState(null);
   const [isFile, setIsFile] = useState(false)
   const [currentTrip, setCurrentTrip] = useState({})
 
@@ -67,16 +67,16 @@ export default function AddExpenses({ route }) {
     }
   };
 
-  const scanReceipt = async () => {
+  const scanReceipt = async (URL) => {
 
     let formDataBody = new FormData();
-    let localUri = scanImage;
+    let localUri = URL;
     let filename = localUri.split("/").pop();
 
     // Infer the type of the image
     let match = /\.(\w+)$/.exec(filename);
     let type = match ? `image/${match[1]}` : `image`;
-    formDataBody.append("imageFile", { uri: scanImage, name: filename, type });
+    formDataBody.append("imageFile", { uri: URL, name: filename, type });
     const link = `${server}/ocr`;
     fetch(link, {
       method: "POST",
@@ -99,6 +99,7 @@ export default function AddExpenses({ route }) {
         setDescription(result.message)
       })
       .catch((err) => {
+        console.log(err);
         alert(err.message)
       });
   };
@@ -109,7 +110,7 @@ export default function AddExpenses({ route }) {
 
   useEffect(()=>{
     if(scanImage) {
-      scanReceipt()
+      scanReceipt(scanImage)
     }
   },[scanImage])
 
@@ -163,7 +164,7 @@ export default function AddExpenses({ route }) {
           access_token: token,
         },
       });
-      console.log(typeof resp.data);
+      // console.log(typeof resp.data);
       if (typeof resp.data === "object") {
         nav.navigate("Expenses", {
           tripId: tripId,
@@ -175,7 +176,7 @@ export default function AddExpenses({ route }) {
     }
   };
 
-  console.log(paymentMethodId);
+  // console.log(paymentMethodId);
 
   return (
     <SafeAreaView style={styles.mainContainer}>
@@ -191,7 +192,7 @@ export default function AddExpenses({ route }) {
                 <View style={{ flexDirection: "row" }}>
                   <Text 
 
-                  style={{ fontSize: 32, color: "#fff" }}>{currentTrip.homeCurrency.toUpperCase()} </Text>
+                  style={{ fontSize: 32, color: "#fff" }}>{currentTrip.homeCurrency} </Text>
                   <TextInput
                     keyboardType={phoneInput}
                     style={focused === "amount" ? editProfileStyle.title : editProfileStyle.title}

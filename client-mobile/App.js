@@ -23,6 +23,7 @@ import DetailExpenses from './screens/DetailExpenses';
 import Notification from './screens/Notification';
 import Weather from './screens/Weather';
 import CurrencyList from './screens/CurrencyList';
+import {IntlProvider} from 'react-intl'
 
 
 

@@ -53,7 +53,7 @@ export default function TripForm({ type }) {
       quality: 1,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.cancelled) {
       setIsFile(true)

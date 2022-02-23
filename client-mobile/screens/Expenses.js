@@ -13,6 +13,8 @@ import axios from 'axios';
 import { server } from '../globalvar';
 import moment from 'moment'
 import { useNavigation } from '@react-navigation/native';
+import "intl";
+import "intl/locale-data/jsonp/en";
 
 
 export default function Expenses({ route }) {
@@ -24,6 +26,9 @@ export default function Expenses({ route }) {
 
   const bs = React.createRef();
   const fall = new Animated.Value(1);
+  const currencyFormat = (value)=>{
+    return new Intl.NumberFormat(['ban', 'id']).format(value)
+  }
   const totalExpenses = expenses.length > 0 ? expenses.map(el => el.amount).reduce((prev, cur) => prev + cur) : "Rp 0"
 
   const headerModal = () => {
@@ -95,7 +100,7 @@ export default function Expenses({ route }) {
             <View style={expensesStyle.blueCardContainer}>
               <View style={expensesStyle.blueCardView}>
                 <Text style={expensesStyle.blueCardDesc}>Total Expenses</Text>
-                <Text style={expensesStyle.blueCardNumber}>{totalExpenses}</Text>
+                <Text style={expensesStyle.blueCardNumber}>{currencyFormat(totalExpenses)}</Text>
               </View>
               <TouchableOpacity 
               onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
