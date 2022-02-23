@@ -1,4 +1,4 @@
-import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, View, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { server } from '../globalvar';
 import axios from 'axios';
@@ -22,7 +22,13 @@ export default function InvitationCard({data}) {
       })
       .then(res => {
         navigation.navigate('Notification', {userId: data.id})
-        alert(res.data.message)
+        Alert.alert("Success",res.data.message)
+      })
+      .catch((err)=>{
+        console.log(err)
+        if (typeof err === "object" && err.response.data.message) {
+          Alert.alert("Error",err.response.data.message)
+      }
       })
   }
   return (

@@ -5,7 +5,7 @@ import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
 
 
-export default function ExpensesCard({data}) {
+export default function ExpensesCard({data, curr}) {
   const nav = useNavigation();
   
   return (
@@ -22,7 +22,9 @@ export default function ExpensesCard({data}) {
       </View>
       <View style={{flexDirection: "column", alignItems: "flex-end"}}>
         <Text>{data.ExpenseCategory.name}</Text>
-        <Text style={expensesCardStyle.moneyText}>{data.amount}</Text>
+        <Text style={expensesCardStyle.moneyText}>
+          <Text style={{fontSize:14, color:"gray", fontWeight:"normal"}}>({curr}) </Text>
+        {data.amount}</Text>
       </View>
     </TouchableOpacity>
   )

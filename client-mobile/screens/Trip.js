@@ -40,7 +40,7 @@ import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import BottomTab from '../components/BottomTabs';
 import { server } from '../globalvar';
-
+import loadingGif from '../assets/loading.gif'
 
 const screenWidth = Dimensions.get("window").width;
 const data = [
@@ -113,7 +113,7 @@ export default function Trip({ route }) {
   const [trip, setTrip] = useState({})
   const [cartData, setCartData] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
-
+  const [loading, setLoading] = useState(true)
 
   const newCartData = (newData) => {
     const temp = []
@@ -265,6 +265,9 @@ export default function Trip({ route }) {
         .catch(err => {
           console.log(err)
         })
+        .finally(()=>{
+          setLoading(false)
+        })
     }
   }, [trip])
 
@@ -291,6 +294,7 @@ export default function Trip({ route }) {
 
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.screenSize}>
+        
         <ScrollView>
           <View style={styles.mainContainer}>
 
@@ -471,6 +475,11 @@ export default function Trip({ route }) {
 
         </ScrollView>
         <BottomTab data={trip.id} />
+        {loading ? (
+          <View style={{ width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)" }}>
+            <Image source={loadingGif} />
+          </View>
+        ) : undefined}
       </SafeAreaView>
     </TouchableWithoutFeedback>
 
