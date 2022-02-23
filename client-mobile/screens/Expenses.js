@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
 import moment from 'moment'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 
 export default function Expenses({ route }) {
@@ -21,11 +21,14 @@ export default function Expenses({ route }) {
   const [expenses, setExpenses] = useState([])
   const [loading, setLoading] = useState(false)
   const [token, setToken] = useState('')
-  const [trip, setTrip] = useState({})
 
+  const routesLength = useNavigationState(state => state.routes.length);
+  const [trip, setTrip] = useState({})
   const bs = React.createRef();
   const fall = new Animated.Value(1);
   const totalExpenses = expenses.length > 0 ? expenses.map(el => el.amount).reduce((prev, cur) => prev + cur) : "Rp 0"
+
+  
 
   const headerModal = () => {
     return (
@@ -89,10 +92,10 @@ export default function Expenses({ route }) {
       <View  style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <BottomSheet
           ref={bs}
-          snapPoints={[730, 0]}
+          snapPoints={[730, 0, 0]}
           renderContent={() => { return (<ExpenseCategoryModal data={tripId} />) }}
           renderHeader={headerModal}
-          initialSnap={1}
+          initialSnap={2}
           callbackNode={fall}
           enabledGestureInteraction={true}
           enabledHeaderGestureInteraction={true}

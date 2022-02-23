@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Picker, Image, Modal, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, Text, View, Picker, Image, Modal, TouchableOpacity, TextInput, Dimensions } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather, FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons';
 import { styles } from '../styles/index'
-import loadingGif from '../assets/loading.gif'
+
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -56,7 +56,6 @@ export default function Weather({ route }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [text, setText] = useState("Jakarta");
   const [token, setToken] = useState('')
-  const [loading, setLoading] = useState(true)
 
   const loginCheck = async () => {
     try {
@@ -96,7 +95,8 @@ export default function Weather({ route }) {
   }, [token])
 
   return (
-    <SafeAreaView style={weatherStyle.container}>
+    <SafeAreaView style={styles.screenSize}>
+      <View style={styles.mainContainer}>
         <View style={weatherStyle.container}>
           <Text style={weatherStyle.todayText}>Today</Text>
 
@@ -105,14 +105,14 @@ export default function Weather({ route }) {
             style={weatherStyle.cityContainer}>
 
             {/* <Picker
-              selectedValue={city}
-              onValueChange={itemValue => setCity(itemValue)}
-              style={weatherStyle.cityPicker}
-              itemStyle={{height: 40}}
-            >
-              <Picker.Item label="Jakarta" value="Jakarta" />
-              <Picker.Item label="United State Kemana aja bo leh" value="United State Kemana aja bo leh" />
-            </Picker> */}
+            selectedValue={city}
+            onValueChange={itemValue => setCity(itemValue)}
+            style={weatherStyle.cityPicker}
+            itemStyle={{height: 40}}
+          >
+            <Picker.Item label="Jakarta" value="Jakarta" />
+            <Picker.Item label="United State Kemana aja bo leh" value="United State Kemana aja bo leh" />
+          </Picker> */}
             <Text style={weatherStyle.city}>{city.name}, {city.sys.country} &nbsp;
               <Ionicons
                 name="search"
@@ -140,9 +140,11 @@ export default function Weather({ route }) {
                 {/* text input */}
                 <TextInput
                   placeholder="Search city"
+                  placeholderTextColor={'#a6a6a6'}
                   style={weatherStyle.inputBar}
                   onChangeText={setText}
                   value={text}
+                  textAlign={'center'}
                 />
 
                 {/* search city */}
@@ -176,7 +178,9 @@ export default function Weather({ route }) {
             </View>
           </Modal>
           {/* MODAL */}
-                  
+
+
+
           <Ionicons name={weatherSymbol(city?.weather[0].main)} size={150} color="white" style={{ marginVertical: 30 }} />
           <Text style={weatherStyle.weatherStatus}>{city?.weather[0].description}</Text>
           <Text style={weatherStyle.weatherDegree}>{city.main.temp}°</Text>
@@ -197,9 +201,9 @@ export default function Weather({ route }) {
               <Text style={weatherStyle.detailText}>{city.main.feels_like}°C</Text>
             </View>
           </View>
-          <BottomTab data={tripId} />
         </View>
-
+      </View>
+      <BottomTab data={tripId} />
     </SafeAreaView>
   )
 }
@@ -207,6 +211,7 @@ export default function Weather({ route }) {
 const weatherStyle = StyleSheet.create({
   container: {
     width: "100%",
+    height: '110%',
     alignItems: "center",
     backgroundColor: "#72c1f2"
   },
@@ -217,6 +222,8 @@ const weatherStyle = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)'
   },
   modalView: {
+    width: Dimensions.get('window').width-20,
+    marginHorizontal: 5,
     margin: 0,
     backgroundColor: "white",
     borderRadius: 10,
@@ -233,9 +240,7 @@ const weatherStyle = StyleSheet.create({
   },
   modalContainer: {
     // backgroundColor: "orange", 
-    width: 300,
     height: 50,
-    display: "flex",
     flexDirection: "row",
     alignItems: "center"
   },
@@ -245,10 +250,10 @@ const weatherStyle = StyleSheet.create({
   },
   inputBar: {
     height: 40,
+    width: '90%',
     margin: 12,
     borderWidth: 1,
-    paddingHorizontal: 130,
-    width: "100%",
+    paddingHorizontal: 1,
     borderRadius: 6,
     backgroundColor: "white",
     borderColor: "#E6E6E6",

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, TextInput, Image, Picker, KeyboardAvoidingView, ScrollView, Modal, Alert, FlatList, Dimensions } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, TextInput, Image, Picker, KeyboardAvoidingView, ScrollView, Modal, Alert, FlatList, Dimensions, Platform } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Ionicons, Entypo, Feather, AntDesign, FontAwesome} from "@expo/vector-icons";
 import DateField from "react-native-datefield";
@@ -12,6 +12,8 @@ import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import loadingGif from '../assets/loading.gif'
+import RNPickerSelect from 'react-native-picker-select';
+
 
 export default function AddExpenses({ route }) {
 
@@ -37,6 +39,7 @@ export default function AddExpenses({ route }) {
   const [convertedCurrency, setConvertedCurrency] = useState(0)
   const [trip, setTrip] = useState({})
   const [loading, setLoading] = useState(false)
+
 
   const phoneInput = Platform.OS === "ios" ? "number-pad" : "numeric";
   function formatDate(value) {
@@ -215,6 +218,47 @@ export default function AddExpenses({ route }) {
     }
   };
 
+
+  const iosDropdown = (
+    <RNPickerSelect
+      value={paymentMethodId}
+      onValueChange={itemValue => setPaymentMethodId(itemValue)}
+      items={[
+        { label: 'Cash', value: 1 },
+        { label: 'Credit', value: 2 },
+
+      ]}
+    />
+  )
+
+  const androidDropdown = (
+    <Picker
+      selectedValue={paymentMethodId}
+      onValueChange={(itemValue) => setPaymentMethodId(itemValue)}
+    >
+      <Picker.Item label="Cash" value={1} />
+      <Picker.Item label="Credit" value={2} />
+    </Picker>
+  )
+
+  // dropdown
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    console.log(result);
+
+    if (!result.cancelled) {
+      setIsFile(true)
+      setTripImage(result.uri);
+    }
+  };
+
   const getCurrency = async () => {
     try {
       let response = await axios({
@@ -255,6 +299,7 @@ export default function AddExpenses({ route }) {
     getCurrency()
   }, [token])
 
+
   useEffect(() => {
     setFilteredCurrency(currency)
   }, [currency])
@@ -274,10 +319,12 @@ export default function AddExpenses({ route }) {
  
   // console.log(paymentMethodId);
   return (
-    
-    <SafeAreaView style={editProfileStyle.mainContainer}>
-      <KeyboardAvoidingView behavior={focused === "amount" ? "height" : "position"} keyboardVerticalOffset={10}>
-        <View style={{ position: "relative", height: "100%" }}>
+
+
+    <SafeAreaView style={styles.screenSize}>
+      <KeyboardAvoidingView behavior={focused === 'amount' ? 'height' : 'position'} keyboardVerticalOffset={0}>
+        <View style={{ position: 'relative', height: '94%' }}>
+
           <View style={editProfileStyle.headerView}>
             <TouchableOpacity 
             onPress={()=> {nav.navigate('Expenses', tripId)}}
@@ -338,17 +385,18 @@ export default function AddExpenses({ route }) {
               </View>
               <Text>Payment Method</Text>
               <View style={editProfileStyle.inputDate}>
-                <Picker selectedValue={paymentMethodId} onValueChange={(itemValue) => setPaymentMethodId(itemValue)}>
-                  <Picker.Item label="Cash" value={1} />
-                  <Picker.Item label="Credit" value={2} />
-                </Picker>
+
+                {
+                  Platform.OS === 'ios' ? iosDropdown : androidDropdown
+                }
               </View>
               <View style={editProfileStyle.descriptionContainer}>
                 <Text>Expenses Description</Text>
-                <TouchableOpacity style={editProfileStyle.receiptButton} onPress={() => {
-                  pickScanImage()
-                  }}>
-                  <Text style={editProfileStyle.receiptText}>Scan Receipt</Text>
+                <TouchableOpacity style={editProfileStyle.receiptButton}
+                  onPress={() => pickImage()}
+                >
+                  <Text style={editProfileStyle.receiptText}>Upload Receipt</Text>
+
                 </TouchableOpacity>
               </View>
               <TextInput

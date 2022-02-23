@@ -1,14 +1,15 @@
-import { View, Text, TextInput,TouchableOpacity } from 'react-native'
+import { View, Text, TextInput,TouchableOpacity, Keyboard } from 'react-native'
 import { useState } from 'react';
 import { styles } from '../styles'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
+
 import { NavigationContainer,useNavigation } from '@react-navigation/native';
 
 
-
 export default inviteCompanion = ({ data }) => {
+  const nav = useNavigation();
   const [focused, setFocused] = useState('');
   const [input, setInput] = useState('');
 
@@ -24,10 +25,13 @@ export default inviteCompanion = ({ data }) => {
           access_token: token
         }
       })
-      console.log(resp);
-      alert(resp.data.message)
-      nav.navigate('Home')
 
+      Keyboard.dismiss()
+      nav.navigate('Companion',{
+        tripId: data,
+        modalStatus: true
+      })
+      console.log(resp.data);
 
     } catch (err) {
       console.log(err);
