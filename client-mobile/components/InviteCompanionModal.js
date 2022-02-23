@@ -4,14 +4,17 @@ import { styles } from '../styles'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
+import { NavigationContainer,useNavigation } from '@react-navigation/native';
+
 
 
 export default inviteCompanion = ({ data }) => {
   const [focused, setFocused] = useState('');
   const [input, setInput] = useState('');
 
+  const nav = useNavigation();
+
   const addCompanion = async () => {
-    console.log('---------------');
     try {
       const token = await AsyncStorage.getItem('access_token')
       const resp = await axios.post(`${server}/trips/${data}`, {
@@ -21,7 +24,11 @@ export default inviteCompanion = ({ data }) => {
           access_token: token
         }
       })
-      console.log(resp.data);
+      console.log(resp);
+      alert(resp.data.message)
+      nav.navigate('Home')
+
+
     } catch (err) {
       console.log(err);
     }

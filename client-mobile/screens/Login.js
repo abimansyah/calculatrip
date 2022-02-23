@@ -9,7 +9,8 @@ import {
   ScrollView,
   Platform,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -42,13 +43,13 @@ export default function Login({ navigation }) {
       setEmailUsername("")
       setPassword("")
       await AsyncStorage.setItem('access_token', resp.data.access_token)
-      alert("Welcome to Calculatrip!")
+      Alert.alert("Success","Welcome to Calculatrip!")
       setLoading(false)
       navigation.navigate('Home')
     } catch (err) {
       setLoading(false)
       console.log(err);
-      alert(err.response.data.message)
+      Alert.alert("Error",err.response.data.message)
     }
   }
 
