@@ -80,7 +80,10 @@ class ExpenseController {
           attributes: {
             exclude: ["password", "createdAt", "updatedAt", "avatar", "phoneNumber", "birthDate"]
           }
-        }]
+        }],
+        order: [
+          ['id', 'DESC']
+        ]
       })
       res.status(200).json(expenses)
     } catch (error) {
