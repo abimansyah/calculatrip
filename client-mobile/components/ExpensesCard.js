@@ -3,10 +3,29 @@ import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import moment from 'moment';
 import { useNavigation } from '@react-navigation/native';
+import "intl";
+import "intl/locale-data/jsonp/en";
+import { useEffect, useState } from 'react';
+import { server } from '../globalvar';
 
 
 export default function ExpensesCard({data, curr}) {
+  const [token, setToken] = useState("")
+  const [homeCurrency, setHomeCurrency] = useState("")
+
   const nav = useNavigation();
+  const currencyFormat = (value)=>{
+    return new Intl.NumberFormat(['ban', 'id']).format(value)
+  }
+
+  useEffect(async ()=> {
+    try {
+      const output = await AsyncStorage.getItem('access_token')
+      setToken(output)
+    } catch (error) {
+      alert(error.data.message)
+    }
+  },[])
   
   return (
     <TouchableOpacity style={expensesCardStyle.containter}  onPress={() => nav.navigate('DetailExpenses', {
@@ -24,7 +43,7 @@ export default function ExpensesCard({data, curr}) {
         <Text>{data.ExpenseCategory.name}</Text>
         <Text style={expensesCardStyle.moneyText}>
           <Text style={{fontSize:14, color:"gray", fontWeight:"normal"}}>({curr}) </Text>
-        {data.amount}</Text>
+        {currencyFormat(data.amount)}</Text>
       </View>
     </TouchableOpacity>
   )

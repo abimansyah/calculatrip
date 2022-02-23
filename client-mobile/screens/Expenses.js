@@ -13,6 +13,9 @@ import axios from 'axios';
 import { server } from '../globalvar';
 import moment from 'moment'
 import { useNavigation, useNavigationState } from '@react-navigation/native';
+import "intl";
+import "intl/locale-data/jsonp/en";
+
 
 
 export default function Expenses({ route }) {
@@ -26,6 +29,9 @@ export default function Expenses({ route }) {
   const [trip, setTrip] = useState({})
   const bs = React.createRef();
   const fall = new Animated.Value(1);
+  const currencyFormat = (value)=>{
+    return new Intl.NumberFormat(['ban', 'id']).format(value)
+  }
   const totalExpenses = expenses.length > 0 ? expenses.map(el => el.amount).reduce((prev, cur) => prev + cur) : "Rp 0"
 
   
@@ -114,8 +120,9 @@ export default function Expenses({ route }) {
             <View style={expensesStyle.blueCardContainer}>
               <View style={expensesStyle.blueCardView}>
                 <Text style={expensesStyle.blueCardDesc}>Total Expenses</Text>
+
                   <View style={{flexDirection:'row', alignItems:"center",}}>
-                    <Text style={expensesStyle.blueCardNumber}>{totalExpenses}</Text>
+                    <Text style={expensesStyle.blueCardNumber}>{currencyFormat(totalExpenses)}</Text>
                     <Text style={{marginTop:8, fontSize:20, marginLeft:10, fontWeight:"bold", color:"white"}}>{trip.homeCurrency}</Text>
                   </View>
               </View>

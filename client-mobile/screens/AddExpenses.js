@@ -28,7 +28,7 @@ export default function AddExpenses({ route }) {
   const [focused, setFocused] = useState("");
   const [scanImage, setScanImage] = useState(null);
   const [token, setToken] = useState("");
-   const [tripImage, setTripImage] = useState(null);
+  const [tripImage, setTripImage] = useState(null);
   const [isFile, setIsFile] = useState(false)
   const [homeCurrency, setHomeCurrency] = useState('')
   const [modalVisible, setModalVisible] = useState(false);
@@ -79,16 +79,16 @@ export default function AddExpenses({ route }) {
     }
   };
 
-  const scanReceipt = async () => {
+  const scanReceipt = async (URL) => {
 
     let formDataBody = new FormData();
-    let localUri = scanImage;
+    let localUri = URL;
     let filename = localUri.split("/").pop();
 
     // Infer the type of the image
     let match = /\.(\w+)$/.exec(filename);
     let type = match ? `image/${match[1]}` : `image`;
-    formDataBody.append("imageFile", { uri: scanImage, name: filename, type });
+    formDataBody.append("imageFile", { uri: URL, name: filename, type });
     const link = `${server}/ocr`;
     fetch(link, {
       method: "POST",
@@ -111,6 +111,7 @@ export default function AddExpenses({ route }) {
         setDescription(result.message)
       })
       .catch((err) => {
+        console.log(err);
         alert(err.message)
       })
       .finally(() => {
@@ -125,7 +126,7 @@ export default function AddExpenses({ route }) {
 
   useEffect(()=>{
     if(scanImage) {
-      scanReceipt()
+      scanReceipt(scanImage)
     }
   },[scanImage])
 
@@ -203,7 +204,7 @@ export default function AddExpenses({ route }) {
           access_token: token,
         },
       });
-      console.log(typeof resp.data);
+      // console.log(typeof resp.data);
       if (typeof resp.data === "object") {
         nav.navigate("Expenses", {
           tripId: tripId,
@@ -258,6 +259,7 @@ export default function AddExpenses({ route }) {
       setTripImage(result.uri);
     }
   };
+
 
   const getCurrency = async () => {
     try {
@@ -316,6 +318,7 @@ export default function AddExpenses({ route }) {
       }
   }, [filter])
 
+
  
   // console.log(paymentMethodId);
   return (
@@ -337,7 +340,6 @@ export default function AddExpenses({ route }) {
                 <View style={{ flexDirection: "row" }}>
 
 
-
                   {/* currency button */}
 
                   <TouchableOpacity
@@ -352,7 +354,6 @@ export default function AddExpenses({ route }) {
                   </TouchableOpacity>
 
                   {/* currency button */}
-
 
                   <TextInput
                     keyboardType={phoneInput}
