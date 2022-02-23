@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Picker, Image, Modal, TouchableOpacity, TextInput } from "react-native";
+import { StyleSheet, Text, View, Picker, Image, Modal, TouchableOpacity, TextInput, Dimensions } from "react-native";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, Feather, FontAwesome5, FontAwesome, AntDesign } from '@expo/vector-icons';
 import { styles } from '../styles/index'
@@ -95,15 +95,16 @@ export default function Weather({ route }) {
   }, [token])
 
   return (
-    <SafeAreaView style={weatherStyle.container}>
-      <View style={weatherStyle.container}>
-        <Text style={weatherStyle.todayText}>Today</Text>
+    <SafeAreaView style={styles.screenSize}>
+      <View style={styles.mainContainer}>
+        <View style={weatherStyle.container}>
+          <Text style={weatherStyle.todayText}>Today</Text>
 
-        <TouchableOpacity
-          onPress={() => setModalVisible(!modalVisible)}
-          style={weatherStyle.cityContainer}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(!modalVisible)}
+            style={weatherStyle.cityContainer}>
 
-          {/* <Picker
+            {/* <Picker
             selectedValue={city}
             onValueChange={itemValue => setCity(itemValue)}
             style={weatherStyle.cityPicker}
@@ -112,94 +113,96 @@ export default function Weather({ route }) {
             <Picker.Item label="Jakarta" value="Jakarta" />
             <Picker.Item label="United State Kemana aja bo leh" value="United State Kemana aja bo leh" />
           </Picker> */}
-          <Text style={weatherStyle.city}>{city.name}, {city.sys.country} &nbsp;
-            <Ionicons
-              name="search"
-              size={30}
-              color="white"
+            <Text style={weatherStyle.city}>{city.name}, {city.sys.country} &nbsp;
+              <Ionicons
+                name="search"
+                size={30}
+                color="white"
 
-            />
-          </Text>
-        </TouchableOpacity>
-
-
-        {/* MODAL */}
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={weatherStyle.centeredView}>
-            <View style={weatherStyle.modalView}>
-
-              {/* text input */}
-              <TextInput
-                placeholder="Search city"
-                style={weatherStyle.inputBar}
-                onChangeText={setText}
-                value={text}
               />
+            </Text>
+          </TouchableOpacity>
 
-              {/* search city */}
-              <TouchableOpacity
-                onPress={() => {
-                  setModalVisible(!modalVisible)
-                  searchCity()
-                }}
-                style={weatherStyle.modalContainer}>
-                <View style={{ paddingHorizontal: 10 }}>
-                  <Ionicons name="search" size={24} color='#0487d9' />
-                </View>
-                <View style={{ paddingHorizontal: 10 }}>
-                  <Text style={weatherStyle.modalText}>Search</Text>
-                </View>
-              </TouchableOpacity>
 
-              {/* close */}
-              <TouchableOpacity
-                style={weatherStyle.modalContainer}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <View style={{ paddingHorizontal: 10 }}>
-                  <Ionicons name="close" size={24} color="red" />
-                </View>
-                <View style={{ paddingHorizontal: 10 }}>
-                  <Text style={weatherStyle.modalText}>Cancel</Text>
-                </View>
-              </TouchableOpacity>
+          {/* MODAL */}
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={weatherStyle.centeredView}>
+              <View style={weatherStyle.modalView}>
+
+                {/* text input */}
+                <TextInput
+                  placeholder="Search city"
+                  style={weatherStyle.inputBar}
+                  onChangeText={setText}
+                  value={text}
+                  textAlign={'center'}
+                />
+
+                {/* search city */}
+                <TouchableOpacity
+                  onPress={() => {
+                    setModalVisible(!modalVisible)
+                    searchCity()
+                  }}
+                  style={weatherStyle.modalContainer}>
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Ionicons name="search" size={24} color='#0487d9' />
+                  </View>
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Text style={weatherStyle.modalText}>Search</Text>
+                  </View>
+                </TouchableOpacity>
+
+                {/* close */}
+                <TouchableOpacity
+                  style={weatherStyle.modalContainer}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Ionicons name="close" size={24} color="red" />
+                  </View>
+                  <View style={{ paddingHorizontal: 10 }}>
+                    <Text style={weatherStyle.modalText}>Cancel</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </Modal>
+          {/* MODAL */}
+
+
+
+          <Ionicons name={weatherSymbol(city?.weather[0].main)} size={150} color="white" style={{ marginVertical: 30 }} />
+          <Text style={weatherStyle.weatherStatus}>{city?.weather[0].description}</Text>
+          <Text style={weatherStyle.weatherDegree}>{city.main.temp}°</Text>
+          <View style={weatherStyle.detailContainer}>
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color: "white" }}>Wind</Text>
+              <Feather name="wind" size={24} color="white" style={{ marginVertical: 10 }} />
+              <Text style={weatherStyle.detailText}>{city.wind.speed} mph</Text>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color: "white" }}>Humidity</Text>
+              <Ionicons name="water" size={24} color="#72c1f2" style={{ marginVertical: 10 }} />
+              <Text style={weatherStyle.detailText}>{city.main.humidity}%</Text>
+            </View>
+            <View style={{ alignItems: "center" }}>
+              <Text style={{ color: "white" }}>Feeling</Text>
+              <FontAwesome5 name="temperature-low" size={24} color="white" style={{ marginVertical: 10 }} />
+              <Text style={weatherStyle.detailText}>{city.main.feels_like}°C</Text>
             </View>
           </View>
-        </Modal>
-        {/* MODAL */}
-
-
-
-        <Ionicons name={weatherSymbol(city?.weather[0].main)} size={150} color="white" style={{ marginVertical: 30 }} />
-        <Text style={weatherStyle.weatherStatus}>{city?.weather[0].description}</Text>
-        <Text style={weatherStyle.weatherDegree}>{city.main.temp}°</Text>
-        <View style={weatherStyle.detailContainer}>
-          <View style={{ alignItems: "center" }}>
-            <Text style={{ color: "white" }}>Wind</Text>
-            <Feather name="wind" size={24} color="white" style={{ marginVertical: 10 }} />
-            <Text style={weatherStyle.detailText}>{city.wind.speed} mph</Text>
-          </View>
-          <View style={{ alignItems: "center" }}>
-            <Text style={{ color: "white" }}>Humidity</Text>
-            <Ionicons name="water" size={24} color="#72c1f2" style={{ marginVertical: 10 }} />
-            <Text style={weatherStyle.detailText}>{city.main.humidity}%</Text>
-          </View>
-          <View style={{ alignItems: "center" }}>
-            <Text style={{ color: "white" }}>Feeling</Text>
-            <FontAwesome5 name="temperature-low" size={24} color="white" style={{ marginVertical: 10 }} />
-            <Text style={weatherStyle.detailText}>{city.main.feels_like}°C</Text>
-          </View>
         </View>
-        <BottomTab data={tripId} />
       </View>
+      <BottomTab data={tripId} />
     </SafeAreaView>
   )
 }
@@ -207,6 +210,7 @@ export default function Weather({ route }) {
 const weatherStyle = StyleSheet.create({
   container: {
     width: "100%",
+    height: '110%',
     alignItems: "center",
     backgroundColor: "#72c1f2"
   },
@@ -217,6 +221,8 @@ const weatherStyle = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)'
   },
   modalView: {
+    width: Dimensions.get('window').width-20,
+    marginHorizontal: 5,
     margin: 0,
     backgroundColor: "white",
     borderRadius: 10,
@@ -233,9 +239,7 @@ const weatherStyle = StyleSheet.create({
   },
   modalContainer: {
     // backgroundColor: "orange", 
-    width: 300,
     height: 50,
-    display: "flex",
     flexDirection: "row",
     alignItems: "center"
   },
@@ -245,10 +249,10 @@ const weatherStyle = StyleSheet.create({
   },
   inputBar: {
     height: 40,
+    width: '90%',
     margin: 12,
     borderWidth: 1,
-    paddingHorizontal: 130,
-    width: "100%",
+    paddingHorizontal: 1,
     borderRadius: 6,
     backgroundColor: "white",
     borderColor: "#E6E6E6",
