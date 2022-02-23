@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: backgroundColor,
     position: 'relative',
+
   },
 
 
@@ -99,7 +100,7 @@ export const styles = StyleSheet.create({
     backgroundColor: backgroundColor,
     color: '#fff',
     alignItems: 'center',
-    height: '95%',
+    height: '100%',
     paddingTop: 30
 
   },
