@@ -40,7 +40,7 @@ import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import BottomTab from '../components/BottomTabs';
 import { server } from '../globalvar';
-
+import loadingGif from '../assets/loading.gif'
 
 const screenWidth = Dimensions.get("window").width;
 const data = [
@@ -113,7 +113,66 @@ export default function Trip({ route }) {
   const [trip, setTrip] = useState({})
   const [cartData, setCartData] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
+
   const [coloredCart, setColoredCart] = useState([])
+
+  const [loading, setLoading] = useState(true)
+
+  const newCartData = (newData) => {
+    const temp = []
+    newData.forEach(el => {
+      if (temp.length === 0) {
+        temp.push({
+          name: el.ExpenseCategory.name,
+          amount: el.amount
+        })
+      } else {
+        // if (temp.length <= 5) {
+        //   const findone = temp.findIndex(elm => elm.name === el.ExpenseCategory.name);
+        //   if (findone >= 0) {
+        //     temp[findone].amount += el.amount
+        //   } else {
+        //     temp.push({
+        //       name: el.ExpenseCategory.name,
+        //       amount: el.amount
+        //     })
+        //   }
+        // } else {
+        //   if (!temp[5]) {
+        //     temp.push({
+        //       name: 'others',
+        //       amount: el.amount
+        //     })
+        //   } else {
+        //     temp[5].amount += el.amount
+        //   }
+        // }
+        const findone = temp.findIndex(elm => elm.name === el.ExpenseCategory.name);
+        if (findone >= 0) {
+          temp[findone].amount += el.amount
+        } else {
+          if (temp.length <= 5) {
+            temp.push({
+              name: el.ExpenseCategory.name,
+              amount: el.amount
+            })
+          } else {
+            if (!temp[5]) {
+              temp.push({
+                name: 'others',
+                amount: el.amount
+              })
+            } else {
+              temp[5].amount += el.amount
+            }
+          }
+        }
+      }
+      console.log(temp, '-----------------------');
+    });
+    setCartData(temp)
+    //handlechart
+  }
 
 
   const loginCheck = async () => {
@@ -208,6 +267,9 @@ export default function Trip({ route }) {
         .catch(err => {
           console.log(err)
         })
+        .finally(()=>{
+          setLoading(false)
+        })
     }
   }, [trip])
 
@@ -272,143 +334,179 @@ export default function Trip({ route }) {
 
 
 
-  const totalSaving = saving.length > 0 ? `Rp. ${saving.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "Rp 0"
+  const totalSavingNumber = saving.length > 0 ? saving.map(el => el.amount).reduce((prev, cur) => prev + cur) : 0
 
-  const totalExpenses = expense.length > 0 ? `Rp. ${expense.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "Rp 0"
+  const totalExpensesNumber = expense.length > 0 ? expense.map(el => el.amount).reduce((prev, cur) => prev + cur) : 0
+
+  const totalSaving = saving.length > 0 ? `IDR ${saving.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "IDR 0"
+
+  const totalExpenses = expense.length > 0 ? `IDR ${expense.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "IDR 0"
+
+  const remainingSavings = totalSavingNumber - totalExpensesNumber
+
+  const budgetVsExpenses = trip.targetBudget - totalExpensesNumber
 
   return (
 
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.screenSize}>
-        <View style={styles.mainContainer}>
+        
+        <ScrollView>
+          <View style={styles.mainContainer}>
 
-          <ImageBackground style={tripStyle.imageDetail} source={{ uri: trip.tripImageUrl }}>
-            <LinearGradient style={tripStyle.imageDetail} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.5 }}>
-              <View style={tripStyle.iconContainer}>
-                <TouchableOpacity style={tripStyle.iconButton}
-                  onPress={() => {
-                    navigation.navigate('Home')
-                  }}>
-                  <Ionicons name="arrow-back" size={24} color="white" />
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => setModalVisible(!modalVisible)}
-                  style={tripStyle.iconButton}>
-                  <Ionicons name="ellipsis-vertical" size={24} color="white" />
-                </TouchableOpacity>
+            <ImageBackground style={tripStyle.imageDetail} source={{ uri: trip.tripImageUrl }}>
+              <LinearGradient style={tripStyle.imageDetail} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.5 }}>
+                <View style={tripStyle.iconContainer}>
+                  <TouchableOpacity style={tripStyle.iconButton}
+                    onPress={() => {
+                      navigation.navigate('Home')
+                    }}>
+                    <Ionicons name="arrow-back" size={24} color="white" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => setModalVisible(!modalVisible)}
+                    style={tripStyle.iconButton}>
+                    <Ionicons name="ellipsis-vertical" size={24} color="white" />
+                  </TouchableOpacity>
+                </View>
+              </LinearGradient>
+            </ImageBackground>
+
+
+
+            {/* MODAL */}
+
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <View style={tripStyle.centeredView}>
+                <View style={tripStyle.modalView}>
+
+                  {/* edit trip */}
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(!modalVisible)
+                      navigation.navigate('EditTrip', {
+                        tripId: trip.id
+                      })
+
+                    }}
+                    style={tripStyle.modalContainer}>
+                    <View style={{ paddingHorizontal: 10 }}>
+                      <Feather name="edit" size={24} color="green" />
+                    </View>
+                    <View style={{ paddingHorizontal: 10 }}>
+                      <Text style={tripStyle.modalText}>Edit Trip</Text>
+                    </View>
+                  </TouchableOpacity>
+
+                  {/* download report */}
+                  <TouchableOpacity
+                    onPress={() => {
+                      setModalVisible(!modalVisible)
+                      downloadReport()
+                    }}
+                    style={tripStyle.modalContainer}>
+                    <View style={{ paddingHorizontal: 10 }}>
+                      <Feather name="download" size={24} color='#0487d9' />
+                    </View>
+                    <View style={{ paddingHorizontal: 10 }}>
+                      <Text style={tripStyle.modalText}>Download Trip Report</Text>
+                    </View>
+                  </TouchableOpacity>
+
+                  {/* delete */}
+                  <TouchableOpacity style={tripStyle.modalContainer}
+                    onPress={() => {
+                      setModalVisible(!modalVisible)
+                      deleteTrip()
+                    }}
+                  >
+                    <View style={{ paddingHorizontal: 10 }}>
+                      <AntDesign name="delete" size={24} color="black" />
+                    </View>
+                    <View style={{ paddingHorizontal: 10 }}>
+                      <Text style={tripStyle.modalText}>Delete</Text>
+                    </View>
+                  </TouchableOpacity>
+
+                  {/* close */}
+                  <TouchableOpacity style={tripStyle.modalContainer}
+                    onPress={() => setModalVisible(!modalVisible)}
+                  >
+                    <View style={{ paddingHorizontal: 10 }}>
+                      <Ionicons name="close" size={24} color="red" />
+                    </View>
+                    <View style={{ paddingHorizontal: 10 }}>
+                      <Text style={tripStyle.modalText}>Cancel</Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </LinearGradient>
-          </ImageBackground>
+            </Modal>
+
+            {/* MODAL */}
 
 
 
-          {/* MODAL */}
+            <View style={tripStyle.titleContainer}>
 
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View style={tripStyle.centeredView}>
-              <View style={tripStyle.modalView}>
-
-                {/* edit trip */}
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalVisible(!modalVisible)
-                    navigation.navigate('EditTrip', {
-                      tripId: trip.id
-                    })
-
-                  }}
-                  style={tripStyle.modalContainer}>
-                  <View style={{ paddingHorizontal: 10 }}>
-                    <Feather name="edit" size={24} color="green" />
-                  </View>
-                  <View style={{ paddingHorizontal: 10 }}>
-                    <Text style={tripStyle.modalText}>Edit Trip</Text>
-                  </View>
-                </TouchableOpacity>
-
-                {/* download report */}
-                <TouchableOpacity
-                  onPress={() => {
-                    setModalVisible(!modalVisible)
-                    downloadReport()
-                  }}
-                  style={tripStyle.modalContainer}>
-                  <View style={{ paddingHorizontal: 10 }}>
-                    <Feather name="download" size={24} color='#0487d9' />
-                  </View>
-                  <View style={{ paddingHorizontal: 10 }}>
-                    <Text style={tripStyle.modalText}>Download Trip Report</Text>
-                  </View>
-                </TouchableOpacity>
-
-                {/* delete */}
-                <TouchableOpacity style={tripStyle.modalContainer}
-                  onPress={() => {
-                    setModalVisible(!modalVisible)
-                    deleteTrip()
-                  }}
-                >
-                  <View style={{ paddingHorizontal: 10 }}>
-                    <AntDesign name="delete" size={24} color="black" />
-                  </View>
-                  <View style={{ paddingHorizontal: 10 }}>
-                    <Text style={tripStyle.modalText}>Delete</Text>
-                  </View>
-                </TouchableOpacity>
-
-                {/* close */}
-                <TouchableOpacity style={tripStyle.modalContainer}
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <View style={{ paddingHorizontal: 10 }}>
-                    <Ionicons name="close" size={24} color="red" />
-                  </View>
-                  <View style={{ paddingHorizontal: 10 }}>
-                    <Text style={tripStyle.modalText}>Cancel</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
+              <Text style={tripStyle.titleText}>{trip.name}</Text>
+              <Text>{`${moment(new Date(trip.startDate)).format('DD MMMM YYYY')} - ${moment(new Date(trip.endDate)).format('DD MMMM YYYY')}`}</Text>
             </View>
-          </Modal>
-
-          {/* MODAL */}
-
-
-
-          <View style={tripStyle.titleContainer}>
-
-            <Text style={tripStyle.titleText}>{trip.name}</Text>
-            <Text>{`${moment(new Date(trip.startDate)).format('DD MMMM YYYY')} - ${moment(new Date(trip.endDate)).format('DD MMMM YYYY')}`}</Text>
-          </View>
-          <View style={tripStyle.darkCardContainer}>
-            <View style={tripStyle.innerCardContainer}>
-              <View style={tripStyle.innerCardView}>
-                <Text style={tripStyle.innerCardBudget}>Budget Target</Text>
+            <View style={tripStyle.darkCardContainer}>
+              <View style={tripStyle.innerCardContainer}>
+                <View style={tripStyle.innerCardView}>
+                  <Text style={tripStyle.innerCardBudget}>Budget Target</Text>
+                </View>
+                <View style={tripStyle.innerCardView}>
+                  <Text style={tripStyle.innerCardNumber}>IDR {trip.targetBudget}</Text>
+                </View>
               </View>
-              <View style={tripStyle.innerCardView}>
-                <Text style={tripStyle.innerCardNumber}>Rp {trip.targetBudget}</Text>
+              <View style={tripStyle.blueCardContainer}>
+                <View style={tripStyle.blueCardView}>
+                  <Text style={tripStyle.blueCardNumber}>{totalSaving}</Text>
+                  <Text style={tripStyle.blueCardDesc}>Saving</Text>
+                </View>
+                <View style={tripStyle.cardSeparator} />
+                <View style={tripStyle.blueCardView}>
+                  <Text style={tripStyle.blueCardNumber}>{totalExpenses}</Text>
+                  <Text style={tripStyle.blueCardDesc}>Expenses</Text>
+                </View>
               </View>
+
+              {/* remaining savings */}
+
+              <View style={tripStyle.innerCardContainerBottom}>
+                <View style={tripStyle.innerCardView}>
+                  <Text style={tripStyle.innerCardBudgetRemainingSaving}>Remaining Savings</Text>
+                </View>
+                <View style={tripStyle.innerCardView}>
+                <Text style={remainingSavings < 0? tripStyle.blueCardNumberMinus:tripStyle.blueCardNumberPlus}>IDR {remainingSavings}</Text>
+                </View>
+              </View>
+
+              {/* target budget vs actual expenses */}
+
+              <View style={tripStyle.innerCardContainerBottomBottom}>
+                <View style={tripStyle.innerCardView}>
+                  <Text style={tripStyle.innerCardBudgetRemainingSaving}>Budget vs Expenses</Text>
+                </View>
+                <View style={tripStyle.innerCardView}>
+                <Text style={budgetVsExpenses < 0? tripStyle.blueCardNumberMinus:tripStyle.blueCardNumberPlus}>IDR {budgetVsExpenses}</Text>
+                </View>
+              </View>
+
+
+
             </View>
-            <View style={tripStyle.blueCardContainer}>
-              <View style={tripStyle.blueCardView}>
-                <Text style={tripStyle.blueCardNumber}>{totalSaving}</Text>
-                <Text style={tripStyle.blueCardDesc}>Saving</Text>
-              </View>
-              <View style={tripStyle.cardSeparator} />
-              <View style={tripStyle.blueCardView}>
-                <Text style={tripStyle.blueCardNumber}>{totalExpenses}</Text>
-                <Text style={tripStyle.blueCardDesc}>Expenses</Text>
-              </View>
-            </View>
-          </View>
+
 
 
           {/* <View style={tripStyle.emptyContainer}>
@@ -430,8 +528,14 @@ export default function Trip({ route }) {
               />
             </View>
           </View>
-        </View>
+
+        </ScrollView>
         <BottomTab data={trip.id} />
+        {loading ? (
+          <View style={{ width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)" }}>
+            <Image source={loadingGif} />
+          </View>
+        ) : undefined}
       </SafeAreaView>
     </TouchableWithoutFeedback>
 
@@ -508,7 +612,27 @@ const tripStyle = StyleSheet.create({
     alignItems: 'center',
     justifyContent: "space-between",
     padding: 15,
-    marginBottom: 5
+    marginBottom: 5,
+  },
+  innerCardContainerBottom: {
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "space-between",
+    padding: 15,
+    marginBottom: 0,
+    backgroundColor:"white"
+  },
+  innerCardContainerBottomBottom: {
+    flexDirection: "row",
+    alignItems: 'center',
+    justifyContent: "space-between",
+    padding: 15,
+    marginBottom: -10,
+    backgroundColor:"white",
+    borderTopWidth:1,
+    borderTopColor:'#0378a6',
+    borderBottomLeftRadius:10,
+    borderBottomRightRadius:10,
   },
   innerCardView: {
     width: "50%",
@@ -518,6 +642,9 @@ const tripStyle = StyleSheet.create({
   },
   innerCardBudget: {
     color: "#fff",
+    fontSize: 16
+  },
+  innerCardRemainingSaving: {
     fontSize: 16
   },
   innerCardNumber: {
@@ -530,7 +657,8 @@ const tripStyle = StyleSheet.create({
     alignItems: 'center',
     justifyContent: "space-between",
     padding: 15,
-    borderRadius: 10,
+    borderTopRightRadius:10,
+    borderTopLeftRadius:10,
     backgroundColor: '#0378a6'
   },
   blueCardView: {
@@ -547,6 +675,16 @@ const tripStyle = StyleSheet.create({
     fontSize: 21,
     fontWeight: "bold",
     color: "#fff"
+  },
+  blueCardNumberPlus: {
+    fontSize: 21,
+    fontWeight: "bold",
+    color: "#3cb043"
+  },
+  blueCardNumberMinus: {
+    fontSize: 21,
+    fontWeight: "bold",
+    color: "#E53232"
   },
   blueCardDesc: {
     color: "#fff",

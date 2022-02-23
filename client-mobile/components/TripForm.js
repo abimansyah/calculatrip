@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, TextInput, ImageBackground, Picker, ScrollView, Platform } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet, TextInput, ImageBackground, Picker, ScrollView, Image, Alert, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateField from 'react-native-datefield';
@@ -11,6 +11,8 @@ import moment from 'moment'
 import axios from 'axios'
 import { useRoute } from '@react-navigation/native';
 import RNPickerSelect from 'react-native-picker-select';
+import loadingGif from '../assets/loading.gif'
+
 
 export default function TripForm({ type }) {
   const [randomPhotos] = useState([
@@ -35,6 +37,7 @@ export default function TripForm({ type }) {
   const [isFile, setIsFile] = useState(false)
   const route = useRoute();
   const tripId = route.params?.tripId
+  const [loading, setLoading] = useState(false)
 
   function formatDate(value) {
     let newDate = []
@@ -69,7 +72,7 @@ export default function TripForm({ type }) {
   }
 
   const submitTrip = () => {
-    
+      setLoading(true)
       let formDataBody = new FormData();
       let localUri = tripImage;
       let filename = localUri.split('/').pop();
@@ -113,7 +116,7 @@ export default function TripForm({ type }) {
       setName("")
       setTargetBudget("")
       // console.log("Trip has been added");
-      alert(result.message);
+      Alert.alert('Success',result.message);
       if(type === "Add") {
         navigation.navigate('Home', {tripId})
       } else {
@@ -121,7 +124,8 @@ export default function TripForm({ type }) {
       }
     })
     .catch((err)=>{
-      alert(err.message);
+      setLoading(false)
+      Alert.alert('Error',err.message);
     })
   }
 
@@ -142,6 +146,7 @@ export default function TripForm({ type }) {
     if (type === "Add") {
       randomizeImage()
     } else {
+      setLoading(true)
       loginCheck()
         .then(tokenA => {
           return axios.get(`${server}/trips/${tripId}`, {
@@ -160,7 +165,12 @@ export default function TripForm({ type }) {
         })
         .catch(err => {
           console.log(err)
-          if (err.response.data.message) alert(err.response.data.message)
+
+          if(err.response.data.message) Alert.alert('Error',err.response.data.message)
+        })
+        .finally(()=>{
+          setLoading(false)
+
         })
     }
   }, [])
@@ -278,6 +288,12 @@ export default function TripForm({ type }) {
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {loading ? (
+        <View style={{ width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)" }}>
+          <Image source={loadingGif} />
+        </View>
+      ) : undefined}
     </View>
   )
 }

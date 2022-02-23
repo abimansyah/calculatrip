@@ -140,6 +140,7 @@ export default function Weather({ route }) {
                 {/* text input */}
                 <TextInput
                   placeholder="Search city"
+                  placeholderTextColor={'#a6a6a6'}
                   style={weatherStyle.inputBar}
                   onChangeText={setText}
                   value={text}

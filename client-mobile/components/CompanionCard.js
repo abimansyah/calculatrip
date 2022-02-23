@@ -40,6 +40,7 @@ export default function CompanionCard({ data }) {
   );
 
   return (
+
     <TouchableHighlight onLongPress={() => deleteCompanion()} underlayColor="white">
       <View style={companionCardStyle.containter}>
         <View style={{ width: "60%" }}>
@@ -49,6 +50,7 @@ export default function CompanionCard({ data }) {
         <View style={data.UserTrip.status === "accept" ? companionCardStyle.buttonAccept : companionCardStyle.buttonPending}>
           <Text>{data.UserTrip.status}</Text>
         </View>
+
       </View>
     </TouchableHighlight>
   )
@@ -71,17 +73,40 @@ const companionCardStyle = StyleSheet.create({
   buttonAccept: {
     padding: 10,
     alignSelf: 'flex-start',
-    backgroundColor: "green",
-    borderRadius: 10
+    backgroundColor: "#3cb043",
+    borderRadius: 10,
   },
   buttonPending: {
     padding: 10,
     alignSelf: 'flex-start',
-    backgroundColor: "yellow",
-    borderRadius: 10
+    backgroundColor: "#CC9426",
+    borderRadius: 10,
+  },
+  buttonStatus:{
+    padding: 7,
+    alignSelf: 'flex-start',
+    backgroundColor: "#EDEDED",
+    borderRadius: 6,
+    shadowColor: "#000",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold'
-  }
+  },
+  buttonTextAccept: {
+    color: "#3cb043",
+    fontWeight: 'bold'
+  },
+  buttonTextPending: {
+    color: '#E2AE12',
+    fontWeight: 'bold'
+  },
 })

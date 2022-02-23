@@ -9,7 +9,8 @@ import {
   ScrollView,
   Platform,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import DateField from 'react-native-datefield';
@@ -50,13 +51,13 @@ export default function Register({ navigation }) {
       setDate("")
       if (resp.data !== null) {
         setLoading(false)
-        alert("Register is success!")
+        Alert.alert("Success","Register is success!")
         navigation.navigate('Login')
       }
     } catch (err) {
       setIsLoading(false)
       console.log(err);
-      alert(err.response.data.message)
+      Alert.alert("Error",err.response.data.message)
     }
   }
 
