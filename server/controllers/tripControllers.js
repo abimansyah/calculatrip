@@ -4,16 +4,7 @@ const {
   UserTrip,
   sequelize
 } = require("../models/index");
-const imageRandomizer = require("../helpers/imageRandomizer");
 
-const defaultBackgrounds = [
-  "https://images.unsplash.com/photo-1642287458180-449fad5abc2f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1932&q=80",
-  "https://images.unsplash.com/photo-1462400362591-9ca55235346a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2032&q=80",
-  "https://images.unsplash.com/photo-1510908072721-6fbd31199630?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
-  "https://images.unsplash.com/photo-1535747790212-30c585ab4867?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2025&q=80",
-  "https://images.unsplash.com/photo-1465256410760-10640339c72c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2070&q=80",
-  "https://images.unsplash.com/photo-1488441770602-aed21fc49bd5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2069&q=80",
-];
 
 class TripController {
   static async postTrip(req, res, next) {
@@ -87,6 +78,9 @@ class TripController {
             },
           }, ],
         }, ],
+        order: [
+          ['id', 'DESC']
+        ]
       });
       res.status(200).json(trip);
     } catch (err) {
@@ -164,8 +158,7 @@ class TripController {
         startDate,
         endDate,
         homeCurrency,
-        tripImageUrl: req.uploadUrl ||
-          defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
+        tripImageUrl: req.uploadUrl,
         targetBudget,
       }, {
         where: {

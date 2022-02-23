@@ -110,7 +110,7 @@ const data =[
   {
     "ExpenseCategory": {
       "icon": "http://dummyimage.com/119x100.png/ff4444/ffffff",
-      "name": "Coffee",
+      "name": "Tas",
     },
     "PaymentMethod": {
       "icon": "http://dummyimage.com/169x100.png/cc0000/ffffff",
@@ -324,27 +324,35 @@ const data =[
     "userId": 1,
   },
 ]
-let chartData = []
 const newCartData = () => {
-  data.forEach(el => {
-    if (chartData.length === 0) {
-      chartData.push({
-        name: el.ExpenseCategory.name,
-        amount: el.amount
-      })
-    } else {
-      const findone = chartData.findIndex(elm => elm.name === el.ExpenseCategory.name);
-      if (findone >= 0) {
-        chartData[findone].amount += el.amount
-      } else {
-        chartData.push({
-          name: el.ExpenseCategory.name,
-          amount: el.amount
-        })
-      }
+  const sorting = data.map(el => {
+    let show = {
+      name: el.ExpenseCategory.name,
+      amount: el.amount
     }
-  });
-  //handlechart
+    return show
+  }).reduce((prev, cur) => {
+    const found = prev.find(a => a.name === cur.name)
+    if(!found) {
+      prev.push({name: cur.name, amount: cur.amount})
+    } else {
+      found.amount += cur.amount
+    }
+    return prev
+  }, []).sort((a, b) => {
+    if(a.amount > b.amount) return -1
+    if(a.amount < b.amount) return 1
+    return 0
+  }).reduce((prev, cur) => {
+    if(prev.length < 5) {
+      prev.push(cur)
+    } else if(prev.length === 5) {
+      prev.push({name: "Others", amount: cur.amount})
+    } else {
+      prev[5].amount += cur.amount
+    }
+    return prev
+  }, [])
+  return sorting
 }
-newCartData()
-console.log(chartData);
+console.log(newCartData());

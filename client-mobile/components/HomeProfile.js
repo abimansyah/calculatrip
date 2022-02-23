@@ -11,7 +11,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { server } from '../globalvar';
 
-export default function HomeProfile({ isFocused }) {
+export default function HomeProfile({ tripId }) {
   const navigation = useNavigation()
   const [user, setUser] = useState({})
   const doLogout = async () => {
@@ -37,7 +37,7 @@ export default function HomeProfile({ isFocused }) {
         alert(err.response.data.message)
       }
     }
-  }, [isFocused])
+  }, [tripId])
 
   return (
     <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-between", marginVertical: 5, marginHorizontal: 10, padding: 15, borderRadius: 10, backgroundColor: '#0378a6' }}>
