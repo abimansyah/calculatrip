@@ -67,8 +67,8 @@ export default function TripForm({ type }) {
     setTripImage(randomPhotos[randomIndex])
   }
 
-  const submitTrip = async () => {
-    try {
+  const submitTrip = () => {
+    
       let formDataBody = new FormData();
       let localUri = tripImage;
       let filename = localUri.split('/').pop();
@@ -89,7 +89,8 @@ export default function TripForm({ type }) {
       formDataBody.append('endDate', formatDate(endDate))
       const link = type === "Add" ? `${server}/trips` : `${server}/trips/${tripId}`
       const method = type === "Add" ? "post" : "put"
-      const response = await fetch(link, {
+
+      fetch(link,{
       method,
       headers: {
         'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
@@ -97,17 +98,29 @@ export default function TripForm({ type }) {
       },
       body: formDataBody,
     })
+    .then((response)=> {
+      if(response.ok) {
+        return response.json()
+      } else {
+        return response.json().then((err)=> {
+          throw err
+        })
+      }
+    })
+    .then((result)=>{
       setName("")
       setTargetBudget("")
-      console.log("Trip has been added");
+      // console.log("Trip has been added");
+      alert(result.message);
       if(type === "Add") {
         navigation.navigate('Home', {tripId})
       } else {
         navigation.navigate('Trip', {tripId})
       }
-    } catch (error) {
-      console.log(error, "<<<<<<<<<<<<<");
-    }
+    })
+    .catch((err)=>{
+      alert(err.message);
+    })
   }
 
   const loginCheck = async () => {
@@ -180,8 +193,8 @@ export default function TripForm({ type }) {
         <Text style={{ fontSize: 18, fontWeight: "bold" }}>{`${type} Trip`}</Text>
       </View>
 
-      <ScrollView>
-        <View style={{ marginHorizontal: 40, marginTop: 10, marginBottom: 100 }}>
+      <ScrollView style={{paddingBottom: 5}}>
+        <View style={{ marginHorizontal: 40, marginTop: 10, marginBottom: 30 }}>
           <Text>Trip Name</Text>
           <TextInput
             style={focused === 'name' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
@@ -205,8 +218,18 @@ export default function TripForm({ type }) {
               selectedValue={homeCurrency}
               onValueChange={itemValue => setHomeCurrency(itemValue)}
             >
-              <Picker.Item label="IDR" value="idr" />
-              <Picker.Item label="USD" value="usd" />
+              <Picker.Item label="Indonesian Rupiah" value="IDR" />
+              <Picker.Item label="United States Dollar" value="USD" />
+              <Picker.Item label="Chinese Yuan" value="CNY" />
+              <Picker.Item label="Australian Dollar" value="AUD" />
+              <Picker.Item label="British Pound Sterling" value="GBP" />
+              <Picker.Item label="European Euro" value="EUR" />
+              <Picker.Item label="Japanese Yen" value="JPY" />
+              <Picker.Item label="Malaysian Ringgit" value="MYR" />
+              <Picker.Item label="Singapore Dollar" value="SGD" />
+              <Picker.Item label="South Korean Won" value="KRW" />
+              <Picker.Item label="Thai Baht" value="THB" />
+              <Picker.Item label="United Arab Emirates Dirham" value="AED" />
             </Picker>
           </View>
           <Text>Start Date</Text>
@@ -254,6 +277,7 @@ const editProfileStyle = StyleSheet.create({
   },
   iconContainer: {
     padding: 10,
+    marginTop: 30,
     flexDirection: 'row',
     justifyContent: "flex-start",
   },

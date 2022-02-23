@@ -4,17 +4,23 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from '@expo/vector-icons';
 import DateField from 'react-native-datefield';
 import { styles } from "../styles"
-import logo from '../assets/logo.png'
+import axios from 'axios';
+import { server } from '../globalvar';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import loadingGif from '../assets/loading.gif'
 
-export default function EditProfile() {
-  const [username, setUsername] = useState("Username")
-  const [email, setEmail] = useState("Email@gmail.com")
-  const [password, setPassword] = useState("")
-  const [birthDate, setBirthDate] = useState("12/25/2021")
-  const [phoneNumber, setPhoneNumber] = useState("081108101")
+export default function EditProfile({ navigation }) {
+  const [userId, setUserId] = useState()
+  const [username, setUsername] = useState("")
+  const [email, setEmail] = useState("")
+  // const [password, setPassword] = useState("")
+  const [birthDate, setBirthDate] = useState(new Date())
+  const [phoneNumber, setPhoneNumber] = useState("")
   const [avatar, setAvatar] = useState("airplane")
   const [focused, setFocused] = useState('')
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
+  const [token, setToken] = useState("")
+  const [loading, setLoading] = useState(true)
 
   function formatDate(value) {
     let newDate = []
@@ -24,15 +30,61 @@ export default function EditProfile() {
     newDate.push(formated[2])
     newDate.push(formated[0])
     newDate = newDate.join('-')
-    setBirthDate(newDate);
+    return newDate
   }
 
-  useEffect(() => {}, [])
+  const submit = () => {
+    setLoading(true)
+    axios.put(`${server}/users/${userId}`, {
+      email,
+      username,
+      birthDate: formatDate(birthDate),
+      phoneNumber,
+      avatar
+    }, {
+      headers: {
+        access_token: token
+      }
+    })
+      .then(res => {
+        alert(res.data.message)
+        navigation.navigate("Home", {tripId: userId})
+      })
+      .catch(err => {
+        console.log(err)
+        alert(err.response.data.message)
+      })
+  }
+
+  useEffect(() => {
+    AsyncStorage.getItem('access_token')
+      .then(tokenA => {
+        setToken(tokenA)
+        return axios.get(`${server}/users/profile`, {
+          headers: {
+            access_token: tokenA
+          }
+        })
+      })
+      .then(res => {
+        setUserId(res.data.id)
+        setUsername(res.data.username)
+        setEmail(res.data.email)
+        setBirthDate(new Date(res.data.birthDate))
+        setPhoneNumber(res.data.phoneNumber)
+        setAvatar(res.data.avatar)
+        setLoading(false)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }, [])
+
   return(
     <SafeAreaView style={styles.mainContainer}>
       <View style={{ position: 'relative', height: '100%' }}>
         <View style={editProfileStyle.headerView}>
-          <TouchableOpacity style={{padding: 15}} >
+          <TouchableOpacity style={{padding: 15}} onPress={() => navigation.navigate("Home")}>
             <Ionicons name="arrow-back" size={30} color="white" />
           </TouchableOpacity>
           <Text style={{marginLeft: 40, color: "#fff"}}>Username</Text>
@@ -58,7 +110,7 @@ export default function EditProfile() {
             value={email}
             onChangeText={setEmail}
           />
-          <Text>New Password</Text>
+          {/* <Text>New Password</Text>
           <TextInput
             secureTextEntry={true}
             style={focused === 'password' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
@@ -66,15 +118,16 @@ export default function EditProfile() {
             onFocus={() => setFocused('password')}
             value={password}
             onChangeText={setPassword}
-          />
+          /> */}
           <Text>Birth Date</Text>
           <View style={editProfileStyle.inputDate}>
             <DateField
               labelDate="Birth date"
               labelMonth="Birth month"
               labelYear="Birth year"
-              onSubmit={(value) => formatDate(value)}
-              defaultValue={new Date(birthDate)}
+              onSubmit={(value) => setBirthDate(new Date(value))}
+              defaultValue={birthDate}
+              value={birthDate}
             />
           </View>
           <Text>Phone Number</Text>
@@ -123,10 +176,15 @@ export default function EditProfile() {
           </TouchableOpacity>
         </View>
         <View style={editProfileStyle.checkContainer}>
-          <TouchableOpacity style={{ alignSelf: 'flex-start' }}>
+          <TouchableOpacity style={{ alignSelf: 'flex-start' }} onPress={() => submit()}>
             <Ionicons name="checkmark" size={24} color="#0378a6" style={editProfileStyle.checkButton} />
           </TouchableOpacity>
         </View>
+        {loading ? (
+            <View style={{width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)"}}>
+              <Image source={loadingGif} />
+            </View>
+          ) : undefined}
       </View>
     </SafeAreaView>
   )
@@ -206,8 +264,6 @@ const editProfileStyle = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "flex-end",
-    position: 'absolute',
-    bottom: 40,
     paddingRight: 40
   },
   checkButton: {

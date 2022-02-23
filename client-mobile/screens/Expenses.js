@@ -15,8 +15,6 @@ import moment from 'moment'
 import { useNavigation } from '@react-navigation/native';
 
 
-
-
 export default function Expenses({ route }) {
   const navigation = useNavigation();
   const { tripId } = route.params
