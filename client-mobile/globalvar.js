@@ -1,1 +1,2 @@
-export const server = "http://1672-103-78-115-90.ngrok.io"
+export const server = "https://calculatrip-server-v1.herokuapp.com"
+
