@@ -4,10 +4,12 @@ import { styles } from '../styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
+
 import { useNavigation } from '@react-navigation/native';
 
 export default addSaving = ({ data }) => {
   const nav = useNavigation()
+
   const [focused, setFocused] = useState('')
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
@@ -27,7 +29,9 @@ const addNewSaving = async () => {
         access_token: token
       }
     })
-    console.log(resp.data);
+    
+    alert(resp.data.message);
+    navigation.navigate('Saving', {tripId: data})
   } catch (err) {
     console.log(err);
   }

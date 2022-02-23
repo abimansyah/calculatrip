@@ -68,8 +68,8 @@ export default function TripForm({ type }) {
     setTripImage(randomPhotos[randomIndex])
   }
 
-  const submitTrip = async () => {
-    try {
+  const submitTrip = () => {
+    
       let formDataBody = new FormData();
       let localUri = tripImage;
       let filename = localUri.split('/').pop();
@@ -90,25 +90,39 @@ export default function TripForm({ type }) {
       formDataBody.append('endDate', formatDate(endDate))
       const link = type === "Add" ? `${server}/trips` : `${server}/trips/${tripId}`
       const method = type === "Add" ? "post" : "put"
-      const response = await fetch(link, {
-        method,
-        headers: {
-          'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
-          access_token: token,
-        },
-        body: formDataBody,
-      })
+
+
+      fetch(link,{
+      method,
+      headers: {
+        'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
+        access_token: token,
+      },
+      body: formDataBody,
+    })
+    .then((response)=> {
+      if(response.ok) {
+        return response.json()
+      } else {
+        return response.json().then((err)=> {
+          throw err
+        })
+      }
+    })
+    .then((result)=>{
       setName("")
       setTargetBudget("")
-      console.log("Trip has been added");
-      if (type === "Add") {
-        navigation.navigate('Home', { tripId })
+      // console.log("Trip has been added");
+      alert(result.message);
+      if(type === "Add") {
+        navigation.navigate('Home', {tripId})
       } else {
         navigation.navigate('Trip', { tripId })
       }
-    } catch (error) {
-      console.log(error, "<<<<<<<<<<<<<");
-    }
+    })
+    .catch((err)=>{
+      alert(err.message);
+    })
   }
 
   const loginCheck = async () => {
@@ -206,8 +220,8 @@ export default function TripForm({ type }) {
         <Text style={{ fontSize: 18, fontWeight: "bold" }}>{`${type} Trip`}</Text>
       </View>
 
-      <ScrollView>
-        <View style={{ marginHorizontal: 40, marginTop: 10, marginBottom: 100 }}>
+      <ScrollView style={{paddingBottom: 5}}>
+        <View style={{ marginHorizontal: 40, marginTop: 10, marginBottom: 30 }}>
           <Text>Trip Name</Text>
           <TextInput
             style={focused === 'name' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
@@ -227,9 +241,11 @@ export default function TripForm({ type }) {
           />
           <Text>Currency</Text>
           <View style={editProfileStyle.inputDate}>
+
             {
               Platform.OS === 'ios' ? iosDropdown : androidDropdown
             }
+
 
 
           </View>
@@ -278,6 +294,7 @@ const editProfileStyle = StyleSheet.create({
   },
   iconContainer: {
     padding: 10,
+    marginTop: 30,
     flexDirection: 'row',
     justifyContent: "flex-start",
   },
