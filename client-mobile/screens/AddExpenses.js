@@ -13,6 +13,8 @@ import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 export default function AddExpenses({ route }) {
+
+
   const nav = useNavigation();
   const { categoryId, tripId, iconName } = route.params;
   const [amount, setAmount] = useState(null);
@@ -23,6 +25,10 @@ export default function AddExpenses({ route }) {
   const [focused, setFocused] = useState("");
   const [scanImage, setScanImage] = useState(null);
   const [token, setToken] = useState("");
+   const [tripImage, setTripImage] = useState(null);
+  const [isFile, setIsFile] = useState(false)
+  const [currentTrip, setCurrentTrip] = useState({})
+
 
   const phoneInput = Platform.OS === "ios" ? "number-pad" : "numeric";
   function formatDate(value) {
@@ -124,6 +130,22 @@ export default function AddExpenses({ route }) {
   //   }
   // }, [tripImage])
 
+  useEffect(async()=> {
+    try {
+      const token = await AsyncStorage.getItem('access_token')
+      const response = await axios.get(`${server}/trips/${tripId}`,{
+        headers: {
+          access_token: token
+        }
+      })
+      setCurrentTrip(response.data)
+    } catch (err) {
+      console.log(err);
+    }
+  },[])
+
+
+
   const value = {
     name: name,
     amount: amount,
@@ -167,7 +189,9 @@ export default function AddExpenses({ route }) {
               <Icon name={iconName} size={48} color="white" />
               <View style={{ alignItems: "flex-end" }}>
                 <View style={{ flexDirection: "row" }}>
-                  <Text style={{ fontSize: 32, color: "#fff" }}>Rp </Text>
+                  <Text 
+
+                  style={{ fontSize: 32, color: "#fff" }}>{currentTrip.homeCurrency.toUpperCase()} </Text>
                   <TextInput
                     keyboardType={phoneInput}
                     style={focused === "amount" ? editProfileStyle.title : editProfileStyle.title}
