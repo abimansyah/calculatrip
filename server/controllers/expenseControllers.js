@@ -112,6 +112,11 @@ class ExpenseController {
           attributes: {
             exclude: ["password", "createdAt", "updatedAt", "avatar", "phoneNumber", "birthDate"]
           }
+        }, {
+          model: Images,
+          attributes: {
+            exclude: ["createdAt", "updatedAt"]
+          }
         }]
       })
 

@@ -1213,30 +1213,7 @@ describe('PUT /users/:id - Edit profile user', () => {
             })
     })
 
-    test('PUT /users/:id success status (400) - should return error password less than 7 characther edit profile user by id', (done) => {
-        request(app)
-            .put('/users/1')
-            .set("access_token", token)
-            .send({
-                username: "rodheykenatestlagi",
-                email: "lbinter@yahoo.com",
-                password: "12",
-                phoneNumber: "1234564412",
-                avatar: "abcder",
-                birthDate: "01-01-2022"
-            })
-            .then(resp => {
-                const result = resp.body
-                // console.log(result)
-                expect(resp.status).toBe(400)
-                expect(result).toEqual(expect.any(Object))
-                expect(result).toHaveProperty("message", "Password length min 7");
-                done()
-            })
-            .catch(err => {
-                console.log(err)
-            })
-    })
+
 
     test('PUT /users/:id success status (400) - should return error unauthorize edit profile user not owner user', (done) => {
         request(app)

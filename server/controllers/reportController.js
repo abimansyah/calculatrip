@@ -134,7 +134,7 @@ class reportController {
 
       await pdf.create(document, options);
 
-      let baseUrl = "http://localhost:3000"
+      let baseUrl = "https://calculatrip-server-v1.herokuapp.com"
       res.status(200).json({
         message: "Your trip report has been created",
         url: `${baseUrl}/${tripNameUrl}-trip-report-${trip.id}.pdf`,

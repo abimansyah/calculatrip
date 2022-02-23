@@ -1,7 +1,7 @@
 const axios = require('axios')
 
 
-const PRIVATEKEYIMAGEKIT = "private_OkNSf90vWQvyXxxz75BgzFrvaqU="
+const PRIVATEKEYIMAGEKIT = process.env.PRIVATEKEYIMAGEKIT
 
 instanceAxios = axios.create({
     baseURL: 'https://upload.imagekit.io/api/v1/',

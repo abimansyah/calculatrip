@@ -127,7 +127,7 @@ Request:
 
 ```json
 {
-  "lat":"city",
+  "city":"city",
 }
 ```
 
