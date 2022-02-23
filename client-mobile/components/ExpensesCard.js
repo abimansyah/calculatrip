@@ -8,9 +8,11 @@ import "intl/locale-data/jsonp/en";
 import { useEffect, useState } from 'react';
 import { server } from '../globalvar';
 
-export default function ExpensesCard({data}) {
+
+export default function ExpensesCard({data, curr}) {
   const [token, setToken] = useState("")
   const [homeCurrency, setHomeCurrency] = useState("")
+
   const nav = useNavigation();
   const currencyFormat = (value)=>{
     return new Intl.NumberFormat(['ban', 'id']).format(value)
@@ -39,7 +41,9 @@ export default function ExpensesCard({data}) {
       </View>
       <View style={{flexDirection: "column", alignItems: "flex-end"}}>
         <Text>{data.ExpenseCategory.name}</Text>
-        <Text style={expensesCardStyle.moneyText}>{homeCurrency} {currencyFormat(data.amount)}</Text>
+        <Text style={expensesCardStyle.moneyText}>
+          <Text style={{fontSize:14, color:"gray", fontWeight:"normal"}}>({curr}) </Text>
+        {currencyFormat(data.amount)}</Text>
       </View>
     </TouchableOpacity>
   )

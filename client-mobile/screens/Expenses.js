@@ -12,9 +12,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
 import moment from 'moment'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 import "intl";
 import "intl/locale-data/jsonp/en";
+
 
 
 export default function Expenses({ route }) {
@@ -24,12 +25,16 @@ export default function Expenses({ route }) {
   const [loading, setLoading] = useState(false)
   const [token, setToken] = useState('')
 
+  const routesLength = useNavigationState(state => state.routes.length);
+  const [trip, setTrip] = useState({})
   const bs = React.createRef();
   const fall = new Animated.Value(1);
   const currencyFormat = (value)=>{
     return new Intl.NumberFormat(['ban', 'id']).format(value)
   }
   const totalExpenses = expenses.length > 0 ? expenses.map(el => el.amount).reduce((prev, cur) => prev + cur) : "Rp 0"
+
+  
 
   const headerModal = () => {
     return (
@@ -52,6 +57,21 @@ export default function Expenses({ route }) {
       console.log(err);
     }
   }
+
+  useEffect(async()=> {
+    try {
+      const token = await AsyncStorage.getItem('access_token')
+      const response = await axios.get(`${server}/trips/${tripId}`,{
+        headers: {
+          access_token: token
+        }
+      })
+      console.log(response.data.homeCurrency);
+      setTrip(response.data)
+    } catch (err) {
+      console.log(err);
+    }
+  },[])
 
   useEffect(() => {
     if (token) {
@@ -78,10 +98,10 @@ export default function Expenses({ route }) {
       <View  style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <BottomSheet
           ref={bs}
-          snapPoints={[730, 0]}
+          snapPoints={[730, 0, 0]}
           renderContent={() => { return (<ExpenseCategoryModal data={tripId} />) }}
           renderHeader={headerModal}
-          initialSnap={1}
+          initialSnap={2}
           callbackNode={fall}
           enabledGestureInteraction={true}
           enabledHeaderGestureInteraction={true}
@@ -100,7 +120,11 @@ export default function Expenses({ route }) {
             <View style={expensesStyle.blueCardContainer}>
               <View style={expensesStyle.blueCardView}>
                 <Text style={expensesStyle.blueCardDesc}>Total Expenses</Text>
-                <Text style={expensesStyle.blueCardNumber}>{currencyFormat(totalExpenses)}</Text>
+
+                  <View style={{flexDirection:'row', alignItems:"center",}}>
+                    <Text style={expensesStyle.blueCardNumber}>{currencyFormat(totalExpenses)}</Text>
+                    <Text style={{marginTop:8, fontSize:20, marginLeft:10, fontWeight:"bold", color:"white"}}>{trip.homeCurrency}</Text>
+                  </View>
               </View>
               <TouchableOpacity 
               onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
@@ -113,7 +137,7 @@ export default function Expenses({ route }) {
               <FlatList
                 nestedScrollEnabled={true}
                 data={expenses}
-                renderItem={({ item }) => (<ExpensesCard data={item} />)}
+                renderItem={({ item }) => (<ExpensesCard data={item} curr={trip.homeCurrency} />)}
                 keyExtractor={(item) => `Expenses${item.id}`}
                 contentContainerStyle={{ paddingVertical: 10 }}
               />
@@ -157,7 +181,8 @@ const expensesStyle = StyleSheet.create({
     marginTop: -50
   },
   blueCardView: {
-    width: "80%"
+    width: "80%",
+    
   },
   blueCardNumber: {
     fontSize: 28,

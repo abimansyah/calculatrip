@@ -6,7 +6,8 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
+  Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
@@ -54,7 +55,7 @@ export default function Home({ navigation, route }) {
     } catch (err) {
       console.log(err)
       if (typeof err === "object" && err.response.data.message) {
-        alert(err.response.data.message)
+        Alert.alert("Error",err.response.data.message)
       }
     }
   }

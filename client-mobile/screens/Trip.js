@@ -40,7 +40,7 @@ import { Feather } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import BottomTab from '../components/BottomTabs';
 import { server } from '../globalvar';
-
+import loadingGif from '../assets/loading.gif'
 
 const screenWidth = Dimensions.get("window").width;
 const data = [
@@ -114,6 +114,9 @@ export default function Trip({ route }) {
   const [cartData, setCartData] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
 
+  const [coloredCart, setColoredCart] = useState([])
+
+  const [loading, setLoading] = useState(true)
 
   const newCartData = (newData) => {
     const temp = []
@@ -260,10 +263,12 @@ export default function Trip({ route }) {
       })
         .then(res => {
           setExpense(res.data)
-          newCartData(res.data)
         })
         .catch(err => {
           console.log(err)
+        })
+        .finally(()=>{
+          setLoading(false)
         })
     }
   }, [trip])
@@ -271,6 +276,61 @@ export default function Trip({ route }) {
   useEffect(() => {
     loginCheck()
   }, [])
+
+  useEffect(() => {
+    if (expense) {
+      const newCartData = () => {
+        const sorting = expense?.map(el => {
+          let show = {
+            name: el.ExpenseCategory.name,
+            amount: el.amount
+          }
+          return show
+        }).reduce((prev, cur) => {
+          const found = prev.find(a => a.name === cur.name)
+          if (!found) {
+            prev.push({ name: cur.name, amount: cur.amount })
+          } else {
+            found.amount += cur.amount
+          }
+          return prev
+        }, []).sort((a, b) => {
+          if (a.amount > b.amount) return -1
+          if (a.amount < b.amount) return 1
+          return 0
+        }).reduce((prev, cur) => {
+          if (prev.length < 5) {
+            prev.push(cur)
+          } else if (prev.length === 5) {
+            prev.push({ name: "Others", amount: cur.amount })
+          } else {
+            prev[5].amount += cur.amount
+          }
+          return prev
+        }, [])
+        return sorting
+      }
+      setCartData(newCartData());
+    }
+  }, [expense])
+  
+  if (cartData) {
+    const color = [
+      '#BFBC88',
+      '#038C65',
+      '#F28705',
+      '#F23C13',
+      '#8C6542',
+      '#591441',
+    ]
+    for (let i = 0; i < cartData.length; i++) {
+      
+      cartData[i].color = color[i],
+      cartData[i].legendFontColor = "#7F7F7F",
+      cartData[i].legendFontSize = 11
+    }
+  }
+
 
 
 
@@ -286,11 +346,11 @@ export default function Trip({ route }) {
 
   const budgetVsExpenses = trip.targetBudget - totalExpensesNumber
 
-  console.log(cartData);
   return (
 
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.screenSize}>
+        
         <ScrollView>
           <View style={styles.mainContainer}>
 
@@ -448,29 +508,34 @@ export default function Trip({ route }) {
             </View>
 
 
-            {/* <View style={tripStyle.emptyContainer}>
-                <Text style={{textAlign: "center"}}>Add your expenses to see{"\n"}the summary of trip expenses</Text>
-                </View> */}
 
-            <View style={{ flex: 1, marginTop: 5 }}>
-              <View style={{ alignItems: 'center' }}>
-                <PieChart
-                  data={data}
-                  width={screenWidth}
-                  height={200}
-                  chartConfig={chartConfig}
-                  accessor={"amount"}
-                  backgroundColor={"transparent"}
-                  paddingLeft={"15"}
-                  center={[10, 10]}
-                  absolute
-                />
-              </View>
+          {/* <View style={tripStyle.emptyContainer}>
+              <Text style={{textAlign: "center"}}>Add your expenses to see{"\n"}the summary of trip expenses</Text>
+              </View> */}
+
+          <View style={{ flex: 1, marginTop: 5, paddingRight: 15 }}>
+            <View style={{ alignItems: 'center' }}>
+              <PieChart
+                data={cartData}
+                width={screenWidth}
+                height={200}
+                chartConfig={chartConfig}
+                accessor={"amount"}
+                backgroundColor={"transparent"}
+                paddingLeft={"0"}
+                center={[30, 10]}
+                absolute
+              />
             </View>
           </View>
 
         </ScrollView>
         <BottomTab data={trip.id} />
+        {loading ? (
+          <View style={{ width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)" }}>
+            <Image source={loadingGif} />
+          </View>
+        ) : undefined}
       </SafeAreaView>
     </TouchableWithoutFeedback>
 

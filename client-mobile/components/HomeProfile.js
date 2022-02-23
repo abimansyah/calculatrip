@@ -2,7 +2,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -17,7 +18,7 @@ export default function HomeProfile({ tripId }) {
   const doLogout = async () => {
     try {
       await AsyncStorage.removeItem('access_token')
-      alert("See you again!")
+      Alert.alert("Goodbye!","Thank you for using Calculatrip!")
       navigation.navigate('Login')
     } catch (err) {
       console.log(err);
@@ -35,7 +36,7 @@ export default function HomeProfile({ tripId }) {
     } catch(err) {
       console.log(err)
       if(typeof err === "object" && err.response.data.message) {
-        alert(err.response.data.message)
+        Alert.alert("Error",err.response.data.message)
       }
     }
   }, [tripId])
