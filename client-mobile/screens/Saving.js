@@ -12,8 +12,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
 import moment from 'moment'
+import { useNavigation } from '@react-navigation/native';
 
 export default function Saving({ route }) {
+  const navigation = useNavigation();
   const { tripId } = route.params
   const [saving, setSaving] = useState([])
   const [loading, setLoading] = useState(false)
@@ -71,54 +73,59 @@ export default function Saving({ route }) {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <KeyboardAvoidingView behavior='position' >
-        <BottomSheet
-          ref={bs}
-          snapPoints={[450, 0]}
-          renderContent={() => { return (<AddSavingModal data={tripId} />) }}
-          renderHeader={headerModal}
-          initialSnap={1}
-          callbackNode={fall}
-          enabledGestureInteraction={true}
-          enabledHeaderGestureInteraction={true}
-        />
-        <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
-          <View style={savingStyle.headerContainer}>
-            <View style={savingStyle.headerView}>
-              <TouchableOpacity style={{ padding: 15 }} >
-                <Ionicons name="arrow-back" size={30} color="white" />
-              </TouchableOpacity>
-              <Text style={savingStyle.title}>Saving</Text>
-            </View>
-            <View style={savingStyle.blueCardContainer}>
-              <View style={savingStyle.blueCardView}>
-                <Text style={savingStyle.blueCardDesc}>Total Saving</Text>
-                <Text style={savingStyle.blueCardNumber}>{totalSaving}</Text>
+    <SafeAreaView style={styles.screenSize}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <KeyboardAvoidingView behavior='position' >
+          <BottomSheet
+            ref={bs}
+            snapPoints={[350, 0]}
+            renderContent={() => { return (<AddSavingModal data={tripId} />) }}
+            renderHeader={headerModal}
+            initialSnap={1}
+            callbackNode={fall}
+            enabledGestureInteraction={true}
+            enabledHeaderGestureInteraction={true}
+          />
+          <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
+            <View style={savingStyle.headerContainer}>
+              <View style={savingStyle.headerView}>
+                <TouchableOpacity style={{ padding: 15 }} 
+                onPress={() => {
+                  navigation.navigate('Home')
+                }}>
+                  <Ionicons name="arrow-back" size={30} color="white" />
+                </TouchableOpacity>
+                <Text style={savingStyle.title}>Saving</Text>
               </View>
-              <TouchableOpacity onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
-                <Text style={savingStyle.addButton}>+</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View style={{ flex: 1 }}>
-            {!loading && saving.length > 0 ? (
-              <FlatList
-                nestedScrollEnabled={true}
-                data={saving}
-                renderItem={({ item }) => (<SavingCard data={item} />)}
-                keyExtractor={(item) => `Saving${item.id}`}
-                contentContainerStyle={{ paddingVertical: 10 }}
-              />
-            ) : (
-              <View style={savingStyle.emptyContainer}>
-                <Text style={{ textAlign: "center" }}>Add your saving to see{"\n"}all of saving data</Text>
+              <View style={savingStyle.blueCardContainer}>
+                <View style={savingStyle.blueCardView}>
+                  <Text style={savingStyle.blueCardDesc}>Total Saving</Text>
+                  <Text style={savingStyle.blueCardNumber}>{totalSaving}</Text>
+                </View>
+                <TouchableOpacity onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
+                  <Text style={savingStyle.addButton}>+</Text>
+                </TouchableOpacity>
               </View>
-            )}
-          </View>
-          <BottomTab data={tripId} />
-        </Animated.View>
-      </KeyboardAvoidingView>
+            </View>
+            <View style={{ flex: 1 }}>
+              {!loading && saving.length > 0 ? (
+                <FlatList
+                  nestedScrollEnabled={true}
+                  data={saving}
+                  renderItem={({ item }) => (<SavingCard data={item} />)}
+                  keyExtractor={(item) => `Saving${item.id}`}
+                  contentContainerStyle={{ paddingVertical: 10 }}
+                />
+              ) : (
+                <View style={savingStyle.emptyContainer}>
+                  <Text style={{ textAlign: "center" }}>Add your saving to see{"\n"}all of saving data</Text>
+                </View>
+              )}
+            </View>
+            <BottomTab data={tripId} />
+          </Animated.View>
+        </KeyboardAvoidingView>
+      </View>
     </SafeAreaView>
   )
 }

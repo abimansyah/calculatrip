@@ -12,15 +12,17 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
 import moment from 'moment'
+import { useNavigation } from '@react-navigation/native';
+
 
 
 
 export default function Expenses({ route }) {
-    const { tripId } = route.params
+  const navigation = useNavigation();
+  const { tripId } = route.params
   const [expenses, setExpenses] = useState([])
   const [loading, setLoading] = useState(false)
   const [token, setToken] = useState('')
-console.log(tripId, 'expense-----------');
 
   const bs = React.createRef();
   const fall = new Animated.Value(1);
@@ -69,52 +71,57 @@ console.log(tripId, 'expense-----------');
   }, [])
 
   return (
-    <SafeAreaView style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <BottomSheet
-        ref={bs}
-        snapPoints={[680, 0]}
-        renderContent={() => { return (<ExpenseCategoryModal data={tripId}/>) }}
-        renderHeader={headerModal}
-        initialSnap={1}
-        callbackNode={fall}
-        enabledGestureInteraction={true}
-        enabledHeaderGestureInteraction={true}
-      />
-      <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
-        <View style={expensesStyle.headerContainer}>
-          <View style={expensesStyle.headerView}>
-            <TouchableOpacity style={{padding: 15}} >
-              <Ionicons name="arrow-back" size={30} color="white" />
-            </TouchableOpacity>
-            <Text style={expensesStyle.title}>Expenses</Text>
-          </View>
-          <View style={expensesStyle.blueCardContainer}>
-            <View style={expensesStyle.blueCardView}>
-              <Text style={expensesStyle.blueCardDesc}>Total Expenses</Text>
-              <Text style={expensesStyle.blueCardNumber}>{totalExpenses}</Text>
+    <SafeAreaView style={styles.screenSize}>
+      <View  style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <BottomSheet
+          ref={bs}
+          snapPoints={[730, 0]}
+          renderContent={() => { return (<ExpenseCategoryModal data={tripId} />) }}
+          renderHeader={headerModal}
+          initialSnap={1}
+          callbackNode={fall}
+          enabledGestureInteraction={true}
+          enabledHeaderGestureInteraction={true}
+        />
+        <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
+          <View style={expensesStyle.headerContainer}>
+            <View style={expensesStyle.headerView}>
+              <TouchableOpacity style={{ padding: 15 }} 
+              onPress={() => {
+                navigation.navigate('Home')
+              }}>
+                <Ionicons name="arrow-back" size={30} color="white" />
+              </TouchableOpacity>
+              <Text style={expensesStyle.title}>Expenses</Text>
             </View>
-            <TouchableOpacity onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
-              <Text style={expensesStyle.addButton}>+</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{flex: 1}}>
-          { !loading && expenses.length > 0 ? (
-            <FlatList
-              nestedScrollEnabled={true} 
-              data={expenses}
-              renderItem={({ item }) => (<ExpensesCard data={item} />)}
-              keyExtractor={(item) => `Expenses${item.id}`}
-              contentContainerStyle={{ paddingVertical: 10 }}
-            />
-          ) : (
-            <View style={expensesStyle.emptyContainer}>
-              <Text style={{textAlign: "center"}}>Add your expenses to see{"\n"}all of expenses data</Text>
+            <View style={expensesStyle.blueCardContainer}>
+              <View style={expensesStyle.blueCardView}>
+                <Text style={expensesStyle.blueCardDesc}>Total Expenses</Text>
+                <Text style={expensesStyle.blueCardNumber}>{totalExpenses}</Text>
+              </View>
+              <TouchableOpacity onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
+                <Text style={expensesStyle.addButton}>+</Text>
+              </TouchableOpacity>
             </View>
-          ) }
-        </View>
-        <BottomTab data={tripId} />
-      </Animated.View>
+          </View>
+          <View style={{ flex: 1 }}>
+            {!loading && expenses.length > 0 ? (
+              <FlatList
+                nestedScrollEnabled={true}
+                data={expenses}
+                renderItem={({ item }) => (<ExpensesCard data={item} />)}
+                keyExtractor={(item) => `Expenses${item.id}`}
+                contentContainerStyle={{ paddingVertical: 10 }}
+              />
+            ) : (
+              <View style={expensesStyle.emptyContainer}>
+                <Text style={{ textAlign: "center" }}>Add your expenses to see{"\n"}all of expenses data</Text>
+              </View>
+            )}
+          </View>
+          <BottomTab data={tripId} />
+        </Animated.View>
+      </View>
     </SafeAreaView>
   )
 }

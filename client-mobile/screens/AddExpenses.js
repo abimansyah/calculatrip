@@ -10,11 +10,13 @@ import { server } from '../globalvar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+
 
 export default function AddExpenses({ route }) {
   const nav = useNavigation()
-  const { categoryId, tripId } = route.params
-  const [amount, setAmount] = useState("0")
+  const { categoryId, tripId, iconName } = route.params
+  const [amount, setAmount] = useState(null)
   const [name, setName] = useState("")
   const [expenseDate, setExpenseDate] = useState("12/25/2021")
   const [description, setDescription] = useState("")
@@ -23,7 +25,7 @@ export default function AddExpenses({ route }) {
   const [tripImage, setTripImage] = useState(null);
   const [isFile, setIsFile] = useState(false)
 
-
+console.log(amount);
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   function formatDate(value) {
     let newDate = []
@@ -108,14 +110,14 @@ export default function AddExpenses({ route }) {
               <Ionicons name="arrow-back" size={30} color="white" />
             </TouchableOpacity>
             <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 40 }}>
-              <Ionicons name="book" size={48} color="white" />
+              <Icon name={iconName} size={48} color="white" />
               <View style={{ alignItems: "flex-end" }}>
                 <View style={{ flexDirection: "row" }}>
                   <Text style={{ fontSize: 32, color: "#fff" }}>Rp </Text>
                   <TextInput
                     keyboardType={phoneInput}
                     style={focused === 'amount' ? editProfileStyle.title : editProfileStyle.title}
-                    placeholder='Expenses Amount'
+                    placeholder='Amount'
                     placeholderTextColor="#a2e1ff"
                     onFocus={() => setFocused('amount')}
                     value={amount}
