@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, TextInput, ImageBackground, Picker, ScrollView } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet, TextInput, ImageBackground, Picker, ScrollView, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateField from 'react-native-datefield';
@@ -10,6 +10,7 @@ import { server } from '../globalvar';
 import moment from 'moment'
 import axios from 'axios'
 import { useRoute } from '@react-navigation/native';
+import RNPickerSelect from 'react-native-picker-select';
 
 export default function TripForm({ type }) {
   const [randomPhotos] = useState([
@@ -74,14 +75,14 @@ export default function TripForm({ type }) {
       let filename = localUri.split('/').pop();
 
       // Infer the type of the image
-      if(isFile) {
-      let match = /\.(\w+)$/.exec(filename);
-      let type = match ? `image/${match[1]}` : `image`;
-      formDataBody.append('imageFile', { uri: tripImage, name: filename, type });
+      if (isFile) {
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+        formDataBody.append('imageFile', { uri: tripImage, name: filename, type });
       } else {
         formDataBody.append('tripImageUrl', tripImage)
       }
-      
+
       formDataBody.append('name', name)
       formDataBody.append('targetBudget', targetBudget)
       formDataBody.append('homeCurrency', homeCurrency)
@@ -89,6 +90,7 @@ export default function TripForm({ type }) {
       formDataBody.append('endDate', formatDate(endDate))
       const link = type === "Add" ? `${server}/trips` : `${server}/trips/${tripId}`
       const method = type === "Add" ? "post" : "put"
+
 
       fetch(link,{
       method,
@@ -115,7 +117,7 @@ export default function TripForm({ type }) {
       if(type === "Add") {
         navigation.navigate('Home', {tripId})
       } else {
-        navigation.navigate('Trip', {tripId})
+        navigation.navigate('Trip', { tripId })
       }
     })
     .catch((err)=>{
@@ -137,7 +139,7 @@ export default function TripForm({ type }) {
 
   useEffect(() => {
     loginCheck()
-    if(type === "Add") {
+    if (type === "Add") {
       randomizeImage()
     } else {
       loginCheck()
@@ -158,10 +160,35 @@ export default function TripForm({ type }) {
         })
         .catch(err => {
           console.log(err)
-          if(err.response.data.message) alert(err.response.data.message)
+          if (err.response.data.message) alert(err.response.data.message)
         })
     }
   }, [])
+
+  // dropdown
+  const iosDropdown = (
+      <RNPickerSelect
+        value={homeCurrency}
+        onValueChange={itemValue => setHomeCurrency(itemValue)}
+        items={[
+          { label: 'IDR', value: 'idr' },
+          { label: 'USD', value: 'usd' },
+
+        ]}
+      />
+    )
+
+    const androidDropdown = (
+      <Picker
+        selectedValue={homeCurrency}
+        onValueChange={itemValue => setHomeCurrency(itemValue)}
+      >
+        <Picker.Item label="IDR" value="idr" />
+        <Picker.Item label="USD" value="usd" />
+      </Picker>
+    )
+
+  // dropdown
 
   return (
     <View style={{ position: 'relative', height: '100%' }}>
@@ -170,10 +197,10 @@ export default function TripForm({ type }) {
           <View style={editProfileStyle.iconContainer}>
             <TouchableOpacity style={editProfileStyle.iconButton}
               onPress={() => {
-                if(type === "Add") {
+                if (type === "Add") {
                   navigation.navigate('Home')
                 } else {
-                  navigation.navigate('Trip', {tripId})
+                  navigation.navigate('Trip', { tripId })
                 }
               }}>
               <Ionicons name="arrow-back" size={24} color="white" />
@@ -214,23 +241,13 @@ export default function TripForm({ type }) {
           />
           <Text>Currency</Text>
           <View style={editProfileStyle.inputDate}>
-            <Picker
-              selectedValue={homeCurrency}
-              onValueChange={itemValue => setHomeCurrency(itemValue)}
-            >
-              <Picker.Item label="Indonesian Rupiah" value="IDR" />
-              <Picker.Item label="United States Dollar" value="USD" />
-              <Picker.Item label="Chinese Yuan" value="CNY" />
-              <Picker.Item label="Australian Dollar" value="AUD" />
-              <Picker.Item label="British Pound Sterling" value="GBP" />
-              <Picker.Item label="European Euro" value="EUR" />
-              <Picker.Item label="Japanese Yen" value="JPY" />
-              <Picker.Item label="Malaysian Ringgit" value="MYR" />
-              <Picker.Item label="Singapore Dollar" value="SGD" />
-              <Picker.Item label="South Korean Won" value="KRW" />
-              <Picker.Item label="Thai Baht" value="THB" />
-              <Picker.Item label="United Arab Emirates Dirham" value="AED" />
-            </Picker>
+
+            {
+              Platform.OS === 'ios' ? iosDropdown : androidDropdown
+            }
+
+
+
           </View>
           <Text>Start Date</Text>
           <View style={editProfileStyle.inputDate}>
@@ -254,10 +271,10 @@ export default function TripForm({ type }) {
               defaultValue={endDate}
             />
           </View>
-          <TouchableOpacity style={{marginVertical: 10, padding: 10, alignSelf: 'flex-end', backgroundColor: "#0378a6", borderRadius: 50}}
-          onPress={() => submitTrip()}
+          <TouchableOpacity style={{ marginVertical: 10, padding: 10, alignSelf: 'flex-end', backgroundColor: "#0378a6", borderRadius: 50 }}
+            onPress={() => submitTrip()}
           >
-          <Ionicons name="checkmark" size={28} color="#0378a6" style={editProfileStyle.checkButton} />
+            <Ionicons name="checkmark" size={28} color="#0378a6" style={editProfileStyle.checkButton} />
           </TouchableOpacity>
         </View>
       </ScrollView>

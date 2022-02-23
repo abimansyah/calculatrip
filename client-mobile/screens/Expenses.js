@@ -73,10 +73,10 @@ export default function Expenses({ route }) {
       <View  style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
         <BottomSheet
           ref={bs}
-          snapPoints={[730, 0]}
+          snapPoints={[730, 0, 0]}
           renderContent={() => { return (<ExpenseCategoryModal data={tripId} />) }}
           renderHeader={headerModal}
-          initialSnap={1}
+          initialSnap={2}
           callbackNode={fall}
           enabledGestureInteraction={true}
           enabledHeaderGestureInteraction={true}
