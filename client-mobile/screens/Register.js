@@ -15,6 +15,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import DateField from 'react-native-datefield';
 import { styles, mainColor } from '../styles';
 import logo from '../assets/logo.png'
+import loadingGif from '../assets/loading.gif'
 import axios from 'axios';
 import { server } from '../globalvar';
 
@@ -30,9 +31,11 @@ export default function Register({ navigation }) {
   const [date, setDate] = useState('');
   const [open, setOpen] = useState(false);
   const [focused, setFocused] = useState('')
+  const [isLoading, setIsLoading] = useState(false)
 
   const doRegister = async (req, res) => {
     try {
+      setIsLoading(true)
       const resp = await axios.post(`${server}/users/register`, {
         email: email,
         password: password,
@@ -46,9 +49,12 @@ export default function Register({ navigation }) {
       setPhone("")
       setDate("")
       if (resp.data !== null) {
+        setLoading(false)
+        alert("Register is success!")
         navigation.navigate('Login')
       }
     } catch (err) {
+      setIsLoading(false)
       console.log(err);
       alert(err.response.data.message)
     }
@@ -69,7 +75,7 @@ export default function Register({ navigation }) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer}>
         <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}>
-          <View style={{ height: '100%' }}>
+          <View style={{ height: '100%', position: "relative" }}>
             <View style={
               {
                 height: topViewHeight,
@@ -209,6 +215,11 @@ export default function Register({ navigation }) {
                 </TouchableOpacity>
               </View>
             </View>
+            {isLoading ? (
+              <View style={{width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)"}}>
+                <Image source={loadingGif} />
+              </View>
+            ) : undefined}
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>
