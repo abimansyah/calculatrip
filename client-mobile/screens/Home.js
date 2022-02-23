@@ -85,13 +85,13 @@ export default function Home({ navigation, route }) {
                 data={trips}
                 renderItem={({ item }) => (<HomeCard data={item} />)}
                 keyExtractor={(item) => `Trips${item.id}`}
-                ListHeaderComponent={<HomeProfile />}
+                ListHeaderComponent={<HomeProfile tripId={tripId} />}
                 contentContainerStyle={{ paddingBottom: 170 }}
               />
             </View>
           ) : (
             <>
-              <HomeProfile />
+              <HomeProfile tripId={tripId} />
               <View style={homeStyle.emptyContainer}>
                 <Text style={{ textAlign: "center" }}>Add your trip to see{"\n"}all of trips data</Text>
               </View>
