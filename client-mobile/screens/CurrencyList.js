@@ -34,18 +34,6 @@ export default function CurrencyList () {
   const [filter, setFilter] = useState('')
   const navigation = useNavigation()
 
-  
-
-  const headerModal = () => {
-    return (
-      <View style={styles.modalHeader}>
-        <View style={styles.modalPanelHeader}>
-          <View style={styles.modalPanelHandle} />
-        </View>
-      </View>
-    )
-  }
-
   // fetch
   const loginCheck = async () => {
     try {
@@ -60,14 +48,16 @@ export default function CurrencyList () {
 
   const getCurrency = async () => {
     try {
-      let response = await axios.get(`${server}/exchangerate`,{
-        headers: {
+      let response = await axios({
+        url:`${server}/exchangerate`,
+        method:'get',
+        headers:{
           access_token: token
-        },
+        }
       })
       setCurrency(response.data)
     } catch (err) {
-      console.log(err.message);
+      console.log(err.response.data);
     }
   }
 
@@ -97,19 +87,21 @@ export default function CurrencyList () {
     <Item description={item.description} code={item.code} />
   );
 
+
   useEffect(() => {
     loginCheck()
   }, [])
 
+  
+
   useEffect(() => {
     getCurrency()
-    
   }, [token])
 
   useEffect(() => {
     setFilteredCurrency(currency)
   }, [currency])
-
+  
   useEffect(()=> {
     
     if(!filter){
@@ -158,7 +150,7 @@ export default function CurrencyList () {
             <FlatList
               data={filteredCurrency}
               renderItem={renderItem}
-              keyExtractor={item => item.id}
+              keyExtractor={item => item.description}
             />
 
               </View>
