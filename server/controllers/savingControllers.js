@@ -73,7 +73,10 @@ class SavingController {
         }],
         attributes: {
           exclude: ["createdAt", "updatedAt", "userId"]
-        }
+        },
+        order: [
+          ['id', 'DESC']
+        ]
       })
       res.status(200).json(savings)
     } catch (error) {
