@@ -1,12 +1,15 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Keyboard, Alert } from 'react-native'
 import React, { useState } from 'react';
 import { styles } from '../styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
 
+import { useNavigation } from '@react-navigation/native';
+
 export default addSaving = ({ data }) => {
-  console.log(data, '1-1--11-1--11-');
+  const nav = useNavigation()
+
   const [focused, setFocused] = useState('')
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
@@ -26,7 +29,9 @@ const addNewSaving = async () => {
         access_token: token
       }
     })
-    console.log(resp.data);
+    
+    Alert.alert('Success add new saving', resp.data.message);
+    navigation.navigate('Saving', {tripId: data})
   } catch (err) {
     console.log(err);
   }
@@ -55,7 +60,13 @@ const addNewSaving = async () => {
         />
       </View>
       <TouchableOpacity style={savingModalStyle.buttonContainer}
-      onPress={() => addNewSaving()}>
+      onPress={() => {
+        addNewSaving()
+        Keyboard.dismiss()
+        nav.navigate('Saving', {
+          tripId: data
+        })
+        }}>
         <Text style={styles.mainButton}>Add Saving</Text>
       </TouchableOpacity>
     </View>

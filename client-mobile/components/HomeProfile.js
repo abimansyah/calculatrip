@@ -2,7 +2,8 @@ import {
   Text,
   View,
   TouchableOpacity,
-  Image
+  Image,
+  Alert
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,12 +12,13 @@ import { useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { server } from '../globalvar';
 
-export default function HomeProfile({ isFocused }) {
+export default function HomeProfile({ tripId }) {
   const navigation = useNavigation()
   const [user, setUser] = useState({})
   const doLogout = async () => {
     try {
       await AsyncStorage.removeItem('access_token')
+      Alert.alert("Goodbye!","Thank you for using Calculatrip!")
       navigation.navigate('Login')
     } catch (err) {
       console.log(err);
@@ -34,10 +36,10 @@ export default function HomeProfile({ isFocused }) {
     } catch(err) {
       console.log(err)
       if(typeof err === "object" && err.response.data.message) {
-        alert(err.response.data.message)
+        Alert.alert("Error",err.response.data.message)
       }
     }
-  }, [isFocused])
+  }, [tripId])
 
   return (
     <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: "space-between", marginVertical: 5, marginHorizontal: 10, padding: 15, borderRadius: 10, backgroundColor: '#0378a6' }}>

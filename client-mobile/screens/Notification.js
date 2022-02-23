@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import logo from '../assets/logo.png'
+import loadingGif from '../assets/loading.gif'
 import { styles } from '../styles/index'
 import { useState, useCallback } from 'react';
 import axios from 'axios';
@@ -46,6 +47,7 @@ export default function Notification({ navigation, route }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer, notifStyle.homeContainer}>
+        <View style={{position: "relative", height: "100%"}}>
         <View style={{position: "relative"}}>
           <View style={notifStyle.headerContainer}>
             <Image source={logo} style={notifStyle.headerImage} />
@@ -70,6 +72,13 @@ export default function Notification({ navigation, route }) {
             <Text style={{ textAlign: "center" }}>Here is a list of trip invitation{"\n"}you will get from your companion</Text>
           </View>
         )}
+        
+          {loading ? (
+            <View style={{width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)"}}>
+              <Image source={loadingGif} />
+            </View>
+          ) : undefined}
+        </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
   );

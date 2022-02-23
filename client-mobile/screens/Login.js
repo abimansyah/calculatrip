@@ -9,7 +9,8 @@ import {
   ScrollView,
   Platform,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  Alert
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -19,6 +20,7 @@ import axios from 'axios';
 
 import { styles } from '../styles';
 import logo from '../assets/logo.png'
+import loadingGif from '../assets/loading.gif'
 import { server } from '../globalvar';
 
 
@@ -27,10 +29,12 @@ export default function Login({ navigation }) {
   const [emailUsername, setEmailUsername] = useState('')
   const [password, setPassword] = useState('')
   const [focused, setFocused] = useState('')
+  const [loading, setLoading] = useState(false)
 
   // send data to server
   const doLogin = async (req, res) => {
     try {
+      setLoading(true)
       const resp = await axios.post(`${server}/users/login`, {
         loginInput: emailUsername,
         password: password
@@ -39,10 +43,13 @@ export default function Login({ navigation }) {
       setEmailUsername("")
       setPassword("")
       await AsyncStorage.setItem('access_token', resp.data.access_token)
+      Alert.alert("Success","Welcome to Calculatrip!")
+      setLoading(false)
       navigation.navigate('Home')
     } catch (err) {
+      setLoading(false)
       console.log(err);
-      alert(err.response.data.message)
+      Alert.alert("Error",err.response.data.message)
     }
   }
 
@@ -62,6 +69,7 @@ export default function Login({ navigation }) {
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.mainContainer}>
         <KeyboardAvoidingView behavior='position' keyboardVerticalOffset={keyboardVerticalOffset}>
+          <View style={{position: "relative", height: "100%"}}>
           <View style={
             {
               height: '55%'
@@ -157,6 +165,13 @@ export default function Login({ navigation }) {
             >
               <Text style={{ color: '#0487d9', textDecorationLine: 'underline' }}> Sign Up Here</Text>
             </TouchableOpacity>
+          </View>
+          
+          {loading ? (
+              <View style={{width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)"}}>
+                <Image source={loadingGif} />
+              </View>
+            ) : undefined}
           </View>
         </KeyboardAvoidingView>
       </SafeAreaView>

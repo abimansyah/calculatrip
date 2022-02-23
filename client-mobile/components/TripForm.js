@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, TextInput, ImageBackground, Picker, ScrollView } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet, TextInput, ImageBackground, Picker, ScrollView, Image, Alert, Platform } from 'react-native'
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateField from 'react-native-datefield';
@@ -10,6 +10,9 @@ import { server } from '../globalvar';
 import moment from 'moment'
 import axios from 'axios'
 import { useRoute } from '@react-navigation/native';
+import RNPickerSelect from 'react-native-picker-select';
+import loadingGif from '../assets/loading.gif'
+
 
 export default function TripForm({ type }) {
   const [randomPhotos] = useState([
@@ -34,6 +37,7 @@ export default function TripForm({ type }) {
   const [isFile, setIsFile] = useState(false)
   const route = useRoute();
   const tripId = route.params?.tripId
+  const [loading, setLoading] = useState(false)
 
   function formatDate(value) {
     let newDate = []
@@ -53,7 +57,7 @@ export default function TripForm({ type }) {
       quality: 1,
     });
 
-    console.log(result);
+    // console.log(result);
 
     if (!result.cancelled) {
       setIsFile(true)
@@ -67,21 +71,21 @@ export default function TripForm({ type }) {
     setTripImage(randomPhotos[randomIndex])
   }
 
-  const submitTrip = async () => {
-    try {
+  const submitTrip = () => {
+      setLoading(true)
       let formDataBody = new FormData();
       let localUri = tripImage;
       let filename = localUri.split('/').pop();
 
       // Infer the type of the image
-      if(isFile) {
-      let match = /\.(\w+)$/.exec(filename);
-      let type = match ? `image/${match[1]}` : `image`;
-      formDataBody.append('imageFile', { uri: tripImage, name: filename, type });
+      if (isFile) {
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+        formDataBody.append('imageFile', { uri: tripImage, name: filename, type });
       } else {
         formDataBody.append('tripImageUrl', tripImage)
       }
-      
+
       formDataBody.append('name', name)
       formDataBody.append('targetBudget', targetBudget)
       formDataBody.append('homeCurrency', homeCurrency)
@@ -89,7 +93,9 @@ export default function TripForm({ type }) {
       formDataBody.append('endDate', formatDate(endDate))
       const link = type === "Add" ? `${server}/trips` : `${server}/trips/${tripId}`
       const method = type === "Add" ? "post" : "put"
-      const response = await fetch(link, {
+
+
+      fetch(link,{
       method,
       headers: {
         'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
@@ -97,17 +103,30 @@ export default function TripForm({ type }) {
       },
       body: formDataBody,
     })
+    .then((response)=> {
+      if(response.ok) {
+        return response.json()
+      } else {
+        return response.json().then((err)=> {
+          throw err
+        })
+      }
+    })
+    .then((result)=>{
       setName("")
       setTargetBudget("")
-      console.log("Trip has been added");
+      // console.log("Trip has been added");
+      Alert.alert('Success',result.message);
       if(type === "Add") {
         navigation.navigate('Home', {tripId})
       } else {
-        navigation.navigate('Trip', {tripId})
+        navigation.navigate('Trip', { tripId })
       }
-    } catch (error) {
-      console.log(error, "<<<<<<<<<<<<<");
-    }
+    })
+    .catch((err)=>{
+      setLoading(false)
+      Alert.alert('Error',err.message);
+    })
   }
 
   const loginCheck = async () => {
@@ -124,9 +143,10 @@ export default function TripForm({ type }) {
 
   useEffect(() => {
     loginCheck()
-    if(type === "Add") {
+    if (type === "Add") {
       randomizeImage()
     } else {
+      setLoading(true)
       loginCheck()
         .then(tokenA => {
           return axios.get(`${server}/trips/${tripId}`, {
@@ -145,10 +165,40 @@ export default function TripForm({ type }) {
         })
         .catch(err => {
           console.log(err)
-          if(err.response.data.message) alert(err.response.data.message)
+
+          if(err.response.data.message) Alert.alert('Error',err.response.data.message)
+        })
+        .finally(()=>{
+          setLoading(false)
+
         })
     }
   }, [])
+
+  // dropdown
+  const iosDropdown = (
+      <RNPickerSelect
+        value={homeCurrency}
+        onValueChange={itemValue => setHomeCurrency(itemValue)}
+        items={[
+          { label: 'IDR', value: 'idr' },
+          { label: 'USD', value: 'usd' },
+
+        ]}
+      />
+    )
+
+    const androidDropdown = (
+      <Picker
+        selectedValue={homeCurrency}
+        onValueChange={itemValue => setHomeCurrency(itemValue)}
+      >
+        <Picker.Item label="IDR" value="idr" />
+        <Picker.Item label="USD" value="usd" />
+      </Picker>
+    )
+
+  // dropdown
 
   return (
     <View style={{ position: 'relative', height: '100%' }}>
@@ -157,10 +207,10 @@ export default function TripForm({ type }) {
           <View style={editProfileStyle.iconContainer}>
             <TouchableOpacity style={editProfileStyle.iconButton}
               onPress={() => {
-                if(type === "Add") {
+                if (type === "Add") {
                   navigation.navigate('Home')
                 } else {
-                  navigation.navigate('Trip', {tripId})
+                  navigation.navigate('Trip', { tripId })
                 }
               }}>
               <Ionicons name="arrow-back" size={24} color="white" />
@@ -180,8 +230,8 @@ export default function TripForm({ type }) {
         <Text style={{ fontSize: 18, fontWeight: "bold" }}>{`${type} Trip`}</Text>
       </View>
 
-      <ScrollView>
-        <View style={{ marginHorizontal: 40, marginTop: 10, marginBottom: 100 }}>
+      <ScrollView style={{paddingBottom: 5}}>
+        <View style={{ marginHorizontal: 40, marginTop: 10, marginBottom: 30 }}>
           <Text>Trip Name</Text>
           <TextInput
             style={focused === 'name' ? editProfileStyle.inputOnFocus : editProfileStyle.input}
@@ -201,13 +251,13 @@ export default function TripForm({ type }) {
           />
           <Text>Currency</Text>
           <View style={editProfileStyle.inputDate}>
-            <Picker
-              selectedValue={homeCurrency}
-              onValueChange={itemValue => setHomeCurrency(itemValue)}
-            >
-              <Picker.Item label="IDR" value="idr" />
-              <Picker.Item label="USD" value="usd" />
-            </Picker>
+
+            {
+              Platform.OS === 'ios' ? iosDropdown : androidDropdown
+            }
+
+
+
           </View>
           <Text>Start Date</Text>
           <View style={editProfileStyle.inputDate}>
@@ -231,13 +281,19 @@ export default function TripForm({ type }) {
               defaultValue={endDate}
             />
           </View>
-          <TouchableOpacity style={{marginVertical: 10, padding: 10, alignSelf: 'flex-end', backgroundColor: "#0378a6", borderRadius: 50}}
-          onPress={() => submitTrip()}
+          <TouchableOpacity style={{ marginVertical: 10, padding: 10, alignSelf: 'flex-end', backgroundColor: "#0378a6", borderRadius: 50 }}
+            onPress={() => submitTrip()}
           >
-          <Ionicons name="checkmark" size={28} color="#0378a6" style={editProfileStyle.checkButton} />
+            <Ionicons name="checkmark" size={28} color="#0378a6" style={editProfileStyle.checkButton} />
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {loading ? (
+        <View style={{ width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)" }}>
+          <Image source={loadingGif} />
+        </View>
+      ) : undefined}
     </View>
   )
 }
@@ -254,6 +310,7 @@ const editProfileStyle = StyleSheet.create({
   },
   iconContainer: {
     padding: 10,
+    marginTop: 30,
     flexDirection: 'row',
     justifyContent: "flex-start",
   },
