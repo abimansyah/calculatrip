@@ -6,26 +6,9 @@ let form = new FormData();
 class OcrController {
   static async postOcr(req, res, next) {
     try {
-      if (!req.file) {
-        throw {
-          name: "Can't read file image file"
-        }
-      }
-
-      const stream = req.file.buffer.toString("base64");
-      form.append('base64Image', 'data:image/jpg;base64,' + stream);
-      form.append('language', 'eng');
-      form.append('isCreateSearchablePdf', 'true');
-      form.append('isSearchablePdfHideTextLayer', 'false');
-
-      let url = 'https://api.ocr.space/parse/image'
-      let options = {
-        headers: {
-          apikey: process.env.OCRAPIKEY,
-          ...form.getHeaders()
-        }
-      };
-      const response = await axios.post(url, form, options)
+      // console.log(req.uploadUrl);
+      let url = `https://api.ocr.space/parse/imageurl?apikey=K89321088288957&url=${req.uploadUrl}`
+      const response = await axios.get(url)
       res.status(200).json({
         message: response.data.ParsedResults[0].ParsedText
       })

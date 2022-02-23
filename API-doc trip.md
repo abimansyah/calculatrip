@@ -9,6 +9,7 @@ List of available endpoints for Trips:
 - `PUT /trips/:id`
 - `POST /trips/:id`
 - `PATCH /trips/:userTripId`
+- `DELETE /trips/:TripId/:UserId`
 
 &nbsp;
 
@@ -479,6 +480,39 @@ _Response (404 - Not Found)_
 ```
 
 &nbsp;
+
+
+## 8. DELETE /trips/:TripId/:UserId 
+
+Description:
+
+- Delete companion user from trip
+
+- params:
+
+```json
+{
+  "TripId":"integer",
+  "UserId":"integer"
+}
+```
+
+_Response (200 - OK)_
+
+```json
+{
+  "message": "Your deleted ${user.username} from trip ${trip.name}"
+}
+```
+
+_Response (404 - Not Found)_
+
+```json
+{
+  "message": "User Trip not found"
+}
+
+
 
 ## Global Error
 
