@@ -33,7 +33,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 1,
-              tripId: data
+              tripId: data,
+              iconName: 'food'
             })}
           >
             <View style={{
@@ -50,7 +51,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 2,
-              tripId: data
+              tripId: data,
+              iconName: 'taxi'
             })}
           >
             <View style={{
@@ -68,7 +70,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 3,
-              tripId: data
+              tripId: data,
+              iconName: 'bed'
             })}
           >
             <View style={{
@@ -97,7 +100,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 4,
-              tripId: data
+              tripId: data,
+              iconName: 'cart'
             })}
           >
             <View style={{
@@ -114,7 +118,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 5,
-              tripId: data
+              tripId: data,
+              iconName: 'coffee'
             })}
           >
             <View style={{
@@ -132,7 +137,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 6,
-              tripId: data
+              tripId: data,
+              iconName: 'beer'
             })}
           >
             <View style={{
@@ -160,7 +166,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 7,
-              tripId: data
+              tripId: data,
+              iconName: 'airplane'
             })}
           >
             <View style={{
@@ -177,7 +184,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 8,
-              tripId: data
+              tripId: data,
+              iconName: 'binoculars'
             })}
           >
             <View style={{
@@ -196,7 +204,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 9,
-              tripId: data
+              tripId: data,
+              iconName: 'basket'
             })}
           >
             <View style={{
@@ -225,7 +234,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 10,
-              tripId: data
+              tripId: data,
+              iconName: 'weight-lifter'
             })}
           >
             <View style={{
@@ -242,7 +252,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 11,
-              tripId: data
+              tripId: data,
+              iconName: 'drama-masks'
             })}
           >
             <View style={{
@@ -260,7 +271,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 12,
-              tripId: data
+              tripId: data,
+              iconName: 'cash-multiple'
             })}
           >
             <View style={{
@@ -289,7 +301,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 13,
-              tripId: data
+              tripId: data,
+              iconName: 'currency-usd'
             })}
           >
             <View style={{
@@ -306,7 +319,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 14,
-              tripId: data
+              tripId: data,
+              iconName: 'washing-machine'
             })}
           >
             <View style={{
@@ -324,7 +338,8 @@ export default expenseCategory = ({ data }) => {
           <TouchableOpacity
             onPress={() => navigation.navigate('AddExpenses', {
               categoryId: 15,
-              tripId: data
+              tripId: data,
+              iconName: 'file'
             })}
           >
             <View style={{

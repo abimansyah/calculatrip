@@ -25,9 +25,6 @@ export default function Home({ navigation, route }) {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true)
   const [notif, setNotif] = useState(false)
-
-  const isFocused = useIsFocused();
-  useEffect(async () => {
   const tripId = route.params?.tripId
   const fetchData = async () => {
     try {
@@ -66,31 +63,20 @@ export default function Home({ navigation, route }) {
   }, [tripId]))
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-
-      <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
-        <View style={{position: "relative"}}>
-          <View style={homeStyle.headerContainer}>
-            <Image source={logo} style={homeStyle.headerImage} />
-            <Text style={homeStyle.headerText}>Calculatrip</Text>
-          </View>
-          {/* <Text>{JSON.stringify(trips)}</Text> */}
-          <TouchableOpacity style={homeStyle.notifContainer} onPress={() => navigation.navigate('Notification')}>
-            <View style={{position: "relative"}}>
-              <Ionicons name="notifications" size={32} color="#0378a6" />
-              { notif ? ( <Text style={homeStyle.notifCheck}>⬤</Text> ) : undefined}
+      <SafeAreaView style={styles.screenSize}>
+        <View style={styles.mainContainer, homeStyle.homeContainer}>
+          <View style={{ position: "relative" }}>
+            <View style={homeStyle.headerContainer}>
+              <Image source={logo} style={homeStyle.headerImage} />
+              <Text style={homeStyle.headerText}>Calculatrip</Text>
             </View>
-          </TouchableOpacity>
-        </View>
-        {!loading && trips?.length > 0 ? (
-          <View>
-            <FlatList
-              nestedScrollEnabled={true}
-              data={trips}
-              renderItem={({ item }) => (<HomeCard data={item} />)}
-              keyExtractor={(item) => `Trips${item.id}`}
-              ListHeaderComponent={<HomeProfile />}
-              contentContainerStyle={{ paddingBottom: 170 }}
-            />
+            {/* <Text>{JSON.stringify(trips)}</Text> */}
+            <TouchableOpacity style={homeStyle.notifContainer} onPress={() => navigation.navigate('Notification')}>
+              <View style={{ position: "relative" }}>
+                <Ionicons name="notifications" size={32} color="#0378a6" />
+                {notif ? (<Text style={homeStyle.notifCheck}>⬤</Text>) : undefined}
+              </View>
+            </TouchableOpacity>
           </View>
           {!loading && trips?.length > 0 ? (
             <View>
@@ -99,7 +85,7 @@ export default function Home({ navigation, route }) {
                 data={trips}
                 renderItem={({ item }) => (<HomeCard data={item} />)}
                 keyExtractor={(item) => `Trips${item.id}`}
-                ListHeaderComponent={<HomeProfile isFocused={isFocused} />}
+                ListHeaderComponent={<HomeProfile />}
                 contentContainerStyle={{ paddingBottom: 170 }}
               />
             </View>

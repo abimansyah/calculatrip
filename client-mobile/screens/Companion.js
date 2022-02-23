@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList,  } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, KeyboardAvoidingView } from 'react-native'
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -11,8 +11,12 @@ import BottomTab from '../components/BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function Companion({ route }) {
+  const navigation = useNavigation();
+
   const { tripId } = route.params;
   const [token, setToken] = useState('');
   const [owner, setOwner] = useState('');
@@ -69,61 +73,66 @@ export default function Companion({ route }) {
   useEffect(() => {
     loginCheck()
   }, [])
-  
+
   useEffect(() => {
     setOwner(companion.filter((el) => el.UserTrip.role === 'owner'))
   }, [companion])
 
   return (
-    <SafeAreaView style={styles.screenSize}>
-      <View style={styles.mainContainer}>
-      <BottomSheet
-        ref={bs}
-        snapPoints={[320, 0]}
-        renderContent={() => { return (<InviteCompanionModal data={tripId}/>) }}
-        renderHeader={headerModal}
-        initialSnap={1}
-        callbackNode={fall}
-        enabledGestureInteraction={true}
-        enabledHeaderGestureInteraction={true}
-      />
-      <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
-        <View style={companionStyle.headerContainer}>
-          <View style={companionStyle.headerView}>
-            <TouchableOpacity style={{ padding: 15 }} >
-              <Ionicons name="arrow-back" size={30} color="white" />
-            </TouchableOpacity>
-            <Text style={companionStyle.title}>Companion</Text>
-          </View>
-          <View style={companionStyle.blueCardContainer}>
-            <View style={companionStyle.blueCardView}>
-              <Text style={companionStyle.blueCardDesc}>Owner</Text>
-              <Text style={companionStyle.blueCardNumber}>{owner[0]?.username}</Text>
+    <KeyboardAvoidingView behavior='position'>
+      <SafeAreaView style={styles.screenSize}>
+        <View style={styles.mainContainer}>
+          <BottomSheet
+            ref={bs}
+            snapPoints={[200, 0]}
+            renderContent={() => { return (<InviteCompanionModal data={tripId} />) }}
+            renderHeader={headerModal}
+            initialSnap={1}
+            callbackNode={fall}
+            enabledGestureInteraction={true}
+            enabledHeaderGestureInteraction={true}
+          />
+          <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
+            <View style={companionStyle.headerContainer}>
+              <View style={companionStyle.headerView}>
+                <TouchableOpacity style={{ padding: 15 }}
+                  onPress={() => {
+                    navigation.navigate('Home')
+                  }}>
+                  <Ionicons name="arrow-back" size={30} color="white" />
+                </TouchableOpacity>
+                <Text style={companionStyle.title}>Companion</Text>
+              </View>
+              <View style={companionStyle.blueCardContainer}>
+                <View style={companionStyle.blueCardView}>
+                  <Text style={companionStyle.blueCardDesc}>Owner</Text>
+                  <Text style={companionStyle.blueCardNumber}>{owner[0]?.username}</Text>
+                </View>
+                <TouchableOpacity onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
+                  <Text style={companionStyle.addButton}>+</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-            <TouchableOpacity onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
-              <Text style={companionStyle.addButton}>+</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{ flex: 1 }}>
-          {!loading && companion.length > 0 ? (
-            <FlatList
-              nestedScrollEnabled={true}
-              data={companion}
-              renderItem={({ item }) => (<CompanionCard data={item} />)}
-              keyExtractor={(item) => `Companion${item.id}`}
-              contentContainerStyle={{ paddingVertical: 10 }}
-            />
-          ) : (
-            <View style={companionStyle.emptyContainer}>
-              <Text style={{ textAlign: "center" }}>Invite your companion{"\n"}to join your trip</Text>
+            <View style={{ flex: 1 }}>
+              {!loading && companion.length > 0 ? (
+                <FlatList
+                  nestedScrollEnabled={true}
+                  data={companion}
+                  renderItem={({ item }) => (<CompanionCard data={item} />)}
+                  keyExtractor={(item) => `Companion${item.id}`}
+                  contentContainerStyle={{ paddingVertical: 10 }}
+                />
+              ) : (
+                <View style={companionStyle.emptyContainer}>
+                  <Text style={{ textAlign: "center" }}>Invite your companion{"\n"}to join your trip</Text>
+                </View>
+              )}
             </View>
-          )}
+            <BottomTab data={tripId} />
+          </Animated.View>
         </View>
-        <BottomTab data={tripId} />
-      </Animated.View>
-      </View>
-    </SafeAreaView>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   )
 }
 
