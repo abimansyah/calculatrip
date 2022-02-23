@@ -12,7 +12,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
 import moment from 'moment'
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 
 export default function Expenses({ route }) {
@@ -21,10 +21,14 @@ export default function Expenses({ route }) {
   const [expenses, setExpenses] = useState([])
   const [loading, setLoading] = useState(false)
   const [token, setToken] = useState('')
-
+  const routesLength = useNavigationState(state => state.routes.length);
+  
+ 
   const bs = React.createRef();
   const fall = new Animated.Value(1);
   const totalExpenses = expenses.length > 0 ? expenses.map(el => el.amount).reduce((prev, cur) => prev + cur) : "Rp 0"
+
+  
 
   const headerModal = () => {
     return (
