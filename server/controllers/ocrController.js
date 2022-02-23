@@ -21,7 +21,7 @@ class OcrController {
       let url = 'https://api.ocr.space/parse/image'
       let options = {
         headers: {
-          apikey: 'K89321088288957',
+          apikey: process.env.OCRAPIKEY,
           ...form.getHeaders()
         }
       };
