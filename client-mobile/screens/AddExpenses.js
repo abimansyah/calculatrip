@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, TextInput, Image, Picker, KeyboardAvoidingView, ScrollView } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet, TextInput, Image, Picker, KeyboardAvoidingView, ScrollView, Platform } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from '@expo/vector-icons';
 import DateField from 'react-native-datefield';
@@ -11,6 +11,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import RNPickerSelect from 'react-native-picker-select';
 
 
 export default function AddExpenses({ route }) {
@@ -25,7 +26,7 @@ export default function AddExpenses({ route }) {
   const [tripImage, setTripImage] = useState(null);
   const [isFile, setIsFile] = useState(false)
 
-console.log(amount);
+  console.log(amount);
   const phoneInput = Platform.OS === 'ios' ? 'number-pad' : 'numeric'
   function formatDate(value) {
     let newDate = []
@@ -99,12 +100,34 @@ console.log(amount);
     }
   }
 
-  console.log(paymentMethodId);
+  const iosDropdown = (
+    <RNPickerSelect
+      value={paymentMethodId}
+      onValueChange={itemValue => setPaymentMethodId(itemValue)}
+      items={[
+        { label: 'Cash', value: 1 },
+        { label: 'Credit', value: 2 },
+
+      ]}
+    />
+  )
+
+  const androidDropdown = (
+    <Picker
+      selectedValue={paymentMethodId}
+      onValueChange={(itemValue) => setPaymentMethodId(itemValue)}
+    >
+      <Picker.Item label="Cash" value={1} />
+      <Picker.Item label="Credit" value={2} />
+    </Picker>
+  )
+
+  // dropdown
 
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <KeyboardAvoidingView behavior={focused === 'amount' ? 'height' : 'position'} keyboardVerticalOffset={10}>
-        <View style={{ position: 'relative', height: '100%' }}>
+    <SafeAreaView style={styles.screenSize}>
+      <KeyboardAvoidingView behavior={focused === 'amount' ? 'height' : 'position'} keyboardVerticalOffset={0}>
+        <View style={{ position: 'relative', height: '94%' }}>
           <View style={editProfileStyle.headerView}>
             <TouchableOpacity style={{ padding: 15 }} >
               <Ionicons name="arrow-back" size={30} color="white" />
@@ -154,18 +177,14 @@ console.log(amount);
               </View>
               <Text>Payment Method</Text>
               <View style={editProfileStyle.inputDate}>
-                <Picker
-                  selectedValue={paymentMethodId}
-                  onValueChange={(itemValue) => setPaymentMethodId(itemValue)}
-                >
-                  <Picker.Item label="Cash" value={1} />
-                  <Picker.Item label="Credit" value={2} />
-                </Picker>
+                {
+                  Platform.OS === 'ios' ? iosDropdown : androidDropdown
+                }
               </View>
               <View style={editProfileStyle.descriptionContainer}>
                 <Text>Expenses Description</Text>
                 <TouchableOpacity style={editProfileStyle.receiptButton}
-                onPress={() => pickImage()}
+                  onPress={() => pickImage()}
                 >
                   <Text style={editProfileStyle.receiptText}>Upload Receipt</Text>
                 </TouchableOpacity>

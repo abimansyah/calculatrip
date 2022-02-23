@@ -113,63 +113,7 @@ export default function Trip({ route }) {
   const [trip, setTrip] = useState({})
   const [cartData, setCartData] = useState([])
   const [modalVisible, setModalVisible] = useState(false);
-
-
-  const newCartData = (newData) => {
-    const temp = []
-    newData.forEach(el => {
-      if (temp.length === 0) {
-        temp.push({
-          name: el.ExpenseCategory.name,
-          amount: el.amount
-        })
-      } else {
-        // if (temp.length <= 5) {
-        //   const findone = temp.findIndex(elm => elm.name === el.ExpenseCategory.name);
-        //   if (findone >= 0) {
-        //     temp[findone].amount += el.amount
-        //   } else {
-        //     temp.push({
-        //       name: el.ExpenseCategory.name,
-        //       amount: el.amount
-        //     })
-        //   }
-        // } else {
-        //   if (!temp[5]) {
-        //     temp.push({
-        //       name: 'others',
-        //       amount: el.amount
-        //     })
-        //   } else {
-        //     temp[5].amount += el.amount
-        //   }
-        // }
-        const findone = temp.findIndex(elm => elm.name === el.ExpenseCategory.name);
-        if (findone >= 0) {
-          temp[findone].amount += el.amount
-        } else {
-          if (temp.length <= 5) {
-            temp.push({
-              name: el.ExpenseCategory.name,
-              amount: el.amount
-            })
-          } else {
-            if (!temp[5]) {
-              temp.push({
-                name: 'others',
-                amount: el.amount
-              })
-            } else {
-              temp[5].amount += el.amount
-            }
-          }
-        }
-      }
-      console.log(temp, '-----------------------');
-    });
-    setCartData(temp)
-    //handlechart
-  }
+  const [coloredCart, setColoredCart] = useState([])
 
 
   const loginCheck = async () => {
@@ -260,7 +204,6 @@ export default function Trip({ route }) {
       })
         .then(res => {
           setExpense(res.data)
-          newCartData(res.data)
         })
         .catch(err => {
           console.log(err)
@@ -272,13 +215,67 @@ export default function Trip({ route }) {
     loginCheck()
   }, [])
 
+  useEffect(() => {
+    if (expense) {
+      const newCartData = () => {
+        const sorting = expense?.map(el => {
+          let show = {
+            name: el.ExpenseCategory.name,
+            amount: el.amount
+          }
+          return show
+        }).reduce((prev, cur) => {
+          const found = prev.find(a => a.name === cur.name)
+          if (!found) {
+            prev.push({ name: cur.name, amount: cur.amount })
+          } else {
+            found.amount += cur.amount
+          }
+          return prev
+        }, []).sort((a, b) => {
+          if (a.amount > b.amount) return -1
+          if (a.amount < b.amount) return 1
+          return 0
+        }).reduce((prev, cur) => {
+          if (prev.length < 5) {
+            prev.push(cur)
+          } else if (prev.length === 5) {
+            prev.push({ name: "Others", amount: cur.amount })
+          } else {
+            prev[5].amount += cur.amount
+          }
+          return prev
+        }, [])
+        return sorting
+      }
+      setCartData(newCartData());
+    }
+  }, [expense])
+  
+  if (cartData) {
+    const color = [
+      '#BFBC88',
+      '#038C65',
+      '#F28705',
+      '#F23C13',
+      '#8C6542',
+      '#591441',
+    ]
+    for (let i = 0; i < cartData.length; i++) {
+      
+      cartData[i].color = color[i],
+      cartData[i].legendFontColor = "#7F7F7F",
+      cartData[i].legendFontSize = 11
+    }
+  }
+
+
 
 
   const totalSaving = saving.length > 0 ? `Rp. ${saving.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "Rp 0"
 
   const totalExpenses = expense.length > 0 ? `Rp. ${expense.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "Rp 0"
 
-  console.log(cartData);
   return (
 
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -418,17 +415,17 @@ export default function Trip({ route }) {
               <Text style={{textAlign: "center"}}>Add your expenses to see{"\n"}the summary of trip expenses</Text>
               </View> */}
 
-          <View style={{ flex: 1, marginTop: 5 }}>
+          <View style={{ flex: 1, marginTop: 5, paddingRight: 15 }}>
             <View style={{ alignItems: 'center' }}>
               <PieChart
-                data={data}
+                data={cartData}
                 width={screenWidth}
                 height={200}
                 chartConfig={chartConfig}
                 accessor={"amount"}
                 backgroundColor={"transparent"}
-                paddingLeft={"15"}
-                center={[10, 10]}
+                paddingLeft={"0"}
+                center={[30, 10]}
                 absolute
               />
             </View>
