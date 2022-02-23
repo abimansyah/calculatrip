@@ -6,12 +6,6 @@ let form = new FormData();
 class OcrController {
   static async postOcr(req, res, next) {
     try {
-      console.log(req.uploadUrl);
-      if (!req.file) {
-        throw {
-          name: "Can't read file image file"
-        }
-      }
       let url = `https://api.ocr.space/parse/imageurl?apikey=K89321088288957&url=${req.uploadUrl}`
       const response = await axios.get(url)
       res.status(200).json({

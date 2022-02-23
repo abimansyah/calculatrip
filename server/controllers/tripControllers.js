@@ -268,5 +268,57 @@ class TripController {
       next(err);
     }
   }
+
+  static async deleteCompanion(req, res, next) {
+    try {
+      const {
+        tripId,
+        userId
+      } = req.params;
+
+      const user = await User.findByPk(userId)
+      const trip = await Trip.findByPk(tripId)
+
+      const owner = await UserTrip.findOne({
+        where: {
+          UserId: req.user.id,
+          TripId: trip.id
+        }
+      })
+
+      if (owner.role !== "owner") {
+        throw {
+          name: 'Unauthorize'
+        }
+      }
+
+      const userTrip = await UserTrip.findOne({
+        where: {
+          UserId: user.id,
+          TripId: trip.id
+        }
+      })
+
+      if (!userTrip) {
+        throw {
+          name: "UserTripNotFound"
+        }
+      }
+
+      await UserTrip.destroy({
+        where: {
+          UserId: user.id,
+          TripId: trip.id
+        }
+      })
+
+      res.status(200).json({
+        message: `You have deleted ${user.username} from trip ${trip.name}`
+      })
+    } catch (err) {
+      console.log(err)
+      next(err)
+    }
+  }
 }
 module.exports = TripController;
