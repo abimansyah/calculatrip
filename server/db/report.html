@@ -1,20 +1,275 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>Trip Report</title>
-  </head>
-  <body>
-    <h1>{{trip.name}}</h1>
-    <h1>{{trip.startDate}}</h1>
-    <h1>{{trip.endDate}}</h1>
-    
-    <ul>
-      {{#each users}}
-      <li>Name: {{this.name}}</li>
-      <li>Age: {{this.age}}</li>
-      <br />
-      {{/each}}
-    </ul>
-  </body>
+
+<head>
+  <meta charset="utf-8" />
+  <title>Trip Report</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap" rel="stylesheet">
+</head>
+<style>
+  body {
+    margin-top: 20px;
+    background: #eee;
+  }
+
+  .invoice {
+    padding: 30px;
+  }
+
+  .invoice h2 {
+    margin-top: 0px;
+    line-height: 0.8em;
+  }
+
+  .invoice .small {
+    font-weight: 300;
+  }
+
+  .invoice hr {
+    margin-top: 10px;
+    border-color: #ddd;
+  }
+
+  .invoice .table tr.line {
+    border-bottom: 1px solid #ccc;
+  }
+
+  .invoice .table td {
+    border: none;
+  }
+
+  .invoice .identity {
+    margin-top: 10px;
+    font-size: 1.1em;
+    font-weight: 300;
+  }
+
+  .invoice .identity strong {
+    font-weight: 600;
+  }
+
+
+  .grid {
+    position: relative;
+    width: 100%;
+    background: #fff;
+    color: #666666;
+    border-radius: 2px;
+    margin-bottom: 25px;
+    box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  .background {
+    background-image: url("https://cdn.discordapp.com/attachments/414438038358196234/945221811975622686/logo.png");
+    background-repeat: no-repeat;
+    background-position: 500px 100px;;
+    background-size: 1000px 1000px;
+  }
+
+  .font-style {
+    font-family: 'Open Sans', sans-serif;
+  }
+</style>
+
+<body>
+  <!-- <h1>{{trip.name}}</h1>
+  <h1>{{trip.startDate}}</h1>
+  <h1>{{trip.endDate}}</h1>
+  <h1>{{trip.homeCurrency}}</h1> -->
+
+  <div class="container ">
+    <div class="row">
+      <!-- BEGIN INVOICE -->
+      <div class="col-xs-12">
+        <div class="grid invoice background">
+          <div class="grid-body">
+            <div class="invoice-title">
+              <div class="row">
+                <!-- app logo -->
+                
+              </div>
+              <!-- Trip name -->
+              <br>
+              <div class="row">
+                <div class="col-xs-12">
+                  <h2>{{trip.name}}</h2>
+                </div>
+              </div>
+            </div>
+            <hr>
+            <!-- start date - end date -->
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table table-striped">
+                  <thead>
+                    <tr class="line">
+                      <td style="padding-right: 43px"><strong><i class="fa-solid fa-calendar"></i></strong></td>
+                      <td style="text-align: left; padding-right: 240px;">Your trip started on <strong>{{trip.startDate}}</strong> -  Your trip ended on <strong>{{trip.endDate}}</strong></td>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+            <!-- companion -->
+            <div class="row">
+              <div class="col-md-12">
+                <table class="table table-striped">
+                  <thead>
+                    <tr class="line">
+                      <td style="margin-right: 0px"><i class="fa-solid fa-user-group"></i></td>
+                      <td style=" padding-right: 265px;"><strong>People in this trip</strong></td>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+            <!-- companion body -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Username</th>
+                  <th>Email</th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each companions}}
+                <tr>
+                  <td>{{this.dataValues.id}}</td>
+                  <td>{{this.dataValues.username}}</td>
+                  <td>{{this.dataValues.email}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+
+            <!-- Savings -->
+            <div class="row">
+              <div class="col-md-12">
+                <h3>Savings</h3>
+                <table class="table">
+                  <thead>
+                    <tr class="line">
+                      <td><strong>#</strong></td>
+                      <td class="text-center"><strong>Saving Name</strong></td>
+                      <td class="text-center"><strong><i class="fa-solid fa-calendar"></i></strong></td>
+                      <td class="text-center"><strong>From</strong></td>
+                      <td class="text-center"><strong>Amount</strong></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each savings}}
+                    <tr>
+                      <td>{{this.dataValues.id}}</td>
+                      <td class="text-center">{{this.dataValues.name}}</td>
+                      <td class="text-center">{{this.dataValues.savingDate}}</td>
+                      <td class="text-center">{{this.User.dataValues.username}}</td>
+                      <td class="text-center">{{this.dataValues.amount}}</td>
+                    </tr>
+                    {{/each}}
+                    <!-- Total -->
+                    <tr>
+                      <td colspan="3">
+                      </td>
+                      <td class="text-center"><strong>Total</strong></td>
+                      <td class="text-center"><strong>{{this.totalSavings}}</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!-- Expenses -->
+            <div class="row">
+              <div class="col-md-12">
+                <h3>Expenses</h3>
+                <table class="table">
+                  <thead>
+                    <tr class="line">
+                      <td><strong>#</strong></td>
+                      <td class="text-center"><strong>Name</strong></td>
+                      <td class="text-center"><strong><i class="fa-solid fa-calendar"></i></strong></td>
+                      <td class="text-right"><strong>Category</strong></td>
+                      <td class="text-right"><strong>Payment Method</strong></td>
+                      <td class="text-right"><strong>Location</strong></td>
+                      <td class="text-right"><strong>Description</strong></td>
+                      <td class="text-right"><strong>From</strong></td>
+                      <td class="text-right"><strong>Amount</strong></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {{#each expenses}}
+                    <tr>
+                      <td class="text-center">{{this.dataValues.id}}</td>
+                      <td class="text-center">{{this.dataValues.name}}</td>
+                      <td class="text-center">{{this.dataValues.expenseDate}}</td>
+                      <td class="text-center">{{this.dataValues.ExpenseCategory.dataValues.name}}</td>
+                      <td class="text-center">{{this.dataValues.PaymentMethod.dataValues.name}}</td>
+                      <td class="text-center">{{this.dataValues.location}}</td>
+                      <td class="text-center">{{this.dataValues.description}}</td>
+                      <td class="text-center">{{this.dataValues.User.dataValues.username}}</td>
+                      <td class="text-center">{{this.dataValues.amount}}</td>
+                    </tr>
+                    {{/each}}
+                    
+                      <td colspan="7">
+                      </td>
+                      <td class="text-right"><strong>Total</strong></td>
+                      <td class="text-right"><strong>{{this.totalExpenses}}</strong></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Statistics -->
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Target Budget</th>
+                  <th>Total Savings</th>
+                  <th>Total Expenses</th>
+                  <th>Remaining Savings</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{trip.targetBudget}}</td>
+                  <td>{{this.totalSavings}}</td>
+                  <td>{{this.totalExpenses}}</td>
+                  <td>{{this.remainingSavings}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <div class="row">
+              <div class="col-md-12 text-right identity">
+                <p>Thank You For Using<br><strong>CALCULATRIP</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- END INVOICE -->
+    </div>
+  </div>
+
+  <!-- <ul>
+    {{#each users}}
+    <li>Name: {{this.name}}</li>
+    <li>Age: {{this.age}}</li>
+    <br />
+    {{/each}}
+  </ul> -->
+  <script></script>
+</body>
+
 </html>

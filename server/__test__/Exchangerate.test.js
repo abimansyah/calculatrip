@@ -85,20 +85,21 @@ describe('GET /exchangerate - Get Symbols money from 3rd party currency', () => 
             })
     })
 
-    test("GET /exchangerate error (500) - should handle error with status (500)", async () => {
+    test('GET /exchangerate Error status (500), Should handle error when hit get exchangerate', async () => {
         jest.spyOn(axios, 'get').mockRejectedValue('Error')
         return request(app)
-            .get("/exchangerate")
-            .set("access_token", token)
+            .get('/exchangerate')
+            .set('access_token', token)
             .then((resp) => {
-                const result = resp.body;
-                expect(resp.status).toBe(500);
-                expect(result).toHaveProperty("message", "Internal Server Error");
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(500)
+                expect(result).toHaveProperty("message", 'Internal Server Error')
             })
             .catch((err) => {
-                console.log(err);
-            });
-    });
+                console.log(err)
+            })
+    })
 })
 
 describe('POST /exchangerate - Convert money with symbols money ', () => {
@@ -202,18 +203,20 @@ describe('GET /exchangerate/:base - Get latest rate Convert money with symbols m
                 console.log(err)
             })
     })
-    test("GET /exchangerate/:base error (500) - should handle error with status (500)", async () => {
+
+    test('GET /exchangerate/:base Error status (500), Should handle error when hit get exchangerate', async () => {
         jest.spyOn(axios, 'get').mockRejectedValue('Error')
         return request(app)
-            .get("/exchangerate/IDR")
-            .set("access_token", token)
+            .get('/exchangerate//IDR')
+            .set('access_token', token)
             .then((resp) => {
-                const result = resp.body;
-                expect(resp.status).toBe(500);
-                expect(result).toHaveProperty("message", "Internal Server Error");
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(500)
+                expect(result).toHaveProperty("message", 'Internal Server Error')
             })
             .catch((err) => {
-                console.log(err);
-            });
-    });
+                console.log(err)
+            })
+    })
 })

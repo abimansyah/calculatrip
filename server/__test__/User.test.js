@@ -9,7 +9,7 @@ const {
     Expense,
     ExpenseCategory,
     PaymentMethod,
-  } = require("../models/index");
+} = require("../models/index");
 
 const {
     createToken
@@ -25,43 +25,43 @@ beforeAll(async () => {
             truncate: true,
             restartIdentity: true,
             cascade: true,
-          });
-          await Trip.destroy({
+        });
+        await Trip.destroy({
             where: {},
             truncate: true,
             restartIdentity: true,
             cascade: true,
-          });
-          await UserTrip.destroy({
+        });
+        await UserTrip.destroy({
             where: {},
             truncate: true,
             restartIdentity: true,
             cascade: true,
-          });
-          await Saving.destroy({
+        });
+        await Saving.destroy({
             where: {},
             truncate: true,
             restartIdentity: true,
             cascade: true,
-          });
-          await Expense.destroy({
+        });
+        await Expense.destroy({
             where: {},
             truncate: true,
             restartIdentity: true,
             cascade: true,
-          });
-          await ExpenseCategory.destroy({
+        });
+        await ExpenseCategory.destroy({
             where: {},
             truncate: true,
             restartIdentity: true,
             cascade: true,
-          });
-          await PaymentMethod.destroy({
+        });
+        await PaymentMethod.destroy({
             where: {},
             truncate: true,
             restartIdentity: true,
             cascade: true,
-          });
+        });
 
         const user = await User.create({
             username: "usernametest",
@@ -87,7 +87,7 @@ beforeAll(async () => {
             avatar: "abcder",
             birthDate: "01-01-2022"
         })
-        
+
         token = await createToken({
             id: 1,
             username: "usernametest",
@@ -96,7 +96,7 @@ beforeAll(async () => {
         wrongToken = await createToken({
             idsalah: 100,
             usernamesalah: "usernametest",
-            emailsalah: "test@mail.com"  
+            emailsalah: "test@mail.com"
         })
 
         await Trip.create({
@@ -104,74 +104,72 @@ beforeAll(async () => {
             startDate: "01-02-2021",
             endDate: "01-03-2021",
             homeCurrency: "USD",
-            tripImageUrl:
-              "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+            tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
             targetBudget: 10000,
-          });
-          await Trip.create({
+        });
+        await Trip.create({
             name: "test trip two",
             startDate: "01-02-2021",
             endDate: "01-03-2021",
             homeCurrency: "USD",
-            tripImageUrl:
-              "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+            tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
             targetBudget: 12000,
-          });
-      
-          await UserTrip.create({
+        });
+
+        await UserTrip.create({
             UserId: 1,
             TripId: 1,
             status: "accept",
             role: "owner",
-          });
-      
-          await UserTrip.create({
+        });
+
+        await UserTrip.create({
             UserId: 1,
             TripId: 2,
             status: "pending",
             role: "owner",
-          });
-      
-          await Saving.create({
+        });
+
+        await Saving.create({
             name: "saving trip one pertama",
             amount: 25000,
             tripId: 1,
             userId: 1,
             savingDate: "01-01-2022",
-          });
-          await Saving.create({
+        });
+        await Saving.create({
             name: "saving trip one kedua",
             amount: 10000,
             userId: 1,
             tripId: 1,
             savingDate: "01-02-2022",
-          });
-      
-          await Saving.create({
+        });
+
+        await Saving.create({
             name: "saving trip two pertama",
             amount: 3000,
             userId: 2,
             tripId: 2,
             savingDate: "03-01-2022",
-          });
-          await Saving.create({
+        });
+        await Saving.create({
             name: "saving trip two kedua",
             amount: 5000,
             userId: 2,
             tripId: 2,
             savingDate: "03-02-2022",
-          });
-      
-          await ExpenseCategory.create({
+        });
+
+        await ExpenseCategory.create({
             name: "Cafe",
             icon: "Cafe",
-          });
-          await PaymentMethod.create({
+        });
+        await PaymentMethod.create({
             name: "Credit",
             icon: "Credit",
-          });
-      
-          await Expense.create({
+        });
+
+        await Expense.create({
             name: "expense trip one",
             tripId: 1,
             amount: 5000,
@@ -181,9 +179,9 @@ beforeAll(async () => {
             location: "jakarta",
             description: "ini testing expense trip one",
             expenseDate: "02-01-2022",
-          });
-      
-          await Expense.create({
+        });
+
+        await Expense.create({
             name: "expense trip two",
             tripId: 2,
             amount: 2000,
@@ -193,7 +191,7 @@ beforeAll(async () => {
             location: "bandung",
             description: "ini testing expense trip two",
             expenseDate: "02-01-2022",
-          });
+        });
     } catch (err) {
         console.log(err)
     }
@@ -751,6 +749,12 @@ describe('GET /users - Get data user from database', () => {
 
     test('GET /users Error status (500), Should handle error when hit get User', async () => {
         jest.spyOn(User, 'findAll').mockRejectedValue('Error')
+        jest.spyOn(User, 'findByPk').mockResolvedValue({
+            id: 1,
+            username: "usernametest",
+            email: "test@mail.com"
+        })
+
         return request(app)
             .get('/users')
             .set('access_token', token)
@@ -829,6 +833,28 @@ describe('GET /users/profile - Get profile user from database', () => {
                 done()
             })
             .catch(err => {
+                console.log(err)
+            })
+    })
+
+    test('GET /users Error status (500), Should handle error when hit get User profile', async () => {
+        jest.spyOn(User, 'findOne').mockRejectedValue('Error')
+        jest.spyOn(User, 'findByPk').mockResolvedValue({
+            id: 1,
+            username: "usernametest",
+            email: "test@mail.com"
+        })
+
+        return request(app)
+            .get('/users/profile')
+            .set('access_token', token)
+            .then((resp) => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(500)
+                expect(result).toHaveProperty("message", 'Internal Server Error')
+            })
+            .catch((err) => {
                 console.log(err)
             })
     })

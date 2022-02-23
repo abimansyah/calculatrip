@@ -9,60 +9,101 @@ import {
   StyleSheet
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 import logo from '../assets/logo.png'
 import { styles } from '../styles/index'
 import HomeProfile from '../components/HomeProfile';
 import HomeCard from '../components/HomeCard';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
+import { server } from '../globalvar';
 
-export default function Home() {
+
+export default function Home({ navigation, route }) {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true)
-  useEffect(() => {
-    axios.get('http://a874-103-78-115-90.ngrok.io/trips')
-      .then(res => {
-        res.data = res.data.map(el => {
-          el.UserTrips = el.UserTrips.length
-          return el
-        })
-        setTrips(res.data)
-        setLoading(false)
+  const [notif, setNotif] = useState(false)
+  const tripId = route.params?.tripId
+  const fetchData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('access_token')
+      const res = await axios.get(`${server}/trips`, {
+        headers: {
+          access_token: token
+        }
       })
-      .catch(err => {
-        console.log(err)
+      const response = res.data.map(el => {
+        el.UserTrips = el.Trip.Users.length - 1
+        return el
       })
-  }, [])
+      setTrips(response)
+      setLoading(false)
+      const invite = await axios.get(`${server}/users/invitation`, {
+        headers: {
+          access_token: token
+        }
+      })
+      if (invite.data.length > 0) {
+        setNotif(true)
+      } else {
+        setNotif(false)
+      }
+    } catch (err) {
+      console.log(err)
+      if (typeof err === "object" && err.response.data.message) {
+        alert(err.response.data.message)
+      }
+    }
+  }
+  useFocusEffect(useCallback(() => {
+    fetchData()
+    return () => true
+  }, [tripId]))
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.mainContainer, homeStyle.homeContainer}>
-        <View style={homeStyle.headerContainer}>
-          <Image source={logo} style={ homeStyle.headerImage } />
-          <Text style={homeStyle.headerText}>Calculatrip</Text>
-        </View>
-        { !loading && trips.length > 0 ? (
-          <View>
-            <FlatList
-              nestedScrollEnabled={true} 
-              data={trips}
-              renderItem={({ item }) => (<HomeCard data={item} />)}
-              keyExtractor={(item) => `Trips${item.id}`}
-              ListHeaderComponent={<HomeProfile />}
-              contentContainerStyle={{ paddingBottom: 200 }}
-            />
-          </View>
-        ) : (
-          <>
-            <HomeProfile />
-            <View style={homeStyle.emptyContainer}>
-              <Text style={{textAlign: "center"}}>Add your trip to see{"\n"}all of trips data</Text>
+      <SafeAreaView style={styles.screenSize}>
+        <View style={styles.mainContainer, homeStyle.homeContainer}>
+          <View style={{ position: "relative" }}>
+            <View style={homeStyle.headerContainer}>
+              <Image source={logo} style={homeStyle.headerImage} />
+              <Text style={homeStyle.headerText}>Calculatrip</Text>
             </View>
-          </>
-        ) }
-        <View style={homeStyle.addContainer}>
-          <TouchableOpacity style={{ alignSelf: 'flex-start' }}>
-            <Text style={homeStyle.addButton}>+</Text>
-          </TouchableOpacity>
+            {/* <Text>{JSON.stringify(trips)}</Text> */}
+            <TouchableOpacity style={homeStyle.notifContainer} onPress={() => navigation.navigate('Notification')}>
+              <View style={{ position: "relative" }}>
+                <Ionicons name="notifications" size={32} color="#0378a6" />
+                {notif ? (<Text style={homeStyle.notifCheck}>⬤</Text>) : undefined}
+              </View>
+            </TouchableOpacity>
+          </View>
+          {!loading && trips?.length > 0 ? (
+            <View>
+              <FlatList
+                nestedScrollEnabled={true}
+                data={trips}
+                renderItem={({ item }) => (<HomeCard data={item} />)}
+                keyExtractor={(item) => `Trips${item.id}`}
+                ListHeaderComponent={<HomeProfile />}
+                contentContainerStyle={{ paddingBottom: 170 }}
+              />
+            </View>
+          ) : (
+            <>
+              <HomeProfile />
+              <View style={homeStyle.emptyContainer}>
+                <Text style={{ textAlign: "center" }}>Add your trip to see{"\n"}all of trips data</Text>
+              </View>
+            </>
+          )}
+          <View style={homeStyle.addContainer}>
+            <TouchableOpacity style={{ alignSelf: 'flex-start' }}
+              onPress={() => navigation.navigate('AddTrip')}
+            >
+              <Text style={homeStyle.addButton}>+</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </SafeAreaView>
     </TouchableWithoutFeedback>
@@ -90,6 +131,20 @@ const homeStyle = StyleSheet.create({
     color: "#0378a6",
     paddingLeft: 5
   },
+  notifContainer: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    padding: 10,
+    margin: 8
+  },
+  notifCheck: {
+    position: "absolute",
+    right: 2,
+    top: -2,
+    fontSize: 15,
+    color: "red"
+  },
   emptyContainer: {
     flex: 1,
     justifyContent: "center",
@@ -103,7 +158,7 @@ const homeStyle = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     position: 'absolute',
-    bottom: 30
+    bottom: 10
   },
   addButton: {
     fontSize: 32,

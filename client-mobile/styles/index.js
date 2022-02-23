@@ -9,7 +9,8 @@ export const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     backgroundColor: backgroundColor,
-    position: 'relative'
+    position: 'relative',
+
   },
 
 
@@ -99,8 +100,9 @@ export const styles = StyleSheet.create({
     backgroundColor: backgroundColor,
     color: '#fff',
     alignItems: 'center',
-    height: '80%',
-    justifyContent: 'center'
+    height: '100%',
+    paddingTop: 30
+
   },
   
   modalInput: {
@@ -135,14 +137,18 @@ export const styles = StyleSheet.create({
 
   expenseIcon: {
     backgroundColor: mainColor,
-    width: 60,
-    height: 60,
+    width: 50,
+    height: 50,
     borderRadius: 50,
     marginTop: 5,
     marginHorizontal: 5,
     marginBottom: 10,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+
+  icontText: {
+    fontSize: 13
   }
 });
 

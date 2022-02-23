@@ -3,9 +3,9 @@ const {
   Trip,
   ExpenseCategory,
   PaymentMethod,
-  User
+  User,
+  Images
 } = require("../models/index");
-
 
 class ExpenseController {
   static async postExpense(req, res, next) {
@@ -131,11 +131,6 @@ class ExpenseController {
         expenseId
       } = req.params
       const expense = await Expense.findByPk(expenseId)
-      if (!expense) {
-        throw {
-          name: "ExpenseNotFound"
-        }
-      }
       await Expense.destroy({
         where: {
           id: expenseId
@@ -149,9 +144,11 @@ class ExpenseController {
     }
   }
 
-  static async uploadImage(req,res,next) {
+  static async uploadImage(req, res, next) {
     try {
-      const { expenseId } = req.params
+      const {
+        expenseId
+      } = req.params
       await Images.create({
         expenseId,
         imageUrl: req.uploadUrl,
@@ -164,23 +161,27 @@ class ExpenseController {
     }
   }
 
-  static async deleteImage(req,res,next) {
+  static async deleteImage(req, res, next) {
     try {
-      const { expenseId, imageId } = req.params
-
+      const {
+        expenseId,
+        imageId
+      } = req.params
       const expense = await Expense.findByPk(expenseId)
-      
-      if(!expense){
-        throw{name:"ExpenseNotFound"}
+      if (!expense) {
+        throw {
+          name: "ExpenseNotFound"
+        }
       }
-
       const deleteImage = await Images.findByPk(imageId)
-      if(!deleteImage) {
-        throw {name: "ImageNotFound"}
+      if (!deleteImage) {
+        throw {
+          name: "ImageNotFound"
+        }
       }
       await Images.destroy({
         where: {
-          id:imageId,
+          id: imageId,
           expenseId
         }
       })
@@ -188,7 +189,6 @@ class ExpenseController {
         message: "Image has been removed"
       })
     } catch (error) {
-      console.log(error);
       next(error)
     }
   }

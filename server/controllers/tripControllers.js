@@ -1,4 +1,9 @@
-const { User, Trip, UserTrip, sequelize } = require("../models/index");
+const {
+  User,
+  Trip,
+  UserTrip,
+  sequelize
+} = require("../models/index");
 const imageRandomizer = require("../helpers/imageRandomizer");
 
 const defaultBackgrounds = [
@@ -23,27 +28,26 @@ class TripController {
         targetBudget,
       } = req.body;
 
-      const newTrip = await Trip.create(
-        {
-          name,
-          startDate,
-          endDate,
-          homeCurrency,
-          tripImageUrl: tripImageUrl || defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
-          targetBudget: targetBudget || 0,
-        },
-        { transaction: t }
-      );
+      const newTrip = await Trip.create({
+        name,
+        startDate,
+        endDate,
+        homeCurrency,
+        tripImageUrl: req.uploadUrl,
+        targetBudget: targetBudget || 0,
+      }, {
+        transaction: t
+      });
 
-      await UserTrip.create(
-        {
-          UserId: req.user.id,
-          TripId: newTrip.id,
-          status: "active",
-          role: "owner",
-        },
-        { transaction: t }
-      );
+
+      await UserTrip.create({
+        UserId: req.user.id,
+        TripId: newTrip.id,
+        status: "accept",
+        role: "owner",
+      }, {
+        transaction: t
+      });
 
       await t.commit();
       res.status(201).json({
@@ -57,64 +61,32 @@ class TripController {
 
   static async getTrips(req, res, next) {
     try {
-      // const output = await User.findOne({
-      //   where: {
-      //     id: req.user.id,
-      //   },
-      //   include: [
-      //     {
-      //       model: Trip,
-      //       order: [["createdAt", "desc"]],
-      //       attributes: {
-      //         exclude: ["createdAt", "updatedAt"],
-      //       },
-      //       include: [
-      //         {
-      //           model: UserTrip,
-      //           attributes: {
-      //             exclude: ["createdAt", "updatedAt"],
-      //           },
-      //         },
-      //       ],
-      //       through: {
-      //         attributes: {
-      //           exclude: ["createdAt", "updatedAt"],
-      //         },
-      //       },
-      //     },
-      //   ],
-      // });
-
       const trip = await UserTrip.findAll({
         where: {
           UserId: req.user.id,
           status: "accept",
-          
+
         },
         attributes: {
           exclude: ["createdAt", "updatedAt"],
         },
-        include: [
-          {
-            model: Trip,
-            attributes: {
-              exclude: ["createdAt", "updatedAt"],
-            },
-            include: [
-              {
-                model: User,
-                through: {
-                  attributes: {
-                    exclude: ["createdAt", "updatedAt"],
-                  },
-                },
-                attributes: {
-                  exclude: ["createdAt", "updatedAt", "password"],
-                },
-              },
-            ],
+        include: [{
+          model: Trip,
+          attributes: {
+            exclude: ["createdAt", "updatedAt"],
           },
-        ],
+          include: [{
+            model: User,
+            through: {
+              attributes: {
+                exclude: ["createdAt", "updatedAt"],
+              },
+            },
+            attributes: {
+              exclude: ["createdAt", "updatedAt", "password"],
+            },
+          }, ],
+        }, ],
       });
       res.status(200).json(trip);
     } catch (err) {
@@ -124,7 +96,9 @@ class TripController {
 
   static async getTripById(req, res, next) {
     try {
-      const { id } = req.params;
+      const {
+        id
+      } = req.params;
       const findTrip = await Trip.findByPk(id, {
         include: {
           model: User,
@@ -139,7 +113,9 @@ class TripController {
         },
       });
       if (!findTrip) {
-        throw { name: "TripNotFound" };
+        throw {
+          name: "TripNotFound"
+        };
       } else {
         res.status(200).json(findTrip);
       }
@@ -150,11 +126,15 @@ class TripController {
 
   static async deleteTrip(req, res, next) {
     try {
-      const { id } = req.params;
+      const {
+        id
+      } = req.params;
       const findTrip = await Trip.findByPk(id);
 
       await Trip.destroy({
-        where: { id },
+        where: {
+          id
+        },
       });
       res.status(200).json({
         message: `Trip ${findTrip.name} has been deleted!`,
@@ -175,25 +155,26 @@ class TripController {
         tripImageUrl,
         targetBudget,
       } = req.body;
-
-      const { id } = req.params;
-
+      const {
+        id
+      } = req.params;
       const findTrip = await Trip.findByPk(id);
-
-      const editedTrip = await Trip.update(
-        {
-          name,
-          startDate,
-          endDate,
-          homeCurrency,
-          tripImageUrl:
-            tripImageUrl ||
-            defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
-          targetBudget,
+      const editedTrip = await Trip.update({
+        name,
+        startDate,
+        endDate,
+        homeCurrency,
+        tripImageUrl: req.uploadUrl ||
+          defaultBackgrounds[imageRandomizer(defaultBackgrounds)],
+        targetBudget,
+      }, {
+        where: {
+          id
         },
-        { where: { id }, returning: true },
-        { transaction: t }
-      );
+        returning: true
+      }, {
+        transaction: t
+      });
 
       await t.commit();
       res.status(201).json({
@@ -207,7 +188,9 @@ class TripController {
 
   static async addCompanion(req, res, next) {
     try {
-      const { input } = req.body;
+      const {
+        input
+      } = req.body;
 
       let findUser = await User.findOne({
         where: {
@@ -223,7 +206,9 @@ class TripController {
         });
       }
       if (!findUser) {
-        throw { name: "User not found" };
+        throw {
+          name: "User not found"
+        };
       }
 
       await UserTrip.create({
@@ -243,8 +228,25 @@ class TripController {
 
   static async acceptInvitation(req, res, next) {
     try {
-      const { userTripId } = req.params;
-      const { status } = req.body;
+      const {
+        userTripId
+      } = req.params;
+      const {
+        status
+      } = req.body;
+
+
+      if (status !== "accept") {
+        await UserTrip.destroy({
+          where: {
+            id: userTripId
+          }
+        })
+        res.status(200).json({
+          message: `You ${status} the invitation`,
+        });
+      }
+
 
       const userTrip = await UserTrip.findOne({
         where: {
@@ -253,18 +255,19 @@ class TripController {
         },
       });
       if (!userTrip) {
-        throw { name: "UserTripNotFound" };
+        throw {
+          name: "UserTripNotFound"
+        };
       }
 
-      await UserTrip.update(
-        { status: status },
-        {
-          where: {
-            id: userTripId,
-            UserId: req.user.id,
-          },
-        }
-      );
+      await UserTrip.update({
+        status: status
+      }, {
+        where: {
+          id: userTripId,
+          UserId: req.user.id,
+        },
+      });
       res.status(200).json({
         message: `You ${status} the invitation`,
       });

@@ -32,7 +32,6 @@ const authentication = async (req, res, next) => {
         }
         next()
     } catch (err) {
-        // console.log(err, "error dari authe")
         next(err)
     }
 

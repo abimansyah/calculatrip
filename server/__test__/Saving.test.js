@@ -17,6 +17,7 @@ const {
 
 let token = ""
 let wrongToken = ""
+let tokenUserTwo = "";
 
 beforeAll(async () => {
     try {
@@ -85,6 +86,11 @@ beforeAll(async () => {
             username: "usernametest",
             email: "test@mail.com",
         });
+        tokenUserTwo = await createToken({
+            id: 2,
+            username: "usernametest",
+            email: "test@mail.com",
+        });
         wrongToken = await createToken({
             idsalah: 100,
             usernamesalah: "usernametest",
@@ -122,6 +128,13 @@ beforeAll(async () => {
             role: "owner",
         });
 
+        await UserTrip.create({
+            UserId: 2,
+            TripId: 1,
+            status: "accept",
+            role: "companion",
+        });
+
         await Saving.create({
             name: "saving trip one pertama",
             amount: 25000,
@@ -132,7 +145,7 @@ beforeAll(async () => {
         await Saving.create({
             name: "saving trip one kedua",
             amount: 10000,
-            userId: 1,
+            userId: 2,
             tripId: 1,
             savingDate: "01-02-2022"
         });
@@ -147,7 +160,7 @@ beforeAll(async () => {
         await Saving.create({
             name: "saving trip two kedua",
             amount: 5000,
-            userId: 2,
+            userId: 1,
             tripId: 2,
             savingDate: "03-02-2022"
         });
@@ -547,6 +560,23 @@ describe('DELETE /savings/:savingId - Delete one saving from a trip by Id', () =
             })
     })
 
+    test('DELETE /savings/:savingId Error status (403) - should return error when saving usertrip as companion', (done) => {
+        request(app)
+            .delete('/savings/2')
+            .set('access_token', tokenUserTwo)
+            .then(resp => {
+                const result = resp.body
+                // console.log(result)
+                expect(resp.status).toBe(200)
+                expect(result).toEqual(expect.any(Object));
+                expect(result).toHaveProperty("message", 'Saving has been deleted!');
+                done()
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    })
+
     test('DELETE /savings/:savingId Error status (404) - should return error when id saving not exist', (done) => {
         request(app)
             .delete('/savings/333')
@@ -584,7 +614,7 @@ describe('DELETE /savings/:savingId - Delete one saving from a trip by Id', () =
     test('Should handle error when hit delete', async () => {
         jest.spyOn(Saving, 'destroy').mockRejectedValue('Error')
         return request(app)
-            .delete('/savings/2')
+            .delete('/savings/5')
             .set('access_token', token)
             .then((resp) => {
                 const result = resp.body

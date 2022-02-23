@@ -1,24 +1,33 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
-import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native";
-// import { useNavigation } from '@react-navigation/native';
+import { ImageBackground, StyleSheet, TouchableOpacity, View, Modal, } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export default function TripImage({ data }) {
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
+
+
   return (
     <ImageBackground style={styles.imageDetail} source={{
       uri: data,
     }}>
-      <LinearGradient style={styles.imageDetail} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{x:0.5, y:0}} end={{x:0.5, y:0.5}}>
+      <LinearGradient style={styles.imageDetail} colors={['rgba(0, 0, 0, 0.5)', 'rgba(0, 0, 0, 0)']} start={{ x: 0.5, y: 0 }} end={{ x: 0.5, y: 0.5 }}>
         <View style={styles.iconContainer}>
           {/* <TouchableOpacity style={styles.iconButton}
           onPress={() => {
             navigation.goBack();
           }}> */}
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity style={styles.iconButton}
+            onPress={() => {
+              navigation.navigate('Home')
+            }}>
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.iconButton}>
+          <TouchableOpacity style={styles.iconButton}
+ 
+          >
             <Ionicons name="ellipsis-vertical" size={24} color="white" />
           </TouchableOpacity>
         </View>
@@ -29,7 +38,7 @@ export default function TripImage({ data }) {
 
 const styles = StyleSheet.create({
   imageDetail: {
-    height: 230,
+    height: 200,
     position: 'relative',
   },
   iconContainer: {

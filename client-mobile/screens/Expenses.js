@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Dimensions } from 'react-native'
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -7,131 +7,22 @@ import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles"
 import ExpensesCard from '../components/ExpensesCard';
 import ExpenseCategoryModal from '../components/ExpenseCategoryModal';
+import BottomTab from '../components/BottomTabs';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
+import { server } from '../globalvar';
+import moment from 'moment'
+import { useNavigation } from '@react-navigation/native';
 
-export default function Expenses() {
-  const [expenses, setExpenses] = useState([
-    {
-      "id": 1,
-      "name": "expense trip one",
-      "userId": 1,
-      "tripId": 1,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 2,
-      "name": "expense trip one",
-      "userId": 1,
-      "tripId": 2,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 3,
-      "name": "expense trip one",
-      "userId": 1,
-      "tripId": 3,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 4,
-      "name": "expense trip one",
-      "userId": 1,
-      "tripId": 4,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 5,
-      "name": "expense trip ",
-      "userId": 2,
-      "tripId": 1,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 6,
-      "name": "expense trip ",
-      "userId": 2,
-      "tripId": 2,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 7,
-      "name": "expense trip",
-      "userId": 2,
-      "tripId": 3,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 8,
-      "name": "expense trip",
-      "userId": 2,
-      "tripId": 4,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 9,
-      "name": "expense trip ",
-      "userId": 3,
-      "tripId": 1,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    },
-    {
-      "id": 10,
-      "name": "expense trip ",
-      "userId": 3,
-      "tripId": 2,
-      "amount": 5000,
-      "expenseCategoryId": 1,
-      "paymentMethodId": 1,
-      "location": "Indonesia",
-      "description": "trip expense",
-      "expenseDate": "02-01-2022"
-    }
-  ])
+
+
+
+export default function Expenses({ route }) {
+  const navigation = useNavigation();
+  const { tripId } = route.params
+  const [expenses, setExpenses] = useState([])
   const [loading, setLoading] = useState(false)
+  const [token, setToken] = useState('')
 
   const bs = React.createRef();
   const fall = new Animated.Value(1);
@@ -147,52 +38,90 @@ export default function Expenses() {
     )
   }
 
+  const loginCheck = async () => {
+    try {
+      const getAccessToken = await AsyncStorage.getItem('access_token')
+      if (getAccessToken !== null) {
+        setToken(getAccessToken);
+      }
+
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    if (token) {
+      axios.get(`${server}/expenses/trip/${tripId}`, {
+        headers: {
+          access_token: token
+        }
+      })
+        .then(res => {
+          setExpenses(res.data)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+  }, [token])
+
+  useEffect(() => {
+    loginCheck()
+  }, [])
+
   return (
-    <SafeAreaView style={styles.mainContainer}>
-      <BottomSheet
-        ref={bs}
-        snapPoints={[450, 0]}
-        renderContent={() => { return (<ExpenseCategoryModal/>) }}
-        renderHeader={headerModal}
-        initialSnap={1}
-        callbackNode={fall}
-        enabledGestureInteraction={true}
-        enabledHeaderGestureInteraction={true}
-      />
-      <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
-        <View style={expensesStyle.headerContainer}>
-          <View style={expensesStyle.headerView}>
-            <TouchableOpacity style={{padding: 15}} >
-              <Ionicons name="arrow-back" size={30} color="white" />
-            </TouchableOpacity>
-            <Text style={expensesStyle.title}>Expenses</Text>
-          </View>
-          <View style={expensesStyle.blueCardContainer}>
-            <View style={expensesStyle.blueCardView}>
-              <Text style={expensesStyle.blueCardDesc}>Total Expenses</Text>
-              <Text style={expensesStyle.blueCardNumber}>{totalExpenses}</Text>
+    <SafeAreaView style={styles.screenSize}>
+      <View  style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+        <BottomSheet
+          ref={bs}
+          snapPoints={[730, 0]}
+          renderContent={() => { return (<ExpenseCategoryModal data={tripId} />) }}
+          renderHeader={headerModal}
+          initialSnap={1}
+          callbackNode={fall}
+          enabledGestureInteraction={true}
+          enabledHeaderGestureInteraction={true}
+        />
+        <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
+          <View style={expensesStyle.headerContainer}>
+            <View style={expensesStyle.headerView}>
+              <TouchableOpacity style={{ padding: 15 }} 
+              onPress={() => {
+                navigation.navigate('Home')
+              }}>
+                <Ionicons name="arrow-back" size={30} color="white" />
+              </TouchableOpacity>
+              <Text style={expensesStyle.title}>Expenses</Text>
             </View>
-            <TouchableOpacity onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
-              <Text style={expensesStyle.addButton}>+</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <View style={{flex: 1}}>
-          { !loading && expenses.length > 0 ? (
-            <FlatList
-              nestedScrollEnabled={true} 
-              data={expenses}
-              renderItem={({ item }) => (<ExpensesCard data={item} />)}
-              keyExtractor={(item) => `Expenses${item.id}`}
-              contentContainerStyle={{ paddingVertical: 10 }}
-            />
-          ) : (
-            <View style={expensesStyle.emptyContainer}>
-              <Text style={{textAlign: "center"}}>Add your expenses to see{"\n"}all of expenses data</Text>
+            <View style={expensesStyle.blueCardContainer}>
+              <View style={expensesStyle.blueCardView}>
+                <Text style={expensesStyle.blueCardDesc}>Total Expenses</Text>
+                <Text style={expensesStyle.blueCardNumber}>{totalExpenses}</Text>
+              </View>
+              <TouchableOpacity onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
+                <Text style={expensesStyle.addButton}>+</Text>
+              </TouchableOpacity>
             </View>
-          ) }
-        </View>
-      </Animated.View>
+          </View>
+          <View style={{ flex: 1 }}>
+            {!loading && expenses.length > 0 ? (
+              <FlatList
+                nestedScrollEnabled={true}
+                data={expenses}
+                renderItem={({ item }) => (<ExpensesCard data={item} />)}
+                keyExtractor={(item) => `Expenses${item.id}`}
+                contentContainerStyle={{ paddingVertical: 10 }}
+              />
+            ) : (
+              <View style={expensesStyle.emptyContainer}>
+                <Text style={{ textAlign: "center" }}>Add your expenses to see{"\n"}all of expenses data</Text>
+              </View>
+            )}
+          </View>
+          <BottomTab data={tripId} />
+        </Animated.View>
+      </View>
     </SafeAreaView>
   )
 }
@@ -203,7 +132,7 @@ const expensesStyle = StyleSheet.create({
     top: 0
   },
   headerView: {
-    width: "100%",
+    width: Dimensions.get('window').width,
     height: 170,
     backgroundColor: "#72c1f2"
   },

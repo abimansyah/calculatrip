@@ -1,18 +1,27 @@
 import { Text, View, StyleSheet, TouchableOpacity } from 'react-native'
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import moment from 'moment';
+import { useNavigation } from '@react-navigation/native';
+
 
 export default function ExpensesCard({data}) {
+  const nav = useNavigation();
+  
   return (
-    <TouchableOpacity style={expensesCardStyle.containter}>
+    <TouchableOpacity style={expensesCardStyle.containter}  onPress={() => nav.navigate('DetailExpenses', {
+      data: data.id,
+      tripId: data.tripId
+    })}>
       <View style={{width: "55%", flexDirection: "row", alignItems: "center"}}>
-        <FontAwesomeIcon name='taxi' size={25} color="black" />
+        <Icon name={data.ExpenseCategory.icon} size={25} color="black" />
         <View style={{marginLeft: 12}}>
           <Text style={{fontWeight: "bold"}}>{data.name}</Text>
-          <Text>{data.expenseDate}</Text>
+          <Text>{`${moment(new Date(data.expenseDate)).format('DD MMMM YYYY')}`}</Text>
         </View>
       </View>
       <View style={{flexDirection: "column", alignItems: "flex-end"}}>
-        <Text>{data.expenseCategoryId}</Text>
+        <Text>{data.ExpenseCategory.name}</Text>
         <Text style={expensesCardStyle.moneyText}>{data.amount}</Text>
       </View>
     </TouchableOpacity>

@@ -88,13 +88,13 @@ beforeAll(async () => {
     });
     tokenUserTwo = await createToken({
       id: 2,
-      username: "usernametesttwo",
-      email: "testtwo@mail.com",
+      username: "usernametest",
+      email: "test@mail.com",
     });
     wrongToken = await createToken({
       idsalah: 100,
-      usernamesalah: "usernametestwrong",
-      emailsalah: "testwrong@mail.com",
+      usernamesalah: "usernametest",
+      emailsalah: "test@mail.com",
     });
 
     await Trip.create({
@@ -114,6 +114,15 @@ beforeAll(async () => {
       targetBudget: 12000,
     });
 
+    await Trip.create({
+      name: "test trip two",
+      startDate: "01-02-2021",
+      endDate: "01-03-2021",
+      homeCurrency: "USD",
+      tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
+      targetBudget: 12000,
+    });
+
     await UserTrip.create({
       UserId: 1,
       TripId: 1,
@@ -124,6 +133,20 @@ beforeAll(async () => {
     await UserTrip.create({
       UserId: 1,
       TripId: 2,
+      status: "accept",
+      role: "owner",
+    });
+
+    await UserTrip.create({
+      UserId: 2,
+      TripId: 1,
+      status: "accept",
+      role: "companion",
+    });
+
+    await UserTrip.create({
+      UserId: 2,
+      TripId: 3,
       status: "accept",
       role: "owner",
     });
@@ -226,7 +249,8 @@ describe("POST /trips - create new trip", () => {
         console.log(err);
       });
   });
-  test("POST /trips success status (201) - should return success with status (201)", (done) => {
+
+  test("POST /trips success status (201) - should return success with status without trip image (201)", (done) => {
     request(app)
       .post("/trips")
       .set("access_token", token)
@@ -235,7 +259,7 @@ describe("POST /trips - create new trip", () => {
         startDate: "02-02-2021",
         endDate: "02-03-2021",
         homeCurrency: "IDR",
-        targetBudget: 20000,
+        tripImageUrl: "https://images.unsplash.com/photo-1645096568201-1d92fd231335?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1974&q=80",
       })
       .then((resp) => {
         const result = resp.body;
@@ -251,6 +275,7 @@ describe("POST /trips - create new trip", () => {
         console.log(err);
       });
   });
+
   test("POST /trips error status (400) - should return error when trip name is null", (done) => {
     request(app)
       .post("/trips")
@@ -414,14 +439,12 @@ describe("POST /trips - create new trip", () => {
 });
 
 describe("GET /trips - get all trips", () => {
-
   test("GET /trips success (200) - get all trips for user with access_token", (done) => {
     request(app)
       .get("/trips")
       .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
-        // console.log(result,"<<<<<<<<<<<<<<<<<<<");
         expect(resp.status).toBe(200);
         expect(result).toEqual(expect.any(Array));
         expect(result[0]).toHaveProperty("id", expect.any(Number));
@@ -447,15 +470,13 @@ describe("GET /trips - get all trips", () => {
       });
   });
   test("GET /trips error (500) - should handle error with status (500)", async () => {
-
     jest.spyOn(UserTrip, 'findAll').mockRejectedValue('Error')
-
     return request(app)
       .get("/trips")
       .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
-        // console.log(result, "<<<<<<<<<<<<<<<<<<<<<<<");
+        // console.log(result,"<<<<<<<<<<<<<<<<<<<<<<<");
         expect(resp.status).toBe(500);
         expect(result).toHaveProperty("message", "Internal Server Error");
       })
@@ -499,7 +520,7 @@ describe("GET /trips/:id - get trips by id", () => {
   });
   test("GET /trips error (404) - should return error with status (404) when trip is not found", (done) => {
     request(app)
-      .get("/trips/400")
+      .get("/trips/10")
       .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
@@ -542,6 +563,34 @@ describe("PUT /trips/:id - edit trip", () => {
         console.log(err);
       });
   });
+
+  test("PUT /trips/:id success status (200) - should return success with status without trip image (200)", (done) => {
+    request(app)
+      .put("/trips/1")
+      .set("access_token", token)
+      .send({
+        name: "jalan jalan ke bandung edited",
+        startDate: "02-02-2021",
+        endDate: "02-03-2021",
+        homeCurrency: "USD",
+        targetBudget: 50000,
+        tripImageUrl: 'tetsts url'
+      })
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(201);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty(
+          "message",
+          "Trip jalan jalan ke bandung edited has been updated!"
+        );
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+
   test("PUT /trips/:id error status (400) - should return error when trip name is null", (done) => {
     request(app)
       .put("/trips/1")
@@ -662,7 +711,7 @@ describe("PUT /trips/:id - edit trip", () => {
   });
   test("PUT /trips/:id error status (404) - should return error when trip not found", (done) => {
     request(app)
-      .put("/trips/400")
+      .put("/trips/60")
       .set("access_token", token)
       .send({
         name: "jalan jalan ke bandung edited",
@@ -708,8 +757,8 @@ describe("PUT /trips/:id - edit trip", () => {
   });
   test("PUT /trips/:id error status (403) - should return error when user is unauthorized", (done) => {
     request(app)
-      .put("/trips/2")
-      .set("access_token", token)
+      .put("/trips/1")
+      .set("access_token", tokenUserTwo)
       .send({
         name: "jalan jalan ke bandung edited by user Two",
         startDate: "01-03-2021",
@@ -771,15 +820,15 @@ describe("DELETE /trips/:id - delete trip", () => {
   });
   test("DELETE /trips/:id error status (403) - should return error when user is tried to delete another user trip", (done) => {
     request(app)
-      .delete("/trips/2")
+      .delete("/trips/3")
       .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
-        expect(resp.status).toBe(403);
+        expect(resp.status).toBe(404);
         expect(result).toEqual(expect.any(Object));
         expect(result).toHaveProperty(
           "message",
-          "Unauthorize - Forbiden to Access"
+          'User Trip not found'
         );
         done();
       })
@@ -789,11 +838,10 @@ describe("DELETE /trips/:id - delete trip", () => {
   });
   test("DELETE /trips/:id error status (404) - should return error when trip is not found", (done) => {
     request(app)
-      .delete("/trips/5")
+      .delete("/trips/100")
       .set("access_token", token)
       .then((resp) => {
         const result = resp.body;
-        // console.log(result);
         expect(resp.status).toBe(404);
         expect(result).toEqual(expect.any(Object));
         expect(result).toHaveProperty("message", "Trip not found");
@@ -832,8 +880,9 @@ describe("DELETE /trips/:id - delete trip", () => {
         console.log(err);
       });
   });
-
 });
+
+// test add friend function
 
 describe("POST /trips/:id - create invitation to another user", () => {
   test("POST /trips/:id success status (201) - should return success with status (201) when invitation sent", (done) => {
@@ -841,7 +890,7 @@ describe("POST /trips/:id - create invitation to another user", () => {
       .post("/trips/2")
       .set("access_token", token)
       .send({
-        input:"usernametestdua"
+        input: "usernametestdua"
       })
       .then((resp) => {
         const result = resp.body;
@@ -857,12 +906,13 @@ describe("POST /trips/:id - create invitation to another user", () => {
         console.log(err);
       });
   });
+
   test("POST /trips/:id success status (201) - should return success with status (201) when invitation sent with email", (done) => {
     request(app)
       .post("/trips/2")
       .set("access_token", token)
       .send({
-        input:"test2@mail.com"
+        input: "test2@mail.com"
       })
       .then((resp) => {
         const result = resp.body;
@@ -883,7 +933,7 @@ describe("POST /trips/:id - create invitation to another user", () => {
       .post("/trips/2")
       .set("access_token", token)
       .send({
-        input:"usernotfound"
+        input: "usernotfound"
       })
       .then((resp) => {
         const result = resp.body;
@@ -901,13 +951,13 @@ describe("POST /trips/:id - create invitation to another user", () => {
   });
 });
 
-describe("PATCH /trips/:userTripId - create invitation to another user", () => {
-  test("PATCH /trips/:userTripId success status (200) - should return success with status (200) when invitation accepted or declined", (done) => {
+describe("PATCH /trips/:userTripId - Update invitation to companion userTrip", () => {
+  test("PATCH /trips/:userTripId success status (200) - should return success with status (200) when invitation accepted", (done) => {
     request(app)
       .patch("/trips/2")
       .set("access_token", token)
       .send({
-        status:"accept"
+        status: "accept"
       })
       .then((resp) => {
         const result = resp.body;
@@ -923,12 +973,34 @@ describe("PATCH /trips/:userTripId - create invitation to another user", () => {
         console.log(err);
       });
   });
+
+  test("PATCH /trips/:userTripId success status (200) - should return success with status (200) when invitation declined", (done) => {
+    request(app)
+      .patch("/trips/2")
+      .set("access_token", token)
+      .send({
+        status: "reject"
+      })
+      .then((resp) => {
+        const result = resp.body;
+        expect(resp.status).toBe(200);
+        expect(result).toEqual(expect.any(Object));
+        expect(result).toHaveProperty(
+          "message",
+          "You reject the invitation"
+        );
+        done();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
   test("PATCH /trips/:userTripId error status (404) - should return error with status (404) when invitation to non existent user trip", (done) => {
     request(app)
       .patch("/trips/100")
       .set("access_token", token)
       .send({
-        status:"accept"
+        status: "accept"
       })
       .then((resp) => {
         const result = resp.body;

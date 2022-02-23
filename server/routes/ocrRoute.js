@@ -8,7 +8,7 @@ const authentication = require('../middlewares/Authentication')
 // controller 
 const ocrController = require('../controllers/ocrController')
 
-ocrRouter.post('/',instanceMulter.single("imageFile"), ocrController.postOcr)
+ocrRouter.post('/',authentication,instanceMulter.single("imageFile"), ocrController.postOcr)
 
 
 module.exports = ocrRouter

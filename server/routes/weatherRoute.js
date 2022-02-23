@@ -7,7 +7,7 @@ const authentication = require('../middlewares/Authentication')
 // controller 
 const weatherController = require('../controllers/weatherController')
 
-weatherRouter.get('/coordinate', authentication, weatherController.getWeatherByCoordinate)
-weatherRouter.get('/city', authentication, weatherController.getWeatherByCity)
+weatherRouter.post('/coordinate', authentication, weatherController.getWeatherByCoordinate)
+weatherRouter.post('/city', authentication, weatherController.getWeatherByCity)
 
 module.exports = weatherRouter
