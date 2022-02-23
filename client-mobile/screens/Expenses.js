@@ -99,7 +99,8 @@ export default function Expenses({ route }) {
                 <Text style={expensesStyle.blueCardDesc}>Total Expenses</Text>
                 <Text style={expensesStyle.blueCardNumber}>{totalExpenses}</Text>
               </View>
-              <TouchableOpacity onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
+              <TouchableOpacity 
+              onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
                 <Text style={expensesStyle.addButton}>+</Text>
               </TouchableOpacity>
             </View>
