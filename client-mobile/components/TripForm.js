@@ -72,30 +72,30 @@ export default function TripForm({ type }) {
   }
 
   const submitTrip = () => {
-      setLoading(true)
-      let formDataBody = new FormData();
-      let localUri = tripImage;
-      let filename = localUri.split('/').pop();
+    setLoading(true)
+    let formDataBody = new FormData();
+    let localUri = tripImage;
+    let filename = localUri.split('/').pop();
 
-      // Infer the type of the image
-      if (isFile) {
-        let match = /\.(\w+)$/.exec(filename);
-        let type = match ? `image/${match[1]}` : `image`;
-        formDataBody.append('imageFile', { uri: tripImage, name: filename, type });
-      } else {
-        formDataBody.append('tripImageUrl', tripImage)
-      }
+    // Infer the type of the image
+    if (isFile) {
+      let match = /\.(\w+)$/.exec(filename);
+      let type = match ? `image/${match[1]}` : `image`;
+      formDataBody.append('imageFile', { uri: tripImage, name: filename, type });
+    } else {
+      formDataBody.append('tripImageUrl', tripImage)
+    }
 
-      formDataBody.append('name', name)
-      formDataBody.append('targetBudget', targetBudget)
-      formDataBody.append('homeCurrency', homeCurrency)
-      formDataBody.append('startDate', formatDate(startDate))
-      formDataBody.append('endDate', formatDate(endDate))
-      const link = type === "Add" ? `${server}/trips` : `${server}/trips/${tripId}`
-      const method = type === "Add" ? "post" : "put"
+    formDataBody.append('name', name)
+    formDataBody.append('targetBudget', targetBudget)
+    formDataBody.append('homeCurrency', homeCurrency)
+    formDataBody.append('startDate', formatDate(startDate))
+    formDataBody.append('endDate', formatDate(endDate))
+    const link = type === "Add" ? `${server}/trips` : `${server}/trips/${tripId}`
+    const method = type === "Add" ? "post" : "put"
 
 
-      fetch(link,{
+    fetch(link, {
       method,
       headers: {
         'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
@@ -103,30 +103,30 @@ export default function TripForm({ type }) {
       },
       body: formDataBody,
     })
-    .then((response)=> {
-      if(response.ok) {
-        return response.json()
-      } else {
-        return response.json().then((err)=> {
-          throw err
-        })
-      }
-    })
-    .then((result)=>{
-      setName("")
-      setTargetBudget("")
-      // console.log("Trip has been added");
-      Alert.alert('Success',result.message);
-      if(type === "Add") {
-        navigation.navigate('Home', {tripId})
-      } else {
-        navigation.navigate('Trip', { tripId })
-      }
-    })
-    .catch((err)=>{
-      setLoading(false)
-      Alert.alert('Error',err.message);
-    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          return response.json().then((err) => {
+            throw err
+          })
+        }
+      })
+      .then((result) => {
+        setName("")
+        setTargetBudget("")
+        // console.log("Trip has been added");
+        Alert.alert('Success', result.message);
+        if (type === "Add") {
+          navigation.navigate('Home', { tripId })
+        } else {
+          navigation.navigate('Trip', { tripId })
+        }
+      })
+      .catch((err) => {
+        setLoading(false)
+        Alert.alert('Error', err.message);
+      })
   }
 
   const loginCheck = async () => {
@@ -166,9 +166,9 @@ export default function TripForm({ type }) {
         .catch(err => {
           console.log(err)
 
-          if(err.response.data.message) Alert.alert('Error',err.response.data.message)
+          if (err.response.data.message) Alert.alert('Error', err.response.data.message)
         })
-        .finally(()=>{
+        .finally(() => {
           setLoading(false)
 
         })
@@ -177,26 +177,47 @@ export default function TripForm({ type }) {
 
   // dropdown
   const iosDropdown = (
-      <RNPickerSelect
-        value={homeCurrency}
-        onValueChange={itemValue => setHomeCurrency(itemValue)}
-        items={[
-          { label: 'IDR', value: 'idr' },
-          { label: 'USD', value: 'usd' },
+    <RNPickerSelect
+      value={homeCurrency}
+      onValueChange={itemValue => setHomeCurrency(itemValue)}
+      items={[
+        { label: "Indonesian Rupiah", value: "IDR" },
+        { label: "United States Dollar", value: "USD" },
+        { label: "Chinese Yuan", value: "CNY" },
+        { label: "Australian Dollar", value: "AUD" },
+        { label: "British Pound Sterling", value: "GBP" },
+        { label: "European Euro", value: "EUR" },
+        { label: "Japanese Yen", value: "JPY" },
+        { label: "Malaysian Ringgit", value: "MYR" },
+        { label: "Singapore Dollar", value: "SGD" },
+        { label: "South Korean Won", value: "KRW" },
+        { label: "Thai Baht", value: "THB" },
+        { label: "United Arab Emirates Dirham", value: "AED" },
 
-        ]}
-      />
-    )
+      ]}
+    />
+  )
 
-    const androidDropdown = (
-      <Picker
-        selectedValue={homeCurrency}
-        onValueChange={itemValue => setHomeCurrency(itemValue)}
-      >
-        <Picker.Item label="IDR" value="idr" />
-        <Picker.Item label="USD" value="usd" />
-      </Picker>
-    )
+  const androidDropdown = (
+    <Picker
+      selectedValue={homeCurrency}
+      onValueChange={itemValue => setHomeCurrency(itemValue)}
+    >
+
+      <Picker.Item label="Indonesian Rupiah" value="IDR" />
+      <Picker.Item label="United States Dollar" value="USD" />
+      <Picker.Item label="Chinese Yuan" value="CNY" />
+      <Picker.Item label="Australian Dollar" value="AUD" />
+      <Picker.Item label="British Pound Sterling" value="GBP" />
+      <Picker.Item label="European Euro" value="EUR" />
+      <Picker.Item label="Japanese Yen" value="JPY" />
+      <Picker.Item label="Malaysian Ringgit" value="MYR" />
+      <Picker.Item label="Singapore Dollar" value="SGD" />
+      <Picker.Item label="South Korean Won" value="KRW" />
+      <Picker.Item label="Thai Baht" value="THB" />
+      <Picker.Item label="United Arab Emirates Dirham" value="AED" />
+    </Picker>
+  )
 
   // dropdown
 
@@ -230,7 +251,7 @@ export default function TripForm({ type }) {
         <Text style={{ fontSize: 18, fontWeight: "bold" }}>{`${type} Trip`}</Text>
       </View>
 
-      <ScrollView style={{paddingBottom: 5}}>
+      <ScrollView style={{ paddingBottom: 5 }}>
         <View style={{ marginHorizontal: 40, marginTop: 10, marginBottom: 30 }}>
           <Text>Trip Name</Text>
           <TextInput
