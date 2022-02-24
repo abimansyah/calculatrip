@@ -2,9 +2,11 @@ import { Text, View, StyleSheet, TouchableHighlight, Alert } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
+import { useNavigation } from '@react-navigation/native';
 
 export default function CompanionCard({ data }) {
-  console.log(data);
+  // console.log(data);
+  const navigation = useNavigation()
 
   const deleted = () => {
     AsyncStorage.getItem('access_token')
@@ -18,8 +20,9 @@ export default function CompanionCard({ data }) {
         })
       })
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         Alert.alert('Success delete', res.data.message)
+        navigation.navigate('Companion', {tripId:data.UserTrip.TripId, companionId:data.id})
       })
       .catch(err => {
         Alert.alert('Sorry', "You're not authorize" )

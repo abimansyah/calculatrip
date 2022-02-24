@@ -4,11 +4,13 @@ import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import { server } from "../globalvar";
+import { useNavigation, useNavigationState } from '@react-navigation/native';
 
 
 export default function SavingModal({ setModalVisible, data }) {
   const [name, setName] = useState('')
   const [amount, setAmount] = useState('')
+  const navigation = useNavigation()
 
   const value = {
     name: name,
@@ -26,6 +28,7 @@ const addNewSaving = async () => {
     })
     
     Alert.alert('Success add new saving', resp.data.message);
+    navigation.navigate('Saving', {tripId:data, savingId:`${name}${amount}`})
   } catch (err) {
     console.log(err);
   }
@@ -38,7 +41,7 @@ const addNewSaving = async () => {
         <Text style={{ marginVertical: 4, fontSize: 21, fontWeight: '700' }}>Add New Saving</Text>
         {/* text input */}
         <TextInput
-          placeholder="Saving Amount"
+          placeholder="Saving Name"
           placeholderTextColor={'#a6a6a6'}
           style={modalStyle.inputBar}
           onChangeText={setName}
