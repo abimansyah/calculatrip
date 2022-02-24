@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, ScrollView,Image } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet, ScrollView, Image, Alert } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles"
@@ -38,16 +38,16 @@ export default function DetailExpenses({ route }) {
 
     if (!result.cancelled) {
       setExpensePhoto(result.uri);
-      
+
       uploadPhoto(result.uri)
     }
 
   };
 
-  const currencyFormat = (value)=>{
+  const currencyFormat = (value) => {
     return new Intl.NumberFormat(['ban', 'id']).format(value)
   }
-  const dateFormat = (date)=> {
+  const dateFormat = (date) => {
     return date.split('T')[0]
   }
 
@@ -61,33 +61,33 @@ export default function DetailExpenses({ route }) {
     let type = match ? `image/${match[1]}` : `image`;
     formDataBody.append('imageFile', { uri: Url, name: filename, type });
 
-    fetch(`${link}/expenses/${expenseId}/image`,{
-    method:'POST',
-    headers: {
-      'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
-      access_token: token,
-    },
-    body: formDataBody,
-  })
-  .then((response)=> {
-    if(response.ok) {
-      return response.json()
-    } else {
-      return response.json().then((err)=> {
-        throw err
+    fetch(`${link}/expenses/${expenseId}/image`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
+        access_token: token,
+      },
+      body: formDataBody,
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json()
+        } else {
+          return response.json().then((err) => {
+            throw err
+          })
+        }
       })
-    }
-  })
-  .then((result)=>{
-    alert(result.message);
-    fetchImages()
-  })
-  .catch((err)=>{
-    alert(err.message);
-  })
+      .then((result) => {
+        alert(result.message);
+        fetchImages()
+      })
+      .catch((err) => {
+        alert(err.message);
+      })
   }
 
-  useEffect( async () => {
+  useEffect(async () => {
     try {
       const output = await AsyncStorage.getItem('access_token')
       setToken(output)
@@ -103,7 +103,7 @@ export default function DetailExpenses({ route }) {
       setDescription(resp.data.description);
 
       const response = await axios({
-        method:'GET',
+        method: 'GET',
         url: `${server}/expenses/${expenseId}`,
         headers: {
           access_token: output,
@@ -111,7 +111,7 @@ export default function DetailExpenses({ route }) {
       })
       setAllImages(response.data.Images)
       const currentTrip = await axios({
-        method:'GET',
+        method: 'GET',
         url: `${server}/trips/${tripId}`,
         headers: {
           access_token: output,
@@ -126,84 +126,109 @@ export default function DetailExpenses({ route }) {
 
   }, [])
 
-    const fetchImages = () => {
-      axios({
-        method:'GET',
-        url: `${server}/expenses/${expenseId}`,
-        headers: {
-          access_token: token,
-        },
-      })
-      .then((response)=>{
+  const fetchImages = () => {
+    axios({
+      method: 'GET',
+      url: `${server}/expenses/${expenseId}`,
+      headers: {
+        access_token: token,
+      },
+    })
+      .then((response) => {
         setAllImages(response.data.Images)
       })
-      .catch((err)=>{
+      .catch((err) => {
         alert(err.data)
       })
+  }
+
+  const deleteTrip = async () => {
+    try {
+      const token = await AsyncStorage.getItem('access_token');
+      const resp = await axios.delete(`${server}/expenses/${expenseId}`, {
+        headers: {
+          access_token: token
+        }
+      })
+      Alert.alert('Success', resp.data.message)
+      nav.navigate("Expenses", {
+        tripId: tripId,
+        expensesId: expenseId
+      });
+    } catch (err) {
+      console.log(err);
     }
+  }
 
-    // useFocusEffect(useCallback(() => {
-    //   fetchImages()
-    //   return () => true
-    // }, [expensePhoto]))
+  // useFocusEffect(useCallback(() => {
+  //   fetchImages()
+  //   return () => true
+  // }, [expensePhoto]))
 
 
-  return(
+  return (
     <SafeAreaView style={styles.mainContainer}>
       <View style={{ position: 'relative', height: '100%' }}>
         <View style={detailExpensesStyle.headerView}>
-          <TouchableOpacity style={{padding: 15}} onPress={() => nav.navigate('Expenses', {
-            tripId
-          })} >
-            <Ionicons name="arrow-back" size={30} color="white" />
-          </TouchableOpacity>
-          <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 40}}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            <TouchableOpacity style={{ padding: 15 }} onPress={() => nav.navigate('Expenses', {
+              tripId
+            })} >
+              <Ionicons name="arrow-back" size={30} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ padding: 15 }} onPress={() => deleteTrip()} >
+              
+                <Ionicons name='trash-outline' size={28} color='white'/>
+
+            </TouchableOpacity>
+          </View>
+          <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 40 }}>
             <Ionicons name="book" size={48} color="white" />
-            <View style={{alignItems: "flex-end"}}>
-              <Text style={detailExpensesStyle.title}>{homeCurrency} {homeCurrency ? currencyFormat(amount): null}</Text>
+            <View style={{ alignItems: "flex-end" }}>
+              <Text style={detailExpensesStyle.title}>{homeCurrency} {homeCurrency ? currencyFormat(amount) : null}</Text>
             </View>
           </View>
         </View>
         <ScrollView>
-          <View style={{width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 25, paddingBottom: 10}}>
-          <Text style={{fontSize: 18, fontWeight: "bold"}}>Detail Expenses</Text>
-        </View>
-        <View style={{marginHorizontal: 40, marginVertical: 10}}>
-          <View style={{marginBottom: 15}}>
-            <Text style={{fontWeight: "bold"}}>Expenses Name</Text>
-            <Text>{name}</Text>
+          <View style={{ width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 25, paddingBottom: 10 }}>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>Detail Expenses</Text>
           </View>
-          <View style={{marginBottom: 15}}>
-            <Text style={{fontWeight: "bold"}}>Expenses Date</Text>
-            <Text>{dateFormat(expenseDate)}</Text>
-          </View>
-          <View style={{marginBottom: 15}}>
-            <Text style={{fontWeight: "bold"}}>Payment Method</Text>
-            <Text>{paymentMethod}</Text>
-          </View>
-          <View style={{marginBottom: 15}}>
-            <Text style={{fontWeight: "bold"}}>Expenses Description</Text>
-            <Text>{description}</Text>
-          </View>
-          <View style={detailExpensesStyle.photoContainer}>
-            <Text style={{fontWeight: "bold"}}>Photo</Text>
-            <TouchableOpacity 
-            onPress={()=>{pickImage()}}
-            style={detailExpensesStyle.photoButton}>
-              <Text style={detailExpensesStyle.photoText}>Upload Photo</Text>
-            </TouchableOpacity>
-          </View>
-          <View style={{flex: 1, flexDirection:"row", flexWrap: "wrap", justifyContent:"space-between"}}>
-          {
-            allImages?.map(el => (
-                <Image key={el.id} source={{uri: el.imageUrl}} style={{width: "48%", height: 100, backgroundColor: "#123456", marginBottom:10}}/>
-              ))
-          }
+          <View style={{ marginHorizontal: 40, marginVertical: 10 }}>
+            <View style={{ marginBottom: 15 }}>
+              <Text style={{ fontWeight: "bold" }}>Expenses Name</Text>
+              <Text>{name}</Text>
             </View>
-          
-        </View>
+            <View style={{ marginBottom: 15 }}>
+              <Text style={{ fontWeight: "bold" }}>Expenses Date</Text>
+              <Text>{dateFormat(expenseDate)}</Text>
+            </View>
+            <View style={{ marginBottom: 15 }}>
+              <Text style={{ fontWeight: "bold" }}>Payment Method</Text>
+              <Text>{paymentMethod}</Text>
+            </View>
+            <View style={{ marginBottom: 15 }}>
+              <Text style={{ fontWeight: "bold" }}>Expenses Description</Text>
+              <Text>{description}</Text>
+            </View>
+            <View style={detailExpensesStyle.photoContainer}>
+              <Text style={{ fontWeight: "bold" }}>Photo</Text>
+              <TouchableOpacity
+                onPress={() => { pickImage() }}
+                style={detailExpensesStyle.photoButton}>
+                <Text style={detailExpensesStyle.photoText}>Upload Photo</Text>
+              </TouchableOpacity>
+            </View>
+            <View style={{ flex: 1, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
+              {
+                allImages?.map(el => (
+                  <Image key={el.id} source={{ uri: el.imageUrl }} style={{ width: "48%", height: 100, backgroundColor: "#123456", marginBottom: 10 }} />
+                ))
+              }
+            </View>
+
+          </View>
         </ScrollView>
-        
+
       </View>
     </SafeAreaView>
   )
@@ -221,7 +246,7 @@ const detailExpensesStyle = StyleSheet.create({
     color: "#fff",
   },
   photoContainer: {
-    flexDirection:"row",
+    flexDirection: "row",
     alignItems: "center",
     marginBottom: 10
   },
@@ -230,7 +255,7 @@ const detailExpensesStyle = StyleSheet.create({
     padding: 10,
     alignSelf: 'flex-start',
     backgroundColor: "#0378a6",
-    borderRadius: 10 
+    borderRadius: 10
   },
   photoText: {
     color: '#fff',

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Text, TouchableOpacity, View, StyleSheet, TextInput, Image, Picker, KeyboardAvoidingView, ScrollView, Modal, Alert, FlatList, Dimensions, Platform } from "react-native";
+import { Text, TouchableOpacity, View, StyleSheet, TextInput, Image, Picker, KeyboardAvoidingView, ScrollView, Modal, Alert, FlatList, Dimensions, Platform, TouchableWithoutFeedback, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Ionicons, Entypo, Feather, AntDesign, FontAwesome} from "@expo/vector-icons";
+import { Ionicons, Entypo, Feather, AntDesign, FontAwesome } from "@expo/vector-icons";
 import DateField from "react-native-datefield";
 import { styles } from "../styles";
 import logo from "../assets/logo.png";
@@ -13,6 +13,7 @@ import * as ImagePicker from "expo-image-picker";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import loadingGif from '../assets/loading.gif'
 import RNPickerSelect from 'react-native-picker-select';
+
 
 
 export default function AddExpenses({ route }) {
@@ -33,9 +34,9 @@ export default function AddExpenses({ route }) {
   const [homeCurrency, setHomeCurrency] = useState('')
   const [modalVisible, setModalVisible] = useState(false);
   const [currency, setCurrency] = useState([])
-  const [filteredCurrency, setFilteredCurrency]= useState([])
+  const [filteredCurrency, setFilteredCurrency] = useState([])
   const [filter, setFilter] = useState('')
-  const [compareCurrency, setCompareCurrency]= useState('IDR')
+  const [compareCurrency, setCompareCurrency] = useState('IDR')
   const [convertedCurrency, setConvertedCurrency] = useState(0)
   const [trip, setTrip] = useState({})
   const [loading, setLoading] = useState(false)
@@ -69,7 +70,6 @@ export default function AddExpenses({ route }) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
       quality: 1,
     });
 
@@ -107,7 +107,7 @@ export default function AddExpenses({ route }) {
           });
         }
       })
-      .then((result) => {   
+      .then((result) => {
         setDescription(result.message)
       })
       .catch((err) => {
@@ -124,11 +124,11 @@ export default function AddExpenses({ route }) {
     loginCheck();
   }, []);
 
-  useEffect(()=>{
-    if(scanImage) {
+  useEffect(() => {
+    if (scanImage) {
       scanReceipt(scanImage)
     }
-  },[scanImage])
+  }, [scanImage])
 
   // useEffect(async () => {
   //   try {
@@ -147,10 +147,10 @@ export default function AddExpenses({ route }) {
   //   }
   // }, [tripImage])
 
-  useEffect(async()=> {
+  useEffect(async () => {
     try {
       const token = await AsyncStorage.getItem('access_token')
-      const response = await axios.get(`${server}/trips/${tripId}`,{
+      const response = await axios.get(`${server}/trips/${tripId}`, {
         headers: {
           access_token: token
         }
@@ -159,17 +159,17 @@ export default function AddExpenses({ route }) {
     } catch (err) {
       console.log(err);
     }
-  },[])
+  }, [])
 
-  useEffect (async() => {
+  useEffect(async () => {
     try {
       const response = await axios({
-        method:'post',
-        url:`${server}/exchangerate`,
-        data:{
-          from:compareCurrency,
+        method: 'post',
+        url: `${server}/exchangerate`,
+        data: {
+          from: compareCurrency,
           to: homeCurrency,
-          amount:1
+          amount: 1
         }
       })
       console.log(response.data);
@@ -177,7 +177,7 @@ export default function AddExpenses({ route }) {
     } catch (err) {
       console.log(err);
     }
-  },[compareCurrency])
+  }, [compareCurrency])
 
 
 
@@ -194,8 +194,8 @@ export default function AddExpenses({ route }) {
   const addNewExpense = async () => {
     try {
       setLoading(true)
-      if(homeCurrency !== compareCurrency) {
-        value.amount = Math.ceil(amount*convertedCurrency)
+      if (homeCurrency !== compareCurrency) {
+        value.amount = Math.ceil(amount * convertedCurrency)
       }
       console.log(value.amount);
       const token = await AsyncStorage.getItem("access_token");
@@ -208,6 +208,7 @@ export default function AddExpenses({ route }) {
       if (typeof resp.data === "object") {
         nav.navigate("Expenses", {
           tripId: tripId,
+          expensesId: `${name}, ${amount}`
         });
       }
     } catch (err) {
@@ -264,9 +265,9 @@ export default function AddExpenses({ route }) {
   const getCurrency = async () => {
     try {
       let response = await axios({
-        url:`${server}/exchangerate`,
-        method:'get',
-        headers:{
+        url: `${server}/exchangerate`,
+        method: 'get',
+        headers: {
           access_token: token
         }
       })
@@ -276,13 +277,13 @@ export default function AddExpenses({ route }) {
     }
   }
 
-  const Item = ({description, code}) => (
-    <TouchableOpacity 
-      onPress={()=> {
-      setModalVisible(!modalVisible)
-      setCompareCurrency(code)
-    }}
-    style={editProfileStyle.modalContainer}
+  const Item = ({ description, code }) => (
+    <TouchableOpacity
+      onPress={() => {
+        setModalVisible(!modalVisible)
+        setCompareCurrency(code)
+      }}
+      style={editProfileStyle.modalContainer}
     >
       <View style={{ paddingHorizontal: 10 }}>
         <Text style={{ fontSize: 20, fontWeight: "bold" }}>{code}</Text>
@@ -305,184 +306,185 @@ export default function AddExpenses({ route }) {
   useEffect(() => {
     setFilteredCurrency(currency)
   }, [currency])
-  
-  useEffect(()=> {
-    
-    if(!filter){
+
+  useEffect(() => {
+
+    if (!filter) {
       setFilteredCurrency(currency)
     } else {
-      let output 
-      output = currency.filter(el => 
-        el.description.toLowerCase().includes(filter.toLowerCase()) || el.code.toLowerCase().includes(filter.toLowerCase()))   
-        setFilteredCurrency(output)
-      }
+      let output
+      output = currency.filter(el =>
+        el.description.toLowerCase().includes(filter.toLowerCase()) || el.code.toLowerCase().includes(filter.toLowerCase()))
+      setFilteredCurrency(output)
+    }
   }, [filter])
 
 
- 
+
   // console.log(paymentMethodId);
   return (
 
-
     <SafeAreaView style={styles.screenSize}>
-      <KeyboardAvoidingView behavior={focused === 'amount' ? 'height' : 'position'} keyboardVerticalOffset={0}>
-        <View style={{ position: 'relative', height: '94%' }}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <KeyboardAvoidingView behavior={focused === 'amount' ? 'height' : 'position'} keyboardVerticalOffset={0}>
+          <View style={{ position: 'relative', height: '96%' }}>
 
-          <View style={editProfileStyle.headerView}>
-            <TouchableOpacity 
-            onPress={()=> {nav.navigate('Expenses', tripId)}}
-            style={{ padding: 15 }}>
-              <Ionicons name="arrow-back" size={30} color="white" />
-            </TouchableOpacity>
-            <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 25 }}>
-              <Icon name={iconName} size={48} color="white" />
-              <View style={{ alignItems: "flex-end", marginRight:20}}>
-                <View style={{ flexDirection: "row" }}>
+            <View style={editProfileStyle.headerView}>
+              <TouchableOpacity
+                onPress={() => { nav.navigate('Expenses', tripId) }}
+                style={{ padding: 15 }}>
+                <Ionicons name="arrow-back" size={30} color="white" />
+              </TouchableOpacity>
+              <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 25 }}>
+                <Icon name={iconName} size={48} color="white" />
+                <View style={{ alignItems: "flex-end", marginRight: 20 }}>
+                  <View style={{ flexDirection: "row" }}>
 
 
-                  {/* currency button */}
+                    {/* currency button */}
 
-                  <TouchableOpacity
-                    style={{ flexDirection: "row", alignItems:"center" }}
-                    onPress={()=> {
-                      setModalVisible(!modalVisible)
-                    }}
-                  >
-                  <Text  style={{ fontSize: 32, color: "#fff" }}>{compareCurrency}
-                  </Text>
-                  <Entypo name="chevron-small-down" size={24} color="white" />
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{ flexDirection: "row", alignItems: "center" }}
+                      onPress={() => {
+                        setModalVisible(!modalVisible)
+                      }}
+                    >
+                      <Text style={{ fontSize: 32, color: "#fff" }}>{compareCurrency}
+                      </Text>
+                      <Entypo name="chevron-small-down" size={24} color="white" />
+                    </TouchableOpacity>
 
-                  {/* currency button */}
+                    {/* currency button */}
 
-                  <TextInput
-                    keyboardType={phoneInput}
-                    style={focused === "amount" ? editProfileStyle.title : editProfileStyle.title}
-                    placeholder="Amount"
-                    placeholderTextColor="#a2e1ff"
-                    onFocus={() => setFocused("amount")}
-                    value={amount}
-                    onChangeText={setAmount}
-                    textAlign="right"
-                  />
+                    <TextInput
+                      keyboardType={phoneInput}
+                      style={focused === "amount" ? editProfileStyle.title : editProfileStyle.title}
+                      placeholder="Amount"
+                      placeholderTextColor="#a2e1ff"
+                      onFocus={() => setFocused("amount")}
+                      value={amount}
+                      onChangeText={setAmount}
+                      textAlign="right"
+                    />
+                  </View>
+                  <Text style={{ color: "#fff", marginRight: 20 }}>
+                    1 {compareCurrency} = {homeCurrency} {convertedCurrency} </Text>
                 </View>
-                <Text style={{ color: "#fff", marginRight:20 }}>
-                  1 {compareCurrency} = {homeCurrency} {convertedCurrency} </Text>
               </View>
             </View>
-          </View>
-          <ScrollView>
-            <View style={{ width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 25, paddingBottom: 10 }}>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>{`Add Expenses`}</Text>
-            </View>
-            <View style={{ marginHorizontal: 40, marginVertical: 10 }}>
-              <Text>Expenses Name</Text>
-              <TextInput style={focused === "name" ? editProfileStyle.inputOnFocus : editProfileStyle.input} placeholder="Expenses Name" onFocus={() => setFocused("name")} value={name} onChangeText={setName} />
-              <Text>Expenses Date</Text>
-              <View style={editProfileStyle.inputDate}>
-
-                <DateField labelDate="Expenses date" labelMonth="Expenses month" labelYear="Expenses year" onSubmit={(value) => setExpenseDate(new Date(value))} defaultValue={expenseDate} />
-
+            <ScrollView>
+              <View style={{ width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 25, paddingBottom: 10 }}>
+                <Text style={{ fontSize: 18, fontWeight: "bold" }}>{`Add Expenses`}</Text>
               </View>
-              <Text>Payment Method</Text>
-              <View style={editProfileStyle.inputDate}>
+              <View style={{ marginHorizontal: 40, marginVertical: 10 }}>
+                <Text>Expenses Name</Text>
+                <TextInput style={focused === "name" ? editProfileStyle.inputOnFocus : editProfileStyle.input} placeholder="Expenses Name" onFocus={() => setFocused("name")} value={name} onChangeText={setName} />
+                <Text>Expenses Date</Text>
+                <View style={editProfileStyle.inputDate}>
 
-                {
-                  Platform.OS === 'ios' ? iosDropdown : androidDropdown
-                }
-              </View>
-              <View style={editProfileStyle.descriptionContainer}>
-                <Text>Expenses Description</Text>
-                <TouchableOpacity style={editProfileStyle.receiptButton}
-                  onPress={() => pickImage()}
-                >
-                  <Text style={editProfileStyle.receiptText}>Upload Receipt</Text>
+                  <DateField labelDate="Expenses date" labelMonth="Expenses month" labelYear="Expenses year" onSubmit={(value) => setExpenseDate(new Date(value))} defaultValue={expenseDate} />
 
-                </TouchableOpacity>
-              </View>
-              <TextInput
-                multiline={true}
-                numberOfLines={4}
-                style={focused === "description" ? editProfileStyle.textAreaOnFocus : editProfileStyle.textArea}
-                placeholder="Expenses Description"
-                onFocus={() => setFocused("description")}
-                value={description}
-                onChangeText={setDescription}
-              />
-              <View style={editProfileStyle.checkContainer}>
-                <TouchableOpacity style={{ alignSelf: "flex-start" }} onPress={() => addNewExpense()}>
-                  <Ionicons name="checkmark" size={24} color="#0378a6" style={editProfileStyle.checkButton} />
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView>
+                </View>
+                <Text>Payment Method</Text>
+                <View style={editProfileStyle.inputDate}>
 
-          {loading ? (
-              <View style={{width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)"}}>
+                  {
+                    Platform.OS === 'ios' ? iosDropdown : androidDropdown
+                  }
+                </View>
+                <View style={editProfileStyle.descriptionContainer}>
+                  <Text>Expenses Description</Text>
+                  <TouchableOpacity style={editProfileStyle.receiptButton}
+                    onPress={() => pickScanImage()}
+                  >
+                    <Text style={editProfileStyle.receiptText}>Scan Receipt</Text>
+
+                  </TouchableOpacity>
+                </View>
+                <TextInput
+                  multiline={true}
+                  numberOfLines={4}
+                  style={focused === "description" ? editProfileStyle.textAreaOnFocus : editProfileStyle.textArea}
+                  placeholder="Expenses Description"
+                  onFocus={() => setFocused("description")}
+                  value={description}
+                  onChangeText={setDescription}
+                />
+                <View style={editProfileStyle.checkContainer}>
+                  <TouchableOpacity style={{ alignSelf: "flex-start" }} onPress={() => addNewExpense()}>
+                    <Ionicons name="checkmark" size={24} color="#0378a6" style={editProfileStyle.checkButton} />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ScrollView>
+
+            {loading ? (
+              <View style={{ width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)" }}>
                 <Image source={loadingGif} />
               </View>
             ) : undefined}
 
-        </View>
-
-        {/* MODAL */}
-      <View style={{
-        // position:'absolute',
-        // height: windowHeight,
-        // justifyContent:"center"
-      }}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            setModalVisible(!modalVisible);
-          }}
-          
-        >
-          <View style={editProfileStyle.centeredView}>
-            <View style={editProfileStyle.modalView}>
-
-              {/* search */}
-              <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
-                <TouchableOpacity
-                  onPress={() => setModalVisible(!modalVisible)}
-                  style={{
-                    width: "10%"
-                  }}
-                >
-                  <Ionicons name="arrow-back" size={24} color="#72c1f2" />
-                </TouchableOpacity>
-                <TextInput style={{ backgroundColor: "white", height: 35, width: "82%", borderBottomWidth: 1, marginRight: 10, borderBottomColor: "#72c1f2" }}
-                  value={filter}
-                  onChangeText={setFilter}
-                />
-              </View>
-              <FlatList
-                data={filteredCurrency}
-                renderItem={renderItem}
-                keyExtractor={item => item.description}
-              />
-
-            </View>
           </View>
-        </Modal>
-      </View>
-        {/* MODAL */}
+
+          {/* MODAL */}
+          <View style={{
+            // position:'absolute',
+            // height: windowHeight,
+            // justifyContent:"center"
+          }}>
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                setModalVisible(!modalVisible);
+              }}
+
+            >
+              <View style={editProfileStyle.centeredView}>
+                <View style={editProfileStyle.modalView}>
+
+                  {/* search */}
+                  <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+                    <TouchableOpacity
+                      onPress={() => setModalVisible(!modalVisible)}
+                      style={{
+                        width: "10%"
+                      }}
+                    >
+                      <Ionicons name="arrow-back" size={24} color="#72c1f2" />
+                    </TouchableOpacity>
+                    <TextInput style={{ backgroundColor: "white", height: 35, width: "82%", borderBottomWidth: 1, marginRight: 10, borderBottomColor: "#72c1f2" }}
+                      value={filter}
+                      onChangeText={setFilter}
+                    />
+                  </View>
+                  <FlatList
+                    data={filteredCurrency}
+                    renderItem={renderItem}
+                    keyExtractor={item => item.description}
+                  />
+
+                </View>
+              </View>
+            </Modal>
+          </View>
+          {/* MODAL */}
 
 
 
 
-      </KeyboardAvoidingView>
-      
+        </KeyboardAvoidingView>
+
+      </TouchableWithoutFeedback>
     </SafeAreaView>
   );
 }
 const windowHeight = Dimensions.get('window').height;
 const editProfileStyle = StyleSheet.create({
-  mainContainer:{
+  mainContainer: {
     // height:windowHeight,
-    justifyContent:"center"
+    justifyContent: "center"
   },
   centeredView: {
     flex: 1,
@@ -491,9 +493,9 @@ const editProfileStyle = StyleSheet.create({
     backgroundColor: 'rgba(0,0,0,0.5)'
   },
   modalView: {
-    position:"absolute",
-    height:windowHeight*0.6,
-    width:350,
+    position: "absolute",
+    height: windowHeight * 0.6,
+    width: 350,
     margin: 0,
     backgroundColor: "white",
     borderRadius: 10,
@@ -509,15 +511,15 @@ const editProfileStyle = StyleSheet.create({
     elevation: 5
   },
   modalContainer: {
-    backgroundColor: "white", 
+    backgroundColor: "white",
     width: "100%",
     height: 50,
     display: "flex",
     flexDirection: "row",
     alignItems: "center",
-    borderBottomWidth:1,
-    borderBottomColor:"#72c1f2",
-    marginBottom:3,
+    borderBottomWidth: 1,
+    borderBottomColor: "#72c1f2",
+    marginBottom: 3,
   },
   modalText: {
     marginLeft: 40,
@@ -545,8 +547,8 @@ const editProfileStyle = StyleSheet.create({
     borderBottomColor: "#fff",
     borderBottomWidth: 1,
     // marginHorizontal:10,
-    marginLeft:10,
-    marginRight:20,
+    marginLeft: 10,
+    marginRight: 20,
   },
   inputDate: {
     borderWidth: 1,
@@ -601,7 +603,7 @@ const editProfileStyle = StyleSheet.create({
     borderColor: "#c1c1c1",
     borderRadius: 5,
     width: "100%",
-    height: 80,
+    height: 100,
     color: "#000",
     paddingHorizontal: 10,
     marginVertical: 10,
@@ -611,7 +613,7 @@ const editProfileStyle = StyleSheet.create({
     borderColor: "#c1c1c1",
     borderRadius: 5,
     width: "100%",
-    height: 80,
+    height: 100,
     color: "#000",
     paddingHorizontal: 10,
     borderBottomColor: "#72c1f2",

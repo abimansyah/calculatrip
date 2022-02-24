@@ -51,7 +51,7 @@ export default function CompanionCard({ data }) {
           <Text>{data.email}</Text>
         </View>
         <View style={data.UserTrip.status === "accept" ? companionCardStyle.buttonAccept : companionCardStyle.buttonPending}>
-          <Text>{data.UserTrip.status}</Text>
+          <Text style={{color: '#fff', fontWeight: '700'}}>{data.UserTrip.status}</Text>
         </View>
 
       </View>

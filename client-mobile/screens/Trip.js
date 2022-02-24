@@ -41,52 +41,10 @@ import { AntDesign } from '@expo/vector-icons';
 import BottomTab from '../components/BottomTabs';
 import { server } from '../globalvar';
 import loadingGif from '../assets/loading.gif'
+import "intl";
+import "intl/locale-data/jsonp/en";
 
 const screenWidth = Dimensions.get("window").width;
-const data = [
-  {
-    name: "sama",
-    amount: 12000,
-    color: "#023859",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  },
-  {
-    name: "sama",
-    amount: 32000,
-    color: "#036099",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  },
-  {
-    name: "Beijing",
-    amount: 121000,
-    color: "#0477BF",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  },
-  {
-    name: "New York",
-    amount: 75000,
-    color: "#058FE6",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  },
-  {
-    name: "Moscow",
-    amount: 12000,
-    color: "#0487D9",
-    legendFontColor: "#7F7F7F",
-    legendFontSize: 15
-  },
-  {
-    name: "mantapi",
-    amount: 120000,
-    color: "#0417D9",
-    legendFontColor: "#743F2F",
-    legendFontSize: 15
-  },
-];
 
 const chartConfig = {
   backgroundGradientFrom: "#1E2923",
@@ -117,6 +75,7 @@ export default function Trip({ route }) {
   const [coloredCart, setColoredCart] = useState([])
 
   const [loading, setLoading] = useState(true)
+  console.log(trip.homeCurrency);
 
   const newCartData = (newData) => {
     const temp = []
@@ -332,26 +291,27 @@ export default function Trip({ route }) {
   }
 
 
-
+  const currencyFormat = (value) => {
+    return new Intl.NumberFormat(['ban', 'id']).format(value)
+  }
 
   const totalSavingNumber = saving.length > 0 ? saving.map(el => el.amount).reduce((prev, cur) => prev + cur) : 0
 
   const totalExpensesNumber = expense.length > 0 ? expense.map(el => el.amount).reduce((prev, cur) => prev + cur) : 0
 
-  const totalSaving = saving.length > 0 ? `IDR ${saving.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "IDR 0"
+  const totalSaving = saving.length > 0 ? saving.map(el => el.amount).reduce((prev, cur) => prev + cur) : 0
 
-  const totalExpenses = expense.length > 0 ? `IDR ${expense.map(el => el.amount).reduce((prev, cur) => prev + cur)}` : "IDR 0"
+  const totalExpenses = expense.length > 0 ? expense.map(el => el.amount).reduce((prev, cur) => prev + cur) : 0
 
   const remainingSavings = totalSavingNumber - totalExpensesNumber
 
   const budgetVsExpenses = trip.targetBudget - totalExpensesNumber
 
   return (
+    <SafeAreaView style={styles.screenSize}>
+      <ScrollView>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
 
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.screenSize}>
-
-        <ScrollView>
           <View style={styles.mainContainer}>
 
             <ImageBackground style={tripStyle.imageDetail} source={{ uri: trip.tripImageUrl }}>
@@ -371,8 +331,6 @@ export default function Trip({ route }) {
                 </View>
               </LinearGradient>
             </ImageBackground>
-
-
 
             {/* MODAL */}
 
@@ -466,17 +424,17 @@ export default function Trip({ route }) {
                   <Text style={tripStyle.innerCardBudget}>Budget Target</Text>
                 </View>
                 <View style={tripStyle.innerCardView}>
-                  <Text style={tripStyle.innerCardNumber}>IDR {trip.targetBudget}</Text>
+                  <Text style={tripStyle.innerCardNumber}> {trip.homeCurrency} {currencyFormat(trip.targetBudget)}</Text>
                 </View>
               </View>
               <View style={tripStyle.blueCardContainer}>
                 <View style={tripStyle.blueCardView}>
-                  <Text style={tripStyle.blueCardNumber}>{totalSaving}</Text>
+                  <Text style={tripStyle.blueCardNumber}>{trip.homeCurrency} {currencyFormat(totalSaving)}</Text>
                   <Text style={tripStyle.blueCardDesc}>Saving</Text>
                 </View>
                 <View style={tripStyle.cardSeparator} />
                 <View style={tripStyle.blueCardView}>
-                  <Text style={tripStyle.blueCardNumber}>{totalExpenses}</Text>
+                  <Text style={tripStyle.blueCardNumber}>{trip.homeCurrency} {currencyFormat(totalExpenses)}</Text>
                   <Text style={tripStyle.blueCardDesc}>Expenses</Text>
                 </View>
               </View>
@@ -488,7 +446,7 @@ export default function Trip({ route }) {
                   <Text style={tripStyle.innerCardBudgetRemainingSaving}>Remaining Savings</Text>
                 </View>
                 <View style={tripStyle.innerCardView}>
-                  <Text style={remainingSavings < 0 ? tripStyle.blueCardNumberMinus : tripStyle.blueCardNumberPlus}>IDR {remainingSavings}</Text>
+                  <Text style={remainingSavings < 0 ? tripStyle.blueCardNumberMinus : tripStyle.blueCardNumberPlus}>{trip.homeCurrency} {currencyFormat(remainingSavings)}</Text>
                 </View>
               </View>
 
@@ -499,7 +457,7 @@ export default function Trip({ route }) {
                   <Text style={tripStyle.innerCardBudgetRemainingSaving}>Budget vs Expenses</Text>
                 </View>
                 <View style={tripStyle.innerCardView}>
-                  <Text style={budgetVsExpenses < 0 ? tripStyle.blueCardNumberMinus : tripStyle.blueCardNumberPlus}>IDR {budgetVsExpenses}</Text>
+                  <Text style={budgetVsExpenses < 0 ? tripStyle.blueCardNumberMinus : tripStyle.blueCardNumberPlus}>{trip.homeCurrency} {currencyFormat(budgetVsExpenses)}</Text>
                 </View>
               </View>
 
@@ -529,16 +487,18 @@ export default function Trip({ route }) {
               </View>
             </View>
           </View>
+        </TouchableWithoutFeedback>
 
-        </ScrollView>
-        <BottomTab data={trip.id} />
-        {loading ? (
-          <View style={{ width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)" }}>
-            <Image source={loadingGif} />
-          </View>
-        ) : undefined}
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
+      </ScrollView>
+
+      <BottomTab data={trip.id} />
+      {loading ? (
+        <View style={{ width: "100%", height: "100%", position: "absolute", justifyContent: "center", alignItems: "center", backgroundColor: "rgba(240, 240, 240, 0.5)" }}>
+          <Image source={loadingGif} />
+        </View>
+      ) : undefined}
+
+    </SafeAreaView >
 
 
   );

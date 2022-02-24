@@ -1,4 +1,4 @@
-import { View, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Text } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useRoute, useNavigation } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -27,44 +27,63 @@ export default function BottomTab({ data }) {
       justifyContent: 'space-around',
       alignItems: 'center'
     }}>
-      <TouchableOpacity style={{padding: 10}}
+      <TouchableOpacity style={{ padding: 10 }}
         onPress={() => nav.navigate('Trip', {
           tripId: data
         })}
       >
-        <Ionicons name={tripHome} size={30} color="white" />
+        <View style={{ alignItems: 'center' }}>
+
+          <Ionicons name={tripHome} size={30} color="white" />
+          <Text style={{ marginTop: 3, color: 'white', fontWeight: '500' }}>Trip</Text>
+        </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={{padding: 10}}
+      <TouchableOpacity style={{ padding: 10 }}
         onPress={() => nav.navigate('Companion', {
           tripId: data
         })}
       >
-        <Ionicons name={companion} size={30} color="white" />
+        <View style={{ alignItems: 'center' }}>
+          <Ionicons name={companion} size={30} color="white" />
+          <Text style={{ marginTop: 3, color: 'white', fontWeight: '500' }}>Companion</Text>
+        </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={{padding: 10}}
-      onPress={() => nav.navigate('Weather', {
+      <TouchableOpacity style={{ padding: 10 }}
+        onPress={() => nav.navigate('Weather', {
           tripId: data
         })}
       >
-        <Ionicons name={weather} size={30} color="white" />
+        <View style={{ alignItems: 'center' }}>
+
+          <Ionicons name={weather} size={30} color="white" />
+          <Text style={{ marginTop: 3, color: 'white', fontWeight: '500' }}>Weather</Text>
+        </View>
       </TouchableOpacity>
 
-      <TouchableOpacity style={{padding: 10}}
+      <TouchableOpacity style={{ padding: 10 }}
         onPress={() => nav.navigate('Saving', {
           tripId: data
         })}
       >
-        <Ionicons name={saving} size={30} color="white" />
+        <View style={{ alignItems: 'center' }}>
+          <Ionicons name={saving} size={30} color="white" />
+          <Text style={{ marginTop: 3, color: 'white', fontWeight: '500' }}>Saving</Text>
+        </View>
+
       </TouchableOpacity>
 
-      <TouchableOpacity style={{padding: 10}}
+      <TouchableOpacity style={{ padding: 10 }}
         onPress={() => nav.navigate('Expenses', {
           tripId: data
         })}
       >
+        <View style={{ alignItems: 'center' }}>
+
         <Ionicons name={expense} size={30} color="white" />
+        <Text style={{ marginTop: 3, color: 'white', fontWeight: '500' }}>Expense</Text>
+        </View>
       </TouchableOpacity>
 
     </View>

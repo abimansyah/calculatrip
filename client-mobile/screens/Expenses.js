@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, Dimensions } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react';
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Dimensions, Modal } from 'react-native'
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -15,6 +15,9 @@ import moment from 'moment'
 import { useNavigation, useNavigationState } from '@react-navigation/native';
 import "intl";
 import "intl/locale-data/jsonp/en";
+import ExpenseCategory from '../components/ExpenseCategory';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 
 
@@ -24,27 +27,16 @@ export default function Expenses({ route }) {
   const [expenses, setExpenses] = useState([])
   const [loading, setLoading] = useState(false)
   const [token, setToken] = useState('')
+  const [modalVisible, setModalVisible] = useState(false);
 
   const routesLength = useNavigationState(state => state.routes.length);
   const [trip, setTrip] = useState({})
-  const bs = React.createRef();
-  const fall = new Animated.Value(1);
-  const currencyFormat = (value)=>{
+  const currencyFormat = (value) => {
     return new Intl.NumberFormat(['ban', 'id']).format(value)
   }
   const totalExpenses = expenses.length > 0 ? expenses.map(el => el.amount).reduce((prev, cur) => prev + cur) : 0
 
-  
 
-  const headerModal = () => {
-    return (
-      <View style={styles.modalHeader}>
-        <View style={styles.modalPanelHeader}>
-          <View style={styles.modalPanelHandle} />
-        </View>
-      </View>
-    )
-  }
 
   const loginCheck = async () => {
     try {
@@ -58,61 +50,77 @@ export default function Expenses({ route }) {
     }
   }
 
-  useEffect(async()=> {
-    try {
-      const token = await AsyncStorage.getItem('access_token')
-      const response = await axios.get(`${server}/trips/${tripId}`,{
-        headers: {
-          access_token: token
-        }
-      })
-      // console.log(response.data.homeCurrency);
-      setTrip(response.data)
-    } catch (err) {
-      console.log(err);
-    }
-  },[])
+  const fetchData = () => {
 
-  useEffect(() => {
-    if (token) {
-      axios.get(`${server}/expenses/trip/${tripId}`, {
-        headers: {
-          access_token: token
-        }
+    AsyncStorage.getItem('access_token')
+      .then(tokenUser => {
+        return axios.get(`${server}/trips/${tripId}`, {
+          headers: {
+            access_token: tokenUser
+          }
+        })
       })
-        .then(res => {
-          setExpenses(res.data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
-  }, [token])
+      .then(resp => {
+        setTrip(resp.data)
+      })
+      .catch(err => {
+        console.log(err);
+      })
 
-  useEffect(() => {
-    loginCheck()
-  }, [])
+    AsyncStorage.getItem('access_token')
+      .then(tokenUser => {
+        return axios.get(`${server}/expenses/trip/${tripId}`, {
+          headers: {
+            access_token: tokenUser
+          }
+        })
+      })
+      .then(res => {
+        setExpenses(res.data)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
+    //autofetch
+    useFocusEffect(useCallback(() => {
+      fetchData()
+      return () => true
+    }, [route.params?.expensesId]))
+    //autofetch
+  
+
 
   return (
     <SafeAreaView style={styles.screenSize}>
-      <View  style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <BottomSheet
-          ref={bs}
-          snapPoints={[730, 0, 0]}
-          renderContent={() => { return (<ExpenseCategoryModal data={tripId} />) }}
-          renderHeader={headerModal}
-          initialSnap={2}
-          callbackNode={fall}
-          enabledGestureInteraction={true}
-          enabledHeaderGestureInteraction={true}
-        />
-        <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+
+
+        {/* MODAL */}
+        <View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              // Alert.alert("Modal has been closed.");
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <ExpenseCategory setModalVisible={setModalVisible} data={tripId} />
+          </Modal>
+        </View>
+
+        {/* MODAL */}
+
+        <View style={{ flex: 1 }}>
           <View style={expensesStyle.headerContainer}>
             <View style={expensesStyle.headerView}>
-              <TouchableOpacity style={{ padding: 15 }} 
-              onPress={() => {
-                navigation.navigate('Home')
-              }}>
+              <TouchableOpacity style={{ padding: 15 }}
+                onPress={() => {
+                  navigation.navigate('Home')
+                }}>
                 <Ionicons name="arrow-back" size={30} color="white" />
               </TouchableOpacity>
               <Text style={expensesStyle.title}>Expenses</Text>
@@ -121,13 +129,13 @@ export default function Expenses({ route }) {
               <View style={expensesStyle.blueCardView}>
                 <Text style={expensesStyle.blueCardDesc}>Total Expenses</Text>
 
-                  <View style={{flexDirection:'row', alignItems:"center",}}>
-                    <Text style={expensesStyle.blueCardNumber}>{currencyFormat(totalExpenses)}</Text>
-                    <Text style={{marginTop:8, fontSize:20, marginLeft:10, fontWeight:"bold", color:"white"}}>{trip.homeCurrency}</Text>
-                  </View>
+                <View style={{ flexDirection: 'row', alignItems: "center", }}>
+                  <Text style={expensesStyle.blueCardNumber}>{currencyFormat(totalExpenses)}</Text>
+                  <Text style={{ marginTop: 8, fontSize: 20, marginLeft: 10, fontWeight: "bold", color: "white" }}>{trip.homeCurrency}</Text>
+                </View>
               </View>
-              <TouchableOpacity 
-              onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
+              <TouchableOpacity
+                onPress={() => setModalVisible(!modalVisible)} style={{ alignSelf: 'flex-start' }}>
                 <Text style={expensesStyle.addButton}>+</Text>
               </TouchableOpacity>
             </View>
@@ -148,7 +156,7 @@ export default function Expenses({ route }) {
             )}
           </View>
           <BottomTab data={tripId} />
-        </Animated.View>
+        </View>
       </View>
     </SafeAreaView>
   )
@@ -182,7 +190,7 @@ const expensesStyle = StyleSheet.create({
   },
   blueCardView: {
     width: "80%",
-    
+
   },
   blueCardNumber: {
     fontSize: 28,
