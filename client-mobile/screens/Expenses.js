@@ -32,7 +32,7 @@ export default function Expenses({ route }) {
   const currencyFormat = (value)=>{
     return new Intl.NumberFormat(['ban', 'id']).format(value)
   }
-  const totalExpenses = expenses.length > 0 ? expenses.map(el => el.amount).reduce((prev, cur) => prev + cur) : "Rp 0"
+  const totalExpenses = expenses.length > 0 ? expenses.map(el => el.amount).reduce((prev, cur) => prev + cur) : 0
 
   
 
@@ -66,7 +66,7 @@ export default function Expenses({ route }) {
           access_token: token
         }
       })
-      console.log(response.data.homeCurrency);
+      // console.log(response.data.homeCurrency);
       setTrip(response.data)
     } catch (err) {
       console.log(err);
