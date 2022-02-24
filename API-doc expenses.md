@@ -209,23 +209,43 @@ _Response (200 - OK)_
 
 ```json
   {
-  "name": "string",
-  "amount": "integer",
-  "categoryId": "integer",
-  "paymentMethodId": "integer",
-  "location": "string",
-  "description": "text",
-  "userId": "integer",
-  "Category": {
-    "name": "string"
-  },
-  "PaymentMethod": {
-    "name": "string"
-  },
-  "User": {
-    "username": "string",
-    "email": "string"
-  }
+    "id": 1,
+    "name": "expense name",
+    "tripId": 1,
+    "amount": 5000,
+    "expenseCategoryId": 1,
+    "paymentMethodId": 1,
+    "userId": 1,
+    "expenseDate": "2022-02-01T00:00:00.000Z",
+    "location": "Indonesia",
+    "description": "trip expense",
+    "createdAt": "2022-02-23T06:14:29.064Z",
+    "updatedAt": "2022-02-23T06:14:29.064Z",
+    "ExpenseCategory": {
+        "name": "Restaurants",
+        "icon": "food"
+    },
+    "PaymentMethod": {
+        "name": "Cash",
+        "icon": "http://dummyimage.com/169x100.png/cc0000/ffffff"
+    },
+    "User": {
+        "id": 1,
+        "email": "user@gmail.com",
+        "username": "userone"
+    },
+    "Images": [
+        {
+            "id": 1,
+            "imageUrl": "https://ik.imagekit.io/yivpvk7dwbx/hacktiv8_GGxw7N_vl.png",
+            "expenseId": 1
+        },
+        {
+            "id": 2,
+            "imageUrl": "https://ik.imagekit.io/Calculatrip/Rudianto-Function_11rHWOJ2L.png",
+            "expenseId": 1
+        }
+    ]
 }
 ```
 

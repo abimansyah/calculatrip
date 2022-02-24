@@ -2,10 +2,15 @@ const request = require("supertest");
 const app = require("../app");
 const instanceMulter = require("../middlewares/multer");
 const axios = require("axios");
+const instanceAxios = require("../apis/axios");
 
-const { User } = require("../models/index");
+const {
+  User
+} = require("../models/index");
 
-const { createToken } = require("../helpers/jwt");
+const {
+  createToken
+} = require("../helpers/jwt");
 
 let token = "";
 let wrongToken = "";
@@ -64,11 +69,16 @@ beforeEach(() => {
 
 describe("POST /ocr - post image file to ocr", () => {
   test("POST /ocr success status (200) - should return success with status (200) when image file successfuly sent to ocr", async () => {
-    jest.spyOn(axios, "post").mockResolvedValue({
+    jest.spyOn(axios, "get").mockResolvedValue({
       data: {
         ParsedResults: [{
           ParsedText: "testingggg",
         }, ],
+      }
+    });
+    jest.spyOn(instanceAxios, "post").mockResolvedValue({
+      data: {
+        url: "fakeurl"
       }
     });
     return request(app)
@@ -101,37 +111,26 @@ describe("POST /ocr - post image file to ocr", () => {
         console.log(err);
       });
   });
-  test("POST /ocr error status (400) - should return error 400 when image file sent to ocr in wrong format", async () => {
-    jest.spyOn(instanceMulter, "single").mockResolvedValue(() => {
-      return (req, res, next) => {
-        req.file = [{
-          buffer: "testing",
-        }, ];
-        return next();
-      };
-    });
 
-    jest.spyOn(axios, "post").mockResolvedValue({
-      ParsedResults: [{
-        ParsedText: "testingggg",
-      }, ],
+  test("POST /ocr error status (500) - should return success with error (500) when image file failed sent to ocr", async () => {
+    jest.spyOn(axios, "get").mockRejectedValue("error");
+    jest.spyOn(instanceAxios, "post").mockResolvedValue({
+      data: {
+        url: "fakeurl"
+      }
     });
-
     return request(app)
       .post("/ocr")
       .set("access_token", token)
-      .send({
-        imageFile: "test",
-      })
+      .attach("imageFile", "./__test__/Capture.JPG")
       .then((resp) => {
         const result = resp.body;
-        expect(resp.status).toBe(400);
+        expect(resp.status).toBe(500);
         expect(result).toEqual(expect.any(Object));
-        expect(result).toHaveProperty("message", "Can't read file image file");
-        // done();
       })
       .catch((err) => {
         console.log(err);
       });
   });
+
 });

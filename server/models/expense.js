@@ -11,10 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Expense.belongsTo(models.ExpenseCategory, {foreignKey:"expenseCategoryId"})
-      Expense.belongsTo(models.PaymentMethod, {foreignKey:"paymentMethodId"})
-      Expense.belongsTo(models.User, {foreignKey:"userId"})
-
+      Expense.belongsTo(models.ExpenseCategory, {
+        foreignKey: "expenseCategoryId"
+      })
+      Expense.belongsTo(models.PaymentMethod, {
+        foreignKey: "paymentMethodId"
+      })
+      Expense.belongsTo(models.User, {
+        foreignKey: "userId"
+      })
+      Expense.hasMany(models.Images, {
+        foreignKey: "expenseId"
+      })
     }
   }
   Expense.init({
@@ -45,7 +53,7 @@ module.exports = (sequelize, DataTypes) => {
           msg: "Amount is required"
         },
         belowZero() {
-          if(this.amount <= 0) {
+          if (this.amount <= 0) {
             throw "Amount can't be 0 or below"
           }
         }
