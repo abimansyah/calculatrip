@@ -267,7 +267,7 @@ export default function Trip({ route }) {
         .catch(err => {
           console.log(err)
         })
-        .finally(()=>{
+        .finally(() => {
           setLoading(false)
         })
     }
@@ -313,7 +313,7 @@ export default function Trip({ route }) {
       setCartData(newCartData());
     }
   }, [expense])
-  
+
   if (cartData) {
     const color = [
       '#BFBC88',
@@ -324,10 +324,10 @@ export default function Trip({ route }) {
       '#591441',
     ]
     for (let i = 0; i < cartData.length; i++) {
-      
+
       cartData[i].color = color[i],
-      cartData[i].legendFontColor = "#7F7F7F",
-      cartData[i].legendFontSize = 11
+        cartData[i].legendFontColor = "#7F7F7F",
+        cartData[i].legendFontSize = 11
     }
   }
 
@@ -350,7 +350,7 @@ export default function Trip({ route }) {
 
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <SafeAreaView style={styles.screenSize}>
-        
+
         <ScrollView>
           <View style={styles.mainContainer}>
 
@@ -488,7 +488,7 @@ export default function Trip({ route }) {
                   <Text style={tripStyle.innerCardBudgetRemainingSaving}>Remaining Savings</Text>
                 </View>
                 <View style={tripStyle.innerCardView}>
-                <Text style={remainingSavings < 0? tripStyle.blueCardNumberMinus:tripStyle.blueCardNumberPlus}>IDR {remainingSavings}</Text>
+                  <Text style={remainingSavings < 0 ? tripStyle.blueCardNumberMinus : tripStyle.blueCardNumberPlus}>IDR {remainingSavings}</Text>
                 </View>
               </View>
 
@@ -499,7 +499,7 @@ export default function Trip({ route }) {
                   <Text style={tripStyle.innerCardBudgetRemainingSaving}>Budget vs Expenses</Text>
                 </View>
                 <View style={tripStyle.innerCardView}>
-                <Text style={budgetVsExpenses < 0? tripStyle.blueCardNumberMinus:tripStyle.blueCardNumberPlus}>IDR {budgetVsExpenses}</Text>
+                  <Text style={budgetVsExpenses < 0 ? tripStyle.blueCardNumberMinus : tripStyle.blueCardNumberPlus}>IDR {budgetVsExpenses}</Text>
                 </View>
               </View>
 
@@ -509,23 +509,24 @@ export default function Trip({ route }) {
 
 
 
-          {/* <View style={tripStyle.emptyContainer}>
+            {/* <View style={tripStyle.emptyContainer}>
               <Text style={{textAlign: "center"}}>Add your expenses to see{"\n"}the summary of trip expenses</Text>
               </View> */}
 
-          <View style={{ flex: 1, marginTop: 5, paddingRight: 15 }}>
-            <View style={{ alignItems: 'center' }}>
-              <PieChart
-                data={cartData}
-                width={screenWidth}
-                height={200}
-                chartConfig={chartConfig}
-                accessor={"amount"}
-                backgroundColor={"transparent"}
-                paddingLeft={"0"}
-                center={[30, 10]}
-                absolute
-              />
+            <View style={{ flex: 1, marginTop: 5, paddingRight: 15 }}>
+              <View style={{ alignItems: 'center' }}>
+                <PieChart
+                  data={cartData}
+                  width={screenWidth}
+                  height={200}
+                  chartConfig={chartConfig}
+                  accessor={"amount"}
+                  backgroundColor={"transparent"}
+                  paddingLeft={"0"}
+                  center={[30, 10]}
+                  absolute
+                />
+              </View>
             </View>
           </View>
 
@@ -620,7 +621,7 @@ const tripStyle = StyleSheet.create({
     justifyContent: "space-between",
     padding: 15,
     marginBottom: 0,
-    backgroundColor:"white"
+    backgroundColor: "white"
   },
   innerCardContainerBottomBottom: {
     flexDirection: "row",
@@ -628,11 +629,11 @@ const tripStyle = StyleSheet.create({
     justifyContent: "space-between",
     padding: 15,
     marginBottom: -10,
-    backgroundColor:"white",
-    borderTopWidth:1,
-    borderTopColor:'#0378a6',
-    borderBottomLeftRadius:10,
-    borderBottomRightRadius:10,
+    backgroundColor: "white",
+    borderTopWidth: 1,
+    borderTopColor: '#0378a6',
+    borderBottomLeftRadius: 10,
+    borderBottomRightRadius: 10,
   },
   innerCardView: {
     width: "50%",
@@ -657,8 +658,8 @@ const tripStyle = StyleSheet.create({
     alignItems: 'center',
     justifyContent: "space-between",
     padding: 15,
-    borderTopRightRadius:10,
-    borderTopLeftRadius:10,
+    borderTopRightRadius: 10,
+    borderTopLeftRadius: 10,
     backgroundColor: '#0378a6'
   },
   blueCardView: {

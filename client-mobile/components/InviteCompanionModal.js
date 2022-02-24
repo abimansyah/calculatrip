@@ -13,8 +13,6 @@ export default inviteCompanion = ({ data }) => {
   const [focused, setFocused] = useState('');
   const [input, setInput] = useState('');
 
-  const nav = useNavigation();
-
   const addCompanion = async () => {
     try {
       const token = await AsyncStorage.getItem('access_token')
