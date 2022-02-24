@@ -9,11 +9,9 @@ import { NavigationContainer,useNavigation } from '@react-navigation/native';
 
 
 export default inviteCompanion = ({ data }) => {
-  const nav = useNavigation();
+
   const [focused, setFocused] = useState('');
   const [input, setInput] = useState('');
-
-  const nav = useNavigation();
 
   const addCompanion = async () => {
     try {

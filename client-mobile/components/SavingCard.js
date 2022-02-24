@@ -3,10 +3,17 @@ import moment from 'moment'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
+import "intl";
+import "intl/locale-data/jsonp/en";
+import { useNavigation, useNavigationState } from '@react-navigation/native';
+const currencyFormat = (value)=>{
+  return new Intl.NumberFormat(['ban', 'id']).format(value)
+}
 
-export default function SavingCard({ data }) {
-  console.log(data);
-  console.log(data.id, '==================');
+export default function SavingCard({ data, curr, tripId }) {
+  const navigation = useNavigation()
+  // console.log(data);
+  // console.log(data.id, '==================');
   const deleted =  () => {
     // console.log(data.id, '<+<++++<+<<+');
     AsyncStorage.getItem('access_token')
@@ -21,8 +28,9 @@ export default function SavingCard({ data }) {
         })
       })
       .then(res => {
-        console.log(res.data);
+        // console.log(res.data);
         Alert.alert('Success delete', res.data.message)
+        navigation.navigate('Saving', {tripId, savingId:`${data.id}`})
       })
       .catch(err => {
         Alert.alert('Sorry', "You're not authorize" )
@@ -54,7 +62,7 @@ export default function SavingCard({ data }) {
           <Text style={{ fontWeight: "bold" }}>{data.name}</Text>
           <Text>{moment(new Date(data.savingDate)).format('DD MMMM YYYY')}</Text>
         </View>
-        <Text style={savingCardStyle.moneyText}>{data.amount}</Text>
+        <Text style={savingCardStyle.moneyText}><Text style={{fontSize:14, color:"gray", fontWeight:"normal"}}>({curr}) </Text>{currencyFormat(data.amount)}</Text>
       </View>
     </TouchableHighlight>
 

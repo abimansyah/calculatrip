@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Text, TouchableOpacity, View, StyleSheet, FlatList, Modal, Keyboard } from 'react-native'
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
@@ -11,7 +11,7 @@ import BottomTab from '../components/BottomTabs';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import AddCompanionModal from '../components/AddCompanionModal';
 
 
@@ -42,14 +42,14 @@ export default function Companion({ route }) {
     }
   }
 
-
-
-  useEffect(() => {
-    if (token) {
-      axios.get(`${server}/trips/${tripId}`, {
-        headers: {
-          access_token: token
-        }
+  const fetchData = () => {
+      AsyncStorage.getItem('access_token')
+      .then((tokenA)=>{
+        return axios.get(`${server}/trips/${tripId}`, {
+          headers: {
+            access_token: tokenA
+          }
+        })
       })
         .then(res => {
           setCompanion(res.data.Users)
@@ -58,7 +58,6 @@ export default function Companion({ route }) {
           console.log(err)
         })
     }
-  }, [token])
 
   useEffect(() => {
     loginCheck()
@@ -76,6 +75,11 @@ export default function Companion({ route }) {
       return 0
     }
   }
+
+  useFocusEffect(useCallback(() => {
+    fetchData()
+    return () => true
+  }, [route.params?.companionId]))
 
   return (
 
@@ -107,7 +111,7 @@ export default function Companion({ route }) {
               {!loading && companion.length > 0 ? (
                 <FlatList
                   nestedScrollEnabled={true}
-                  data={companion}
+                  data={companion.filter((el) => el.UserTrip.role !== 'owner')}
                   renderItem={({ item }) => (<CompanionCard data={item} />)}
                   keyExtractor={(item) => `Companion${item.id}`}
                   contentContainerStyle={{ paddingVertical: 10 }}

@@ -1,16 +1,17 @@
-import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback } from "react-native"
+import { View, Text, StyleSheet, Dimensions, TextInput, TouchableOpacity, Keyboard, TouchableWithoutFeedback, Alert } from "react-native"
 import { useState, useEffect } from "react";
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from "axios";
 import { server } from "../globalvar";
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 
 export default function AddCompanionModal({ setModalVisible, data }) {
   const [input, setInput] = useState('');
-
+  const navigation = useNavigation();
   const addCompanion = async () => {
-    console.log('---------------');
+    // console.log('---------------');
     try {
       const token = await AsyncStorage.getItem('access_token')
       const resp = await axios.post(`${server}/trips/${data}`, {
@@ -21,9 +22,11 @@ export default function AddCompanionModal({ setModalVisible, data }) {
         }
       })
       Keyboard.dismiss()
-      console.log(resp.data);
+      navigation.navigate('Companion', {tripId:data, companionId:input})
+      Alert.alert('Success', resp.data.message)
+      // console.log(resp.data);
     } catch (err) {
-      console.log(err);
+      Alert.alert('Sorry',err.response.data.message);
     }
   }
 

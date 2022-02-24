@@ -157,7 +157,6 @@ class UserController {
       let input = {
         username: req.body.username,
         email: req.body.email,
-        password: req.body.password,
         phoneNumber: req.body.phoneNumber,
         avatar: req.body.avatar,
         birthDate: req.body.birthDate,

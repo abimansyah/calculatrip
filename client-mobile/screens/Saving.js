@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, Dimensions, KeyboardAvoidingView, Modal } from 'react-native'
+import React, { useState, useEffect, useCallback } from 'react';
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Dimensions, KeyboardAvoidingView, Modal, Alert } from 'react-native'
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -14,6 +14,8 @@ import { server } from '../globalvar';
 import moment from 'moment'
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import SavingModal from '../components/SavingModal';
+import "intl";
+import "intl/locale-data/jsonp/en";
 
 export default function Saving({ route }) {
   const navigation = useNavigation();
@@ -21,11 +23,15 @@ export default function Saving({ route }) {
   const [saving, setSaving] = useState([])
   const [loading, setLoading] = useState(false)
   const [token, setToken] = useState('');
+  const [trip, setTrip] = useState({})
   const [modalVisible, setModalVisible] = useState(false);
+  const currencyFormat = (value)=>{
+    return new Intl.NumberFormat(['ban', 'id']).format(value)
+  }
 
-  const totalSaving = saving.length > 0 ? saving.map(el => el.amount).reduce((prev, cur) => prev + cur) : "Rp 0"
+  const totalSaving = saving.length > 0 ? saving.map(el => el.amount).reduce((prev, cur) => prev + cur) : 0
 
-  console.log(tripId, 'saving ------------------');
+  // console.log(tripId, 'saving ------------------');
   // fetch data
   const loginCheck = async () => {
     try {
@@ -39,28 +45,49 @@ export default function Saving({ route }) {
     }
   }
 
-  useEffect(() => {
-    if (token) {
-      axios.get(`${server}/savings/trip/${tripId}`, {
-        headers: {
-          access_token: token
-        }
+  
+  const fetchdata = () => {
+    AsyncStorage.getItem("access_token")
+      .then((tokenA) => {
+        return axios.get(`${server}/savings/trip/${tripId}`, {
+          headers: {
+            access_token: tokenA,
+          },
+        });
       })
-        .then(res => {
-          console.log(res.data);
-          setSaving(res.data)
-        })
-        .catch(err => {
-          console.log(err)
-        })
-    }
-  }, [token])
+      .then((res) => {
+        console.log(res.data);
+        setSaving(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-  useEffect(() => {
-    loginCheck()
-  }, [])
+    AsyncStorage.getItem("access_token")
+      .then((tokenB) => {
+        return axios.get(`${server}/trips/${tripId}`, {
+          headers: {
+            access_token: tokenB,
+          },
+        });
+      })
+      .then((response) => {
+        setTrip(response.data);
+      })
+      .catch((err) => {
+        Alert(err.data);
+      });
+  };  
+
+  // useEffect(() => {
+  //   loginCheck();
+  // }, [])
   // end of fetch data
 
+  useFocusEffect(useCallback(() => {
+    fetchdata()
+    return () => true
+  }, [route.params?.savingId]))
 
   return (
     <SafeAreaView style={styles.screenSize}>
@@ -72,7 +99,7 @@ export default function Saving({ route }) {
               transparent={true}
               visible={modalVisible}
               onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
+                // Alert.alert("Modal has been closed.");
                 setModalVisible(!modalVisible);
               }}
             >
@@ -94,7 +121,9 @@ export default function Saving({ route }) {
               <View style={savingStyle.blueCardContainer}>
                 <View style={savingStyle.blueCardView}>
                   <Text style={savingStyle.blueCardDesc}>Total Saving</Text>
-                  <Text style={savingStyle.blueCardNumber}>{totalSaving}</Text>
+                  <View style={{flexDirection:'row', alignItems:"center",}}>
+                    <Text style={savingStyle.blueCardNumber}>{currencyFormat(totalSaving)}</Text><Text style={{marginTop:8, fontSize:20, marginLeft:10, fontWeight:"bold", color:"white"}}>{trip.homeCurrency}</Text>
+                  </View>
                 </View>
                 <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={{ alignSelf: 'flex-start' }}>
                   <Text style={savingStyle.addButton}>+</Text>
@@ -106,7 +135,7 @@ export default function Saving({ route }) {
                 <FlatList
                   nestedScrollEnabled={true}
                   data={saving}
-                  renderItem={({ item }) => (<SavingCard data={item} />)}
+                  renderItem={({ item }) => (<SavingCard data={item} curr={trip.homeCurrency} tripId={tripId} />)}
                   keyExtractor={(item) => `Saving${item.id}`}
                   contentContainerStyle={{ paddingVertical: 10 }}
                 />
