@@ -1,12 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, Image } from 'react-native'
+import React, { useEffect, useState, useCallback } from 'react';
+import { Text, TouchableOpacity, View, StyleSheet, ScrollView,Image } from 'react-native'
 import { SafeAreaView } from "react-native-safe-area-context"
 import { Ionicons } from '@expo/vector-icons';
 import { styles } from "../styles"
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import * as ImagePicker from 'expo-image-picker';
+import "intl";
+import "intl/locale-data/jsonp/en";
+import Login from './Login';
 
 export default function DetailExpenses({ route }) {
   const expenseId = route.params.data
@@ -16,27 +20,133 @@ export default function DetailExpenses({ route }) {
   const [name, setName] = useState("Test Expenses Name")
   const [expenseDate, setExpenseDate] = useState("25 December 2021")
   const [description, setDescription] = useState("Test Expenses Description")
-  const [paymentMethodId, setPaymentMethodId] = useState("Test payment Method id")
-  const [imageFile, setImageFile] = useState("https://djuragan.sgp1.digitaloceanspaces.com/djurkam/production/images/lodgings/5c53b6ccd8ae3.png")
+  const [paymentMethod, setPaymentMethod] = useState("")
+  const [imageFile, setImageFile] = useState("")
+  const [token, setToken] = useState("")
+  const [expensePhoto, setExpensePhoto] = useState("")
+  const [allImages, setAllImages] = useState([])
+  const [homeCurrency, setHomeCurrency] = useState("")
+  const link = server
+
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 4],
+      quality: 1,
+    });
+
+    if (!result.cancelled) {
+      setExpensePhoto(result.uri);
+      
+      uploadPhoto(result.uri)
+    }
+
+  };
+
+  const currencyFormat = (value)=>{
+    return new Intl.NumberFormat(['ban', 'id']).format(value)
+  }
+  const dateFormat = (date)=> {
+    return date.split('T')[0]
+  }
+
+  const uploadPhoto = (Url) => {
+    let formDataBody = new FormData();
+    let localUri = Url;
+    let filename = localUri.split('/').pop();
+
+    // Infer the type of the image
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+    formDataBody.append('imageFile', { uri: Url, name: filename, type });
+
+    fetch(`${link}/expenses/${expenseId}/image`,{
+    method:'POST',
+    headers: {
+      'Content-Type': 'multipart/form-data', // kalo gabisa coba content type diapus
+      access_token: token,
+    },
+    body: formDataBody,
+  })
+  .then((response)=> {
+    if(response.ok) {
+      return response.json()
+    } else {
+      return response.json().then((err)=> {
+        throw err
+      })
+    }
+  })
+  .then((result)=>{
+    alert(result.message);
+    fetchImages()
+  })
+  .catch((err)=>{
+    alert(err.message);
+  })
+  }
 
   useEffect( async () => {
     try {
-      const token = await AsyncStorage.getItem('access_token')
+      const output = await AsyncStorage.getItem('access_token')
+      setToken(output)
       const resp = await axios.get(`${server}/expenses/${expenseId}`, {
         headers: {
-          access_token: token
+          access_token: output
         }
       })
-      console.log(resp.data);
+      // console.log(output);
       setName(resp.data.name);
       setAmount(resp.data.amount);
       setExpenseDate(resp.data.expenseDate);
-      setDescription(resp.data.description)
+      setDescription(resp.data.description);
+
+      const response = await axios({
+        method:'GET',
+        url: `${server}/expenses/${expenseId}`,
+        headers: {
+          access_token: output,
+        },
+      })
+      setAllImages(response.data.Images)
+      const currentTrip = await axios({
+        method:'GET',
+        url: `${server}/trips/${tripId}`,
+        headers: {
+          access_token: output,
+        },
+      })
+      setHomeCurrency(currentTrip.data.homeCurrency)
+      setPaymentMethod(response.data.PaymentMethod.name)
+
     } catch (err) {
       console.log(err);
     }
 
   }, [])
+
+    const fetchImages = () => {
+      axios({
+        method:'GET',
+        url: `${server}/expenses/${expenseId}`,
+        headers: {
+          access_token: token,
+        },
+      })
+      .then((response)=>{
+        setAllImages(response.data.Images)
+      })
+      .catch((err)=>{
+        alert(err.data)
+      })
+    }
+
+    // useFocusEffect(useCallback(() => {
+    //   fetchImages()
+    //   return () => true
+    // }, [expensePhoto]))
+
 
   return(
     <SafeAreaView style={styles.mainContainer}>
@@ -50,12 +160,12 @@ export default function DetailExpenses({ route }) {
           <View style={{flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginHorizontal: 40}}>
             <Ionicons name="book" size={48} color="white" />
             <View style={{alignItems: "flex-end"}}>
-              <Text style={detailExpensesStyle.title}>{amount}</Text>
-              <Text style={{color: "#fff"}}>1 $ = Rp 14000</Text>
+              <Text style={detailExpensesStyle.title}>{homeCurrency} {homeCurrency ? currencyFormat(amount): null}</Text>
             </View>
           </View>
         </View>
-        <View style={{width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 25, paddingBottom: 10}}>
+        <ScrollView>
+          <View style={{width: "100%", flexDirection: "row", justifyContent: "center", paddingTop: 25, paddingBottom: 10}}>
           <Text style={{fontSize: 18, fontWeight: "bold"}}>Detail Expenses</Text>
         </View>
         <View style={{marginHorizontal: 40, marginVertical: 10}}>
@@ -65,11 +175,11 @@ export default function DetailExpenses({ route }) {
           </View>
           <View style={{marginBottom: 15}}>
             <Text style={{fontWeight: "bold"}}>Expenses Date</Text>
-            <Text>{expenseDate}</Text>
+            <Text>{dateFormat(expenseDate)}</Text>
           </View>
           <View style={{marginBottom: 15}}>
             <Text style={{fontWeight: "bold"}}>Payment Method</Text>
-            <Text>{paymentMethodId}</Text>
+            <Text>{paymentMethod}</Text>
           </View>
           <View style={{marginBottom: 15}}>
             <Text style={{fontWeight: "bold"}}>Expenses Description</Text>
@@ -77,12 +187,23 @@ export default function DetailExpenses({ route }) {
           </View>
           <View style={detailExpensesStyle.photoContainer}>
             <Text style={{fontWeight: "bold"}}>Photo</Text>
-            <TouchableOpacity style={detailExpensesStyle.photoButton}>
+            <TouchableOpacity 
+            onPress={()=>{pickImage()}}
+            style={detailExpensesStyle.photoButton}>
               <Text style={detailExpensesStyle.photoText}>Upload Photo</Text>
             </TouchableOpacity>
           </View>
-          <Image source={{uri: imageFile}} style={{width: "100%", height: 250, backgroundColor: "#123456"}}/>
+          <View style={{flex: 1, flexDirection:"row", flexWrap: "wrap", justifyContent:"space-between"}}>
+          {
+            allImages?.map(el => (
+                <Image key={el.id} source={{uri: el.imageUrl}} style={{width: "48%", height: 100, backgroundColor: "#123456", marginBottom:10}}/>
+              ))
+          }
+            </View>
+          
         </View>
+        </ScrollView>
+        
       </View>
     </SafeAreaView>
   )

@@ -22,6 +22,8 @@ import AddExpenses from './screens/AddExpenses';
 import DetailExpenses from './screens/DetailExpenses';
 import Notification from './screens/Notification';
 import Weather from './screens/Weather';
+import CurrencyList from './screens/CurrencyList';
+import {IntlProvider} from 'react-intl'
 
 
 
@@ -50,11 +52,11 @@ export default function App() {
             <Stack.Screen name='AddExpenses' component={ AddExpenses } />
             <Stack.Screen name='DetailExpenses' component={ DetailExpenses } />
             <Stack.Screen name='Weather' component={ Weather } />
+            <Stack.Screen name='CurrencyList' component={ CurrencyList } />
           </Stack.Navigator>
           <StatusBar style="auto" />
         </View>
       </NavigationContainer>
-      {/* <Weather/> */}
     </SafeAreaProvider>
   );
 }

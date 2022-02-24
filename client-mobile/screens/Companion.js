@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Text, TouchableOpacity, View, StyleSheet, FlatList, KeyboardAvoidingView } from 'react-native'
+import { Text, TouchableOpacity, View, StyleSheet, FlatList, Modal, Keyboard } from 'react-native'
 import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 import { SafeAreaView } from "react-native-safe-area-context"
@@ -12,34 +12,24 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { server } from '../globalvar';
 import { useNavigation } from '@react-navigation/native';
+import AddCompanionModal from '../components/AddCompanionModal';
 
 
 export default function Companion({ route }) {
   const navigation = useNavigation();
 
-  const { tripId } = route.params;
+  let { tripId, modalStatus } = route.params;
   const [token, setToken] = useState('');
   const [owner, setOwner] = useState('');
   const [companion, setCompanion] = useState([])
   const [loading, setLoading] = useState(false)
   const [trip, setTrip] = useState({})
+  const [modalVisible, setModalVisible] = useState(false);
 
 
 
-  const bs = React.createRef();
-  const fall = new Animated.Value(1);
 
-  const headerModal = () => {
-    return (
-      <View style={styles.modalHeader}>
-        <View style={styles.modalPanelHeader}>
-          <View style={styles.modalPanelHandle} />
-        </View>
-      </View>
-    )
-  }
-
-  // fetch
+ // fetch
   const loginCheck = async () => {
     try {
       const getAccessToken = await AsyncStorage.getItem('access_token')
@@ -78,21 +68,21 @@ export default function Companion({ route }) {
     setOwner(companion.filter((el) => el.UserTrip.role === 'owner'))
   }, [companion])
 
+  const snap = () => {
+    if (modalSnap === true) {
+      return 300
+    } else {
+      setModalsnap(false)
+      return 0
+    }
+  }
+
   return (
-    <KeyboardAvoidingView behavior='position'>
+
       <SafeAreaView style={styles.screenSize}>
         <View style={styles.mainContainer}>
-          <BottomSheet
-            ref={bs}
-            snapPoints={[200, 0]}
-            renderContent={() => { return (<InviteCompanionModal data={tripId} />) }}
-            renderHeader={headerModal}
-            initialSnap={1}
-            callbackNode={fall}
-            enabledGestureInteraction={true}
-            enabledHeaderGestureInteraction={true}
-          />
-          <Animated.View style={{ flex: 1, opacity: Animated.add(0.1, Animated.multiply(fall, 1.0)) }}>
+          
+          <View style={{ flex: 1}}>
             <View style={companionStyle.headerContainer}>
               <View style={companionStyle.headerView}>
                 <TouchableOpacity style={{ padding: 15 }}
@@ -108,7 +98,7 @@ export default function Companion({ route }) {
                   <Text style={companionStyle.blueCardDesc}>Owner</Text>
                   <Text style={companionStyle.blueCardNumber}>{owner[0]?.username}</Text>
                 </View>
-                <TouchableOpacity onPress={() => bs.current.snapTo(0)} style={{ alignSelf: 'flex-start' }}>
+                <TouchableOpacity onPress={() => setModalVisible(!modalVisible)} style={{ alignSelf: 'flex-start' }}>
                   <Text style={companionStyle.addButton}>+</Text>
                 </TouchableOpacity>
               </View>
@@ -128,11 +118,27 @@ export default function Companion({ route }) {
                 </View>
               )}
             </View>
+
+            {/* MODAL */}
+            <Modal
+              animationType="slide"
+              transparent={true}
+              visible={modalVisible}
+              onRequestClose={() => {
+                Alert.alert("Modal has been closed.");
+                setModalVisible(!modalVisible);
+              }}
+            >
+              <AddCompanionModal setModalVisible={setModalVisible} data={tripId} />
+            </Modal>
+            {/* MODAL */}
+
             <BottomTab data={tripId} />
-          </Animated.View>
+          </View>
         </View>
       </SafeAreaView>
-    </KeyboardAvoidingView>
+
+
   )
 }
 
@@ -186,5 +192,10 @@ const companionStyle = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: '100%'
-  }
+  },
+
+
+
+
+
 })

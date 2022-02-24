@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Keyboard } from 'react-native'
+import { View, Text, TextInput, StyleSheet, TouchableOpacity, Keyboard, Alert } from 'react-native'
 import React, { useState } from 'react';
 import { styles } from '../styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -30,7 +30,7 @@ const addNewSaving = async () => {
       }
     })
     
-    alert(resp.data.message);
+    Alert.alert('Success add new saving', resp.data.message);
     navigation.navigate('Saving', {tripId: data})
   } catch (err) {
     console.log(err);
